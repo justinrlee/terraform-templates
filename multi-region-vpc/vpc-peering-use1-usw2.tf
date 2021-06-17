@@ -81,7 +81,7 @@ resource aws_route "use1_usw2_private" {
   route_table_id = module.vpc_use1.private_route_table_ids[count.index]
   destination_cidr_block = "${var.usw2_slash16}.0.0/16"
   vpc_peering_connection_id =  aws_vpc_peering_connection_accepter.use1_usw2.id
-  
+
   provider = aws.us-east-1
 }
 
@@ -91,6 +91,6 @@ resource aws_route "usw2_use1_private" {
   route_table_id = module.vpc_usw2.private_route_table_ids[count.index]
   destination_cidr_block = "${var.use1_slash16}.0.0/16"
   vpc_peering_connection_id =  aws_vpc_peering_connection_accepter.use1_usw2.id
-  
+
   provider = aws.us-west-2
 }
