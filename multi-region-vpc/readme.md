@@ -15,7 +15,7 @@ Consists of the following:
 
 * Bastion host in us-east-1 (last public subnet)
     * SG: 22 inbound from Internet
-* Three zookeepers (one in each region, in the first private subnet)
+* Three zookeepers (one in each region)
     * SG: All internal
 * Three brokers in us-east-1 (one in each public subnet)
     * SG: All internal, 9092 from Internet

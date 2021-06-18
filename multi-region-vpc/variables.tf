@@ -28,7 +28,7 @@ variable "worker_count" {
   default = "1"
 }
 
-variable "worker_instance_type" {
+variable "bastion_instance_type" {
   default = "t3.large"
 }
 
@@ -37,11 +37,19 @@ variable "worker_tags" {
   default = {}
 }
 
-variable "worker_associate_public_ip_address" {
+# variable "worker_associate_public_ip_address" {
+#   default = true
+# }
+
+variable "bastion_delete_root_block_device_on_termination" {
   default = true
 }
 
-variable "worker_delete_root_block_device_on_termination" {
+variable "broker_delete_root_block_device_on_termination" {
+  default = true
+}
+
+variable "zookeeper_delete_root_block_device_on_termination" {
   default = true
 }
 
@@ -49,15 +57,31 @@ variable zookeeper_instance_type {
   default = "t3.xlarge"
 }
 
-variable zookeeper_public {
+variable bastion_public_subnet {
   default = true
+}
+
+variable bastion_public_ip {
+  default = true
+}
+
+variable zookeeper_public_subnet {
+  default = true
+}
+
+variable zookeeper_public_ip {
+  default = false
 }
 
 variable broker_instance_type {
   default = "t3.xlarge"
 }
 
-variable broker_public {
+variable broker_public_subnet {
+  default = true
+}
+
+variable broker_public_ip {
   default = true
 }
 
