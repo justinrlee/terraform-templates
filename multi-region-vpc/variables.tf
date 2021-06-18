@@ -50,7 +50,7 @@ variable zookeeper_instance_type {
 }
 
 variable zookeeper_public {
-  default = false
+  default = true
 }
 
 variable broker_instance_type {
