@@ -1,18 +1,17 @@
-resource "aws_instance" "zk_use1" {
-  # count                       = var.worker_count
-  ami                         = lookup(var.aws_amis, "us-east-1")
+resource "aws_instance" "zk_r1s" {
+  count                       = var.zookeeper_counts[0]
+  ami                         = lookup(var.aws_amis, var.r1)
   instance_type               = var.zookeeper_instance_type
   associate_public_ip_address = var.zookeeper_public_ip
-  key_name                    = var.use1_ec2_public_key_name
+  key_name                    = var.r1s_ec2_public_key_name
 
-  subnet_id                   = var.zookeeper_public_subnet ? module.vpc_use1.public_subnets[0] : module.vpc_use1.private_subnets[0]
+  subnet_id                   = var.zookeeper_public_subnet ? module.vpc_r1s.public_subnets[count.index % 3] : module.vpc_r1s.private_subnets[count.index % 3]
   vpc_security_group_ids      = var.zookeeper_public_subnet ? [
-    aws_security_group.use1_allow_ssh.id,
-    aws_security_group.use1_allow_internal.id,
-    aws_security_group.use1_allow_egress.id,
+    aws_security_group.r1s_allow_internal.id,
+    aws_security_group.r1s_allow_egress.id,
   ] : [
-    aws_security_group.use1_allow_internal.id,
-    aws_security_group.use1_allow_egress.id,
+    aws_security_group.r1s_allow_internal.id,
+    aws_security_group.r1s_allow_egress.id,
   ]
   
   root_block_device {
@@ -29,24 +28,23 @@ resource "aws_instance" "zk_use1" {
     ignore_changes = [tags]
   }
 
-  provider = aws.us-east-1
+  provider = aws.r1a
 }
 
-resource "aws_instance" "zk_use2" {
-  # count                       = var.worker_count
-  ami                         = lookup(var.aws_amis, "us-east-2")
+resource "aws_instance" "zk_r2s" {
+  count                       = var.zookeeper_counts[1]
+  ami                         = lookup(var.aws_amis, var.r2)
   instance_type               = var.zookeeper_instance_type
   associate_public_ip_address = var.zookeeper_public_ip
-  key_name                    = var.use2_ec2_public_key_name
+  key_name                    = var.r2s_ec2_public_key_name
 
-  subnet_id                   = var.zookeeper_public_subnet ? module.vpc_use2.public_subnets[0] : module.vpc_use2.private_subnets[0]
+  subnet_id                   = var.zookeeper_public_subnet ? module.vpc_r2s.public_subnets[count.index % 3] : module.vpc_r2s.private_subnets[count.index % 3]
   vpc_security_group_ids      = var.zookeeper_public_subnet ? [
-    aws_security_group.use2_allow_ssh.id,
-    aws_security_group.use2_allow_internal.id,
-    aws_security_group.use2_allow_egress.id,
+    aws_security_group.r2s_allow_internal.id,
+    aws_security_group.r2s_allow_egress.id,
   ] : [
-    aws_security_group.use2_allow_internal.id,
-    aws_security_group.use2_allow_egress.id,
+    aws_security_group.r2s_allow_internal.id,
+    aws_security_group.r2s_allow_egress.id,
   ]
   
   root_block_device {
@@ -63,24 +61,23 @@ resource "aws_instance" "zk_use2" {
     ignore_changes = [tags]
   }
 
-  provider = aws.us-east-2
+  provider = aws.r2a
 }
 
-resource "aws_instance" "zk_usw2" {
-  # count                       = var.worker_count
-  ami                         = lookup(var.aws_amis, "us-west-2")
+resource "aws_instance" "zk_r3s" {
+  count                       = var.zookeeper_counts[2]
+  ami                         = lookup(var.aws_amis, var.r3)
   instance_type               = var.zookeeper_instance_type
   associate_public_ip_address = var.zookeeper_public_ip
-  key_name                    = var.usw2_ec2_public_key_name
+  key_name                    = var.r3s_ec2_public_key_name
 
-  subnet_id                   = var.zookeeper_public_subnet ? module.vpc_usw2.public_subnets[0] : module.vpc_usw2.private_subnets[0]
+  subnet_id                   = var.zookeeper_public_subnet ? module.vpc_r3s.public_subnets[count.index % 3] : module.vpc_r3s.private_subnets[count.index % 3]
   vpc_security_group_ids      = var.zookeeper_public_subnet ? [
-    aws_security_group.usw2_allow_ssh.id,
-    aws_security_group.usw2_allow_internal.id,
-    aws_security_group.usw2_allow_egress.id,
+    aws_security_group.r3s_allow_internal.id,
+    aws_security_group.r3s_allow_egress.id,
   ] : [
-    aws_security_group.usw2_allow_internal.id,
-    aws_security_group.usw2_allow_egress.id,
+    aws_security_group.r3s_allow_internal.id,
+    aws_security_group.r3s_allow_egress.id,
   ]
   
   root_block_device {
@@ -97,5 +94,5 @@ resource "aws_instance" "zk_usw2" {
     ignore_changes = [tags]
   }
 
-  provider = aws.us-west-2
+  provider = aws.r3a
 }

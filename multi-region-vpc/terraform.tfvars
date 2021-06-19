@@ -1,13 +1,13 @@
 # Default tfvars
 cluster_name = "justin-mrc"
 owner_name = "Justin Lee"
-use1_ec2_public_key_name = "justin-confluent-dev"
-use2_ec2_public_key_name = "justinrlee-confluent-dev"
-usw2_ec2_public_key_name = "justinrlee-confluent-dev"
+r1s_ec2_public_key_name = "justin-confluent-dev"
+r2s_ec2_public_key_name = "justinrlee-confluent-dev"
+r3s_ec2_public_key_name = "justinrlee-confluent-dev"
 
 zookeeper_public_ip = true
 
 # Region-specific
-use1_slash16 = "10.2"
-use2_slash16 = "10.18"
-usw2_slash16 = "10.50"
+r1s_prefix16 = "10.2"
+r2s_prefix16 = "10.18"
+r3s_prefix16 = "10.50"

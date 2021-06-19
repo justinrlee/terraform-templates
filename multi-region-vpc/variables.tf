@@ -1,60 +1,54 @@
-# Customization
+# Env customization
 
-variable "cluster_name" {
-}
+variable "cluster_name" {}
 
-variable "owner_name" {
-}
+variable "owner_name" {}
 
-variable "use1_ec2_public_key_name" {
-}
-variable "use2_ec2_public_key_name" {
-}
-variable "usw2_ec2_public_key_name" {
-}
+variable "r1s_ec2_public_key_name" {}
+variable "r2s_ec2_public_key_name" {}
+variable "r3s_ec2_public_key_name" {}
 
-# Region-specific
-variable "use1_slash16" {
-}
+# Region-specific (prefix for a /16; eg., 10.8)
+variable "r1s_prefix16" {}
+variable "r2s_prefix16" {}
+variable "r3s_prefix16" {}
 
-variable "use2_slash16" {
-}
-
-variable "usw2_slash16" {
+# Region Settings
+# Full region name (e.g., us-east-1)
+variable "r1" {
+  default = "us-east-1"
 }
 
-# Static but overrideable
-variable "worker_count" {
-  default = "1"
+variable "r2" {
+  default = "us-east-2"
+}
+
+variable "r3" {
+  default = "us-west-2"
+}
+
+# Region shortname (e.g., use1)
+variable "r1s" {
+  default = "use1"
+}
+
+variable "r2s" {
+  default = "use2"
+}
+
+variable "r3s" {
+  default = "usw2"
+}
+
+# Defaults
+
+# Bastion Settings
+variable bastion_counts {
+  default = [1, 0, 0]
 }
 
 variable "bastion_instance_type" {
   default = "t3.large"
-}
-
-variable "worker_tags" {
-  type    = map(string)
-  default = {}
-}
-
-# variable "worker_associate_public_ip_address" {
-#   default = true
-# }
-
-variable "bastion_delete_root_block_device_on_termination" {
-  default = true
-}
-
-variable "broker_delete_root_block_device_on_termination" {
-  default = true
-}
-
-variable "zookeeper_delete_root_block_device_on_termination" {
-  default = true
-}
-
-variable zookeeper_instance_type {
-  default = "t3.xlarge"
 }
 
 variable bastion_public_subnet {
@@ -65,12 +59,47 @@ variable bastion_public_ip {
   default = true
 }
 
+variable "bastion_delete_root_block_device_on_termination" {
+  default = true
+}
+
+# Zookeeper Settings
+variable zookeeper_counts {
+  default = [1, 1, 1]
+}
+
+variable zookeeper_instance_type {
+  default = "t3.xlarge"
+}
+
 variable zookeeper_public_subnet {
   default = true
 }
 
 variable zookeeper_public_ip {
   default = false
+}
+
+variable "zookeeper_delete_root_block_device_on_termination" {
+  default = true
+}
+
+# Broker Settings
+# Broker count is per-region
+variable broker_counts {
+  default = [3, 3, 0]
+}
+
+variable r1s_broker_count {
+  default = 3
+}
+
+variable r2s_broker_count {
+  default = 3
+}
+
+variable r3s_broker_count {
+  default = 0
 }
 
 variable broker_instance_type {
@@ -85,6 +114,6 @@ variable broker_public_ip {
   default = true
 }
 
-variable broker_count {
-  default = 3
+variable "broker_delete_root_block_device_on_termination" {
+  default = true
 }
