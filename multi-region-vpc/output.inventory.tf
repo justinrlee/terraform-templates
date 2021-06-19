@@ -13,8 +13,14 @@ output inventory {
     zookeeper = {
       hosts = merge(
         zipmap(
-          aws_instance.zk_r1s.*.private_dns, 
+          aws_instance.zk_r0s.*.private_dns, 
           [
+            for i in range(length(aws_instance.zk_r0s.*.private_dns)): null
+          ]
+        ),
+
+        zipmap(
+          aws_instance.zk_r1s.*.private_dns, [
             for i in range(length(aws_instance.zk_r1s.*.private_dns)): null
           ]
         ),
@@ -23,22 +29,24 @@ output inventory {
           aws_instance.zk_r2s.*.private_dns, [
             for i in range(length(aws_instance.zk_r2s.*.private_dns)): null
           ]
-        ),
-
-        zipmap(
-          aws_instance.zk_r3s.*.private_dns, [
-            for i in range(length(aws_instance.zk_r3s.*.private_dns)): null
-          ]
         )
       )
     },
     kafka_broker = {
       hosts = merge(
         zipmap(
-          aws_instance.brokers_r1s.*.private_dns, 
+          aws_instance.brokers_r0s.*.private_dns, 
           [
-            for i in range(length(aws_instance.brokers_r1s.*.private_dns)): {
+            for i in range(length(aws_instance.brokers_r0s.*.private_dns)): {
               broker_id: i + 100
+            }
+          ]
+        ),
+
+        zipmap(
+          aws_instance.brokers_r1s.*.private_dns, [
+            for i in range(length(aws_instance.brokers_r1s.*.private_dns)): {
+              broker_id: i + 200
             }
           ]
         ),
@@ -46,14 +54,6 @@ output inventory {
         zipmap(
           aws_instance.brokers_r2s.*.private_dns, [
             for i in range(length(aws_instance.brokers_r2s.*.private_dns)): {
-              broker_id: i + 200
-            }
-          ]
-        ),
-
-        zipmap(
-          aws_instance.brokers_r3s.*.private_dns, [
-            for i in range(length(aws_instance.brokers_r3s.*.private_dns)): {
               broker_id: i + 300
             }
           ]

@@ -4,39 +4,39 @@ variable "cluster_name" {}
 
 variable "owner_name" {}
 
+variable "r0s_ec2_public_key_name" {}
 variable "r1s_ec2_public_key_name" {}
 variable "r2s_ec2_public_key_name" {}
-variable "r3s_ec2_public_key_name" {}
 
 # Region-specific (prefix for a /16; eg., 10.8)
+variable "r0s_prefix16" {}
 variable "r1s_prefix16" {}
 variable "r2s_prefix16" {}
-variable "r3s_prefix16" {}
 
 # Region Settings
 # Full region name (e.g., us-east-1)
-variable "r1" {
+variable "r0" {
   default = "us-east-1"
 }
 
-variable "r2" {
+variable "r1" {
   default = "us-east-2"
 }
 
-variable "r3" {
+variable "r2" {
   default = "us-west-2"
 }
 
 # Region shortname (e.g., use1)
-variable "r1s" {
+variable "r0s" {
   default = "use1"
 }
 
-variable "r2s" {
+variable "r1s" {
   default = "use2"
 }
 
-variable "r3s" {
+variable "r2s" {
   default = "usw2"
 }
 
@@ -90,15 +90,15 @@ variable broker_counts {
   default = [3, 3, 0]
 }
 
+variable r0s_broker_count {
+  default = 3
+}
+
 variable r1s_broker_count {
   default = 3
 }
 
 variable r2s_broker_count {
-  default = 3
-}
-
-variable r3s_broker_count {
   default = 0
 }
 
