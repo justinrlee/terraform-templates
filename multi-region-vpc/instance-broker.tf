@@ -1,9 +1,9 @@
 resource "aws_instance" "brokers_r0s" {
   count                       = var.broker_counts[0]
-  ami                         = lookup(var.aws_amis, var.r0)
+  ami                         = lookup(var.aws_amis, var.regions[0])
   instance_type               = var.broker_instance_type
   associate_public_ip_address = var.broker_public_ip
-  key_name                    = var.r0s_ec2_public_key_name
+  key_name                    = var.ec2_public_key_names[0]
 
   subnet_id                   = var.broker_public_subnet ? module.vpc_r0s.public_subnets[count.index % 3] : module.vpc_r0s.private_subnets[count.index % 3]
   vpc_security_group_ids      = var.broker_public_subnet ? [
@@ -34,10 +34,10 @@ resource "aws_instance" "brokers_r0s" {
 
 resource "aws_instance" "brokers_r1s" {
   count                       = var.broker_counts[1]
-  ami                         = lookup(var.aws_amis, var.r1)
+  ami                         = lookup(var.aws_amis, var.regions[1])
   instance_type               = var.broker_instance_type
   associate_public_ip_address = var.broker_public_ip
-  key_name                    = var.r1s_ec2_public_key_name
+  key_name                    = var.ec2_public_key_names[1]
 
   subnet_id                   = var.broker_public_subnet ? module.vpc_r1s.public_subnets[count.index % 3] : module.vpc_r1s.private_subnets[count.index % 3]
   vpc_security_group_ids      = var.broker_public_subnet ? [
@@ -68,10 +68,10 @@ resource "aws_instance" "brokers_r1s" {
 
 resource "aws_instance" "brokers_r2s" {
   count                       = var.broker_counts[2]
-  ami                         = lookup(var.aws_amis, var.r2)
+  ami                         = lookup(var.aws_amis, var.regions[2])
   instance_type               = var.broker_instance_type
   associate_public_ip_address = var.broker_public_ip
-  key_name                    = var.r2s_ec2_public_key_name
+  key_name                    = var.ec2_public_key_names[2]
 
   subnet_id                   = var.broker_public_subnet ? module.vpc_r2s.public_subnets[count.index % 3] : module.vpc_r2s.private_subnets[count.index % 3]
   vpc_security_group_ids      = var.broker_public_subnet ? [

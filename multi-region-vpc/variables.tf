@@ -4,44 +4,33 @@ variable "cluster_name" {}
 
 variable "owner_name" {}
 
-variable "r0s_ec2_public_key_name" {}
-variable "r1s_ec2_public_key_name" {}
-variable "r2s_ec2_public_key_name" {}
-
-# Region-specific (prefix for a /16; eg., 10.8)
-variable "r0s_prefix16" {}
-variable "r1s_prefix16" {}
-variable "r2s_prefix16" {}
-
 # Region Settings
 # Full region name (e.g., us-east-1)
-variable "r0" {
-  default = "us-east-1"
+variable "regions" {
+  default = ["us-east-1", "us-east-2", "us-west-2"]
 }
 
-variable "r1" {
-  default = "us-east-2"
+# Region shortname
+variable "regions_short" {
+  default = ["use1", "use2", "usw2"]
 }
 
-variable "r2" {
-  default = "us-west-2"
+# /16 prefix for each VPC (e.g., "10.2" for 10.2.0.0/16)
+variable "prefixes" {
+  # example = ["10.2", "10.18", "10.50"]
 }
 
-# Region shortname (e.g., use1)
-variable "r0s" {
-  default = "use1"
+variable ec2_public_key_names {
+  # example = ["justin-confluent-dev", "justinrlee-confluent-dev", "justinrlee-confluent-dev"]
 }
 
-variable "r1s" {
-  default = "use2"
-}
-
-variable "r2s" {
-  default = "usw2"
+# If set, uses public dns names as advertised listener with indicated port
+# Should be either null or an int
+variable public_listener_port {
+  default = null
 }
 
 # Defaults
-
 # Bastion Settings
 variable bastion_counts {
   default = [1, 0, 0]

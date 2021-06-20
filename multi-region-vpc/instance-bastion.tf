@@ -1,9 +1,9 @@
 resource "aws_instance" "bastion_r0s" {
   count                       = var.bastion_counts[0]
-  ami                         = lookup(var.aws_amis, var.r0)
+  ami                         = lookup(var.aws_amis, var.regions[0])
   instance_type               = var.bastion_instance_type
   associate_public_ip_address = var.bastion_public_ip
-  key_name                    = var.r0s_ec2_public_key_name
+  key_name                    = var.ec2_public_key_names[0]
 
   subnet_id                   = var.bastion_public_subnet ? module.vpc_r0s.public_subnets[count.index % 3] : module.vpc_r0s.private_subnets[count.index % 3]
 
@@ -32,10 +32,10 @@ resource "aws_instance" "bastion_r0s" {
 
 resource "aws_instance" "bastion_r1s" {
   count                       = var.bastion_counts[1]
-  ami                         = lookup(var.aws_amis, var.r1)
+  ami                         = lookup(var.aws_amis, var.regions[1])
   instance_type               = var.bastion_instance_type
   associate_public_ip_address = var.bastion_public_ip
-  key_name                    = var.r1s_ec2_public_key_name
+  key_name                    = var.ec2_public_key_names[1]
 
   subnet_id                   = var.bastion_public_subnet ? module.vpc_r1s.public_subnets[count.index % 3] : module.vpc_r1s.private_subnets[count.index % 3]
 
@@ -64,10 +64,10 @@ resource "aws_instance" "bastion_r1s" {
 
 resource "aws_instance" "bastion_r2s" {
   count                       = var.bastion_counts[0]
-  ami                         = lookup(var.aws_amis, var.r2)
+  ami                         = lookup(var.aws_amis, var.regions[2])
   instance_type               = var.bastion_instance_type
   associate_public_ip_address = var.bastion_public_ip
-  key_name                    = var.r2s_ec2_public_key_name
+  key_name                    = var.ec2_public_key_names[2]
 
   subnet_id                   = var.bastion_public_subnet ? module.vpc_r2s.public_subnets[count.index % 3] : module.vpc_r2s.private_subnets[count.index % 3]
 

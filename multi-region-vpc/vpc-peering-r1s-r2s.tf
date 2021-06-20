@@ -1,13 +1,13 @@
 resource "aws_vpc_peering_connection" "r1s_r2s" {
   vpc_id        = module.vpc_r1s.vpc_id
   peer_vpc_id   = module.vpc_r2s.vpc_id
-  peer_region   = var.r2
+  peer_region   = var.regions[2]
 
   tags = {
-    Name = "${var.cluster_name}-${var.r1s}-${var.r2s}"
+    Name = "${var.cluster_name}-${var.regions_short[1]}-${var.regions_short[2]}"
     Side = "Requester"
-    Local = var.r1
-    Peer = var.r2
+    Local = var.regions[1]
+    Peer = var.regions[2]
     Provenance = "Multi-Region Terraform for ${var.cluster_name}"
   }
 
@@ -23,10 +23,10 @@ resource "aws_vpc_peering_connection_accepter" "r1s_r2s" {
   auto_accept = true
 
   tags = {
-    Name = "${var.cluster_name}-${var.r2s}-${var.r1s}"
+    Name = "${var.cluster_name}-${var.regions_short[2]}-${var.regions_short[1]}"
     Side = "Accepter"
-    Local = var.r2
-    Peer = var.r1
+    Local = var.regions[2]
+    Peer = var.regions[1]
     Provenance = "Multi-Region Terraform for ${var.cluster_name}"
   }
 
@@ -61,7 +61,7 @@ resource "aws_vpc_peering_connection_options" "r1s_r2s_accepter" {
 
 resource "aws_route" "r1s_r2s_public" {
   route_table_id = module.vpc_r1s.public_route_table_ids[0]
-  destination_cidr_block = "${var.r2s_prefix16}.0.0/16"
+  destination_cidr_block = "${var.prefixes[2]}.0.0/16"
   vpc_peering_connection_id =  aws_vpc_peering_connection_accepter.r1s_r2s.id
 
   provider = aws.r1a
@@ -69,7 +69,7 @@ resource "aws_route" "r1s_r2s_public" {
 
 resource "aws_route" "r2s_r1s_public" {
   route_table_id = module.vpc_r2s.public_route_table_ids[0]
-  destination_cidr_block = "${var.r1s_prefix16}.0.0/16"
+  destination_cidr_block = "${var.prefixes[1]}.0.0/16"
   vpc_peering_connection_id =  aws_vpc_peering_connection_accepter.r1s_r2s.id
 
   provider = aws.r2a
@@ -79,7 +79,7 @@ resource aws_route "r1s_r2s_private" {
   count = 3
 
   route_table_id = module.vpc_r1s.private_route_table_ids[count.index]
-  destination_cidr_block = "${var.r2s_prefix16}.0.0/16"
+  destination_cidr_block = "${var.prefixes[2]}.0.0/16"
   vpc_peering_connection_id =  aws_vpc_peering_connection_accepter.r1s_r2s.id
 
   provider = aws.r1a
@@ -89,7 +89,7 @@ resource aws_route "r2s_r1s_private" {
   count = 3
 
   route_table_id = module.vpc_r2s.private_route_table_ids[count.index]
-  destination_cidr_block = "${var.r1s_prefix16}.0.0/16"
+  destination_cidr_block = "${var.prefixes[1]}.0.0/16"
   vpc_peering_connection_id =  aws_vpc_peering_connection_accepter.r1s_r2s.id
 
   provider = aws.r2a
