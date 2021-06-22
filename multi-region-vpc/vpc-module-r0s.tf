@@ -13,7 +13,7 @@ module "vpc_r0s" {
   enable_ipv6 = false
   enable_dns_hostnames = true
 
-  enable_nat_gateway = false
+  enable_nat_gateway = true
   single_nat_gateway = false
 
   public_subnet_tags = {
