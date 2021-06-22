@@ -1,11 +1,11 @@
-# output "bastion" {
-#     value = {
-#         public_ip = aws_instance.bastion.public_ip,
-#         private_ip = aws_instance.bastion.private_ip,
-#         public_dns = aws_instance.bastion.public_dns,
-#         private_dns = aws_instance.bastion.private_dns,
-#     }
-# }
+output "bastion" {
+    value = {
+        public_ip = aws_instance.bastion_r0s.*.public_ip,
+        private_ip = aws_instance.bastion_r0s.*.private_ip,
+        public_dns = aws_instance.bastion_r0s.*.public_dns,
+        private_dns = aws_instance.bastion_r0s.*.private_dns,
+    }
+}
 
 output "zookeeper_r0s" {
     value = {

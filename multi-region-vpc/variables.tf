@@ -62,7 +62,7 @@ variable zookeeper_instance_type {
 }
 
 variable zookeeper_public_subnet {
-  default = true
+  default = false
 }
 
 variable zookeeper_public_ip {
@@ -96,11 +96,11 @@ variable broker_instance_type {
 }
 
 variable broker_public_subnet {
-  default = true
+  default = false
 }
 
 variable broker_public_ip {
-  default = true
+  default = false
 }
 
 variable "broker_delete_root_block_device_on_termination" {
