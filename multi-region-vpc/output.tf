@@ -51,3 +51,23 @@ output "brokers_r1s" {
         private_dns = aws_instance.brokers_r1s.*.private_dns
     }
 }
+
+output "all_private_dns" {
+    value = concat(
+        aws_instance.bastion_r0s.*.private_dns,
+        aws_instance.zk_r0s.*.private_dns,
+        aws_instance.zk_r1s.*.private_dns,
+        aws_instance.zk_r2s.*.private_dns,
+        aws_instance.brokers_r0s.*.private_dns,
+        aws_instance.brokers_r1s.*.private_dns,
+        aws_instance.brokers_r2s.*.private_dns,
+    )
+}
+
+output "all_brokers_dns" {
+    value = concat(
+        aws_instance.brokers_r0s.*.private_dns,
+        aws_instance.brokers_r1s.*.private_dns,
+        aws_instance.brokers_r2s.*.private_dns,
+    )
+}
