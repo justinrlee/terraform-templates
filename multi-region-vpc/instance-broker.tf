@@ -1,5 +1,5 @@
 resource "aws_instance" "brokers_r0s" {
-  count                       = var.broker_counts[0]
+  count                       = var.broker_counts[0] + var.observer_counts[0]
   ami                         = lookup(var.aws_amis, var.regions[0])
   instance_type               = var.broker_instance_type
   associate_public_ip_address = var.broker_public_ip
@@ -33,7 +33,7 @@ resource "aws_instance" "brokers_r0s" {
 }
 
 resource "aws_instance" "brokers_r1s" {
-  count                       = var.broker_counts[1]
+  count                       = var.broker_counts[1] + var.observer_counts[1]
   ami                         = lookup(var.aws_amis, var.regions[1])
   instance_type               = var.broker_instance_type
   associate_public_ip_address = var.broker_public_ip
@@ -67,7 +67,7 @@ resource "aws_instance" "brokers_r1s" {
 }
 
 resource "aws_instance" "brokers_r2s" {
-  count                       = var.broker_counts[2]
+  count                       = var.broker_counts[2] + var.observer_counts[2]
   ami                         = lookup(var.aws_amis, var.regions[2])
   instance_type               = var.broker_instance_type
   associate_public_ip_address = var.broker_public_ip

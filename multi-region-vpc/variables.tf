@@ -20,6 +20,10 @@ variable "prefixes" {
   # example = ["10.2", "10.18", "10.50"]
 }
 
+variable "kafka_broker_custom_properties" {
+  default = {}
+}
+
 variable ec2_public_key_names {
   # example = ["justin-confluent-dev", "justinrlee-confluent-dev", "justinrlee-confluent-dev"]
 }
@@ -77,6 +81,10 @@ variable "zookeeper_delete_root_block_device_on_termination" {
 # Broker count is per-region
 variable broker_counts {
   default = [3, 3, 0]
+}
+
+variable observer_counts {
+  default = [1, 1, 0]
 }
 
 variable r0s_broker_count {

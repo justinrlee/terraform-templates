@@ -8,9 +8,11 @@ output inventory {
         ssl_enabled = true
         validate_hosts = false
         regenerate_ca = false
-        kafka_broker_custom_properties = {
+        kafka_broker_custom_properties = merge({
           "replica.selector.class" = "org.apache.kafka.common.replica.RackAwareReplicaSelector"
-        }
+        },
+        var.kafka_broker_custom_properties
+        )
       },
       var.public_listener_port != null ? {
         kafka_broker_custom_listeners : {
@@ -52,7 +54,7 @@ output inventory {
             for i in range(length(aws_instance.brokers_r0s.*.private_dns)): merge({
               broker_id: i + 100,
               kafka_broker_custom_properties: {
-                "broker.rack": var.regions[0]
+                "broker.rack": (i < var.broker_counts[0]) ? var.regions[0] : "${var.regions[0]}-o"
               }
             },
             var.public_listener_port != null ? {
@@ -71,7 +73,7 @@ output inventory {
             for i in range(length(aws_instance.brokers_r1s.*.private_dns)): merge({
               broker_id: i + 200,
               kafka_broker_custom_properties: {
-                "broker.rack": var.regions[1]
+                "broker.rack": (i < var.broker_counts[1]) ? var.regions[1] : "${var.regions[1]}-o"
               }
             },
             var.public_listener_port != null ? {
@@ -90,7 +92,7 @@ output inventory {
             for i in range(length(aws_instance.brokers_r2s.*.private_dns)): merge({
               broker_id: i + 300,
               kafka_broker_custom_properties: {
-                "broker.rack": var.regions[2]
+                "broker.rack": (i < var.broker_counts[2]) ? var.regions[2] : "${var.regions[2]}-o"
               }
             },
             var.public_listener_port != null ? {
