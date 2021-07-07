@@ -97,3 +97,10 @@ BOOTSTRAP=$(grep bootstrap client.properties | awk -F',' '{print $2}')
 ```
 
 do other stuff to your heart's content
+
+TODO:
+* Clean up style
+* Fix style for variables ("quotes" or not for variable names)
+* Add Connect
+* Add ksqlDB
+* Add RP
