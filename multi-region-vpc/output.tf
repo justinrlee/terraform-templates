@@ -61,6 +61,12 @@ output "all_private_dns" {
         aws_instance.brokers_r0s.*.private_dns,
         aws_instance.brokers_r1s.*.private_dns,
         aws_instance.brokers_r2s.*.private_dns,
+        aws_instance.schema_registry_r0s.*.private_dns,
+        aws_instance.schema_registry_r1s.*.private_dns,
+        aws_instance.schema_registry_r2s.*.private_dns,
+        aws_instance.control_center_r0s.*.private_dns,
+        aws_instance.control_center_r1s.*.private_dns,
+        aws_instance.control_center_r2s.*.private_dns,
     )
 }
 

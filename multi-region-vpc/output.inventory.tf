@@ -23,24 +23,26 @@ output inventory {
         }
       } : {}
       )
-    }
+    },
     zookeeper = {
       hosts = merge(
         zipmap(
-          aws_instance.zk_r0s.*.private_dns, 
+          aws_instance.zk_r0s.*.private_dns,
           [
             for i in range(length(aws_instance.zk_r0s.*.private_dns)): null
           ]
         ),
 
         zipmap(
-          aws_instance.zk_r1s.*.private_dns, [
+          aws_instance.zk_r1s.*.private_dns,
+          [
             for i in range(length(aws_instance.zk_r1s.*.private_dns)): null
           ]
         ),
 
         zipmap(
-          aws_instance.zk_r2s.*.private_dns, [
+          aws_instance.zk_r2s.*.private_dns,
+          [
             for i in range(length(aws_instance.zk_r2s.*.private_dns)): null
           ]
         )
@@ -106,6 +108,54 @@ output inventory {
           ]
         )
       )
-    }
+    },
+    schema_registry = {
+      hosts = merge(
+        zipmap(
+          aws_instance.schema_registry_r0s.*.private_dns,
+          [
+            for i in range(length(aws_instance.schema_registry_r0s.*.private_dns)): null
+          ]
+        ),
+
+        zipmap(
+          aws_instance.schema_registry_r1s.*.private_dns,
+          [
+            for i in range(length(aws_instance.schema_registry_r1s.*.private_dns)): null
+          ]
+        ),
+
+        zipmap(
+          aws_instance.schema_registry_r2s.*.private_dns,
+          [
+            for i in range(length(aws_instance.schema_registry_r2s.*.private_dns)): null
+          ]
+        )
+      )
+    },
+    control_center = {
+      hosts = merge(
+        zipmap(
+          aws_instance.control_center_r0s.*.private_dns,
+          [
+            for i in range(length(aws_instance.control_center_r0s.*.private_dns)): null
+          ]
+        ),
+
+        zipmap(
+          aws_instance.control_center_r1s.*.private_dns,
+          [
+            for i in range(length(aws_instance.control_center_r1s.*.private_dns)): null
+          ]
+        ),
+
+        zipmap(
+          aws_instance.control_center_r2s.*.private_dns,
+          [
+            for i in range(length(aws_instance.control_center_r2s.*.private_dns)): null
+          ]
+        )
+      )
+    },
   }   
 }

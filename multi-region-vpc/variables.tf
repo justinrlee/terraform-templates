@@ -20,22 +20,13 @@ variable "prefixes" {
   # example = ["10.2", "10.18", "10.50"]
 }
 
-variable "kafka_broker_custom_properties" {
-  default = {}
-}
-
 variable ec2_public_key_names {
   # example = ["justin-confluent-dev", "justinrlee-confluent-dev", "justinrlee-confluent-dev"]
 }
 
-# If set, uses public dns names as advertised listener with indicated port
-# Should be either null or an int
-variable public_listener_port {
-  default = null
-}
 
 # Defaults
-# Bastion Settings
+######################################################################## Bastion
 variable bastion_counts {
   default = [1, 0, 0]
 }
@@ -56,7 +47,7 @@ variable "bastion_delete_root_block_device_on_termination" {
   default = true
 }
 
-# Zookeeper Settings
+###################################################################### Zookeeper
 variable zookeeper_counts {
   default = [1, 1, 1]
 }
@@ -77,7 +68,7 @@ variable "zookeeper_delete_root_block_device_on_termination" {
   default = true
 }
 
-# Broker Settings
+######################################################################## Brokers
 # Broker count is per-region
 variable broker_counts {
   default = [3, 3, 0]
@@ -85,18 +76,6 @@ variable broker_counts {
 
 variable observer_counts {
   default = [1, 1, 0]
-}
-
-variable r0s_broker_count {
-  default = 3
-}
-
-variable r1s_broker_count {
-  default = 3
-}
-
-variable r2s_broker_count {
-  default = 0
 }
 
 variable broker_instance_type {
@@ -112,5 +91,63 @@ variable broker_public_ip {
 }
 
 variable "broker_delete_root_block_device_on_termination" {
+  default = true
+}
+
+variable "kafka_broker_custom_properties" {
+  default = {}
+}
+
+# If set, uses public dns names as advertised listener with indicated port
+# Should be either null or an int
+variable public_listener_port {
+  default = null
+}
+
+################################################################ Schema Registry
+variable schema_registry_instance_type {
+  default = "t3.medium"
+}
+
+variable schema_registry_counts {
+  default = [1, 1, 0]
+}
+
+variable schema_registry_public_subnet {
+  default = false
+}
+
+variable schema_registry_public_ip {
+  default = false
+}
+
+variable "schema_registry_delete_root_block_device_on_termination" {
+  default = true
+}
+
+## Connect (not implemented; want multiple connect clusters)
+
+## Rest Proxy (not implemented; low priority)
+
+## ksql (not implemented)
+
+################################################################# Control Center
+variable control_center_instance_type {
+  default = "t3.xlarge"
+}
+
+variable control_center_counts {
+  default = [1, 0, 0]
+}
+
+variable control_center_public_subnet {
+  default = true
+}
+
+variable control_center_public_ip {
+  default = true
+}
+
+variable "control_center_delete_root_block_device_on_termination" {
   default = true
 }
