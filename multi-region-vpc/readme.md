@@ -172,6 +172,8 @@ do other stuff to your heart's content
 TODO:
 * Clean up style
 * Fix style for variables ("quotes" or not for variable names)
-* Add Connect
-* Add ksqlDB
 * Add RP
+* Refactor bastion, broker, c3, sr, zk to use instance_set (maybe, will break compatibility)
+* Dynamic constraints
+* Clean up outputs (how many or few do we want?)
+* add zk id (maybe)
