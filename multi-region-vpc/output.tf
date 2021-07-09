@@ -67,6 +67,8 @@ output "all_private_dns" {
         aws_instance.control_center_r0s.*.private_dns,
         aws_instance.control_center_r1s.*.private_dns,
         aws_instance.control_center_r2s.*.private_dns,
+        flatten([for k,v in module.connect_workers: v.private_dns]),
+        flatten([for k,v in module.ksql_instances: v.private_dns])
     )
 }
 

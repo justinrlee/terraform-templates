@@ -11,13 +11,28 @@ kafka_broker_custom_properties = {
     "min.insync.replicas": "3"
 }
 
+connect_clusters = {
+    "syslog" = {
+        name = "syslog"
+        counts = [2, 2, 0]
+        instance_type = "t3.large"
+    }
+    "elastic" = {
+        name = "elastic"
+        counts = [2, 2, 0]
+        instance_type = "t3.medium"
+    }
+}
 
-# Uncomment these to put zookeepers in public subnets (with public IPs)
-# zookeeper_public_subnet = true
-# zookeeper_public_ip = true
-
-# Uncomment these to put brokers in public subnets (with public IPs)
-# broker_public_subnet = true
-# broker_public_ip = true
-
-# public_listener_port = 9093
+ksql_clusters = {
+    "ksql1" = {
+        name = "ksql1"
+        counts = [2, 2, 0]
+        instance_type = "t3.large"
+    }
+    "ksql2" = {
+        name = "ksql2"
+        counts = [2, 2, 0]
+        instance_type = "t3.medium"
+    }
+}

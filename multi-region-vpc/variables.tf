@@ -151,3 +151,33 @@ variable control_center_public_ip {
 variable "control_center_delete_root_block_device_on_termination" {
   default = true
 }
+
+
+################################################################# Connect
+variable connect_clusters {
+  description = "Should be a map of maps.  Each top-level map key will be a connect cluster; each child map should have the following information:\n name: Name of Connect worker cluster\n counts: 3-tuple of number of instances in each region\n instance_type: instance type for Connect worker instances"
+  default = {}
+}
+
+## TODO: Support external IPs / subnets
+
+### Example
+# connect_clusters = {
+#       one = {
+#           name = "one"
+#           counts = [2, 2, 0]
+#           instance_type = "t3.large"
+#       }
+#       two = {
+#           name = "two"
+#           counts = [2, 2, 0]
+#           instance_type = "t3.large"
+#       }
+#   }
+
+
+################################################################# KSQL
+variable ksql_clusters {
+  description = "Should be a map of maps.  Each top-level map key will be a connect cluster; each child map should have the following information:\n name: Name of Connect worker cluster\n counts: 3-tuple of number of instances in each region\n instance_type: instance type for Connect worker instances"
+  default = {}
+}
