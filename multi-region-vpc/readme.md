@@ -48,9 +48,32 @@ all:
     regenerate_ca: false
     ssl_enabled: true
     validate_hosts: false
+connect_elastic:
+  hosts:
+    ip-10-18-101-164.us-east-2.compute.internal: null
+    ip-10-18-102-24.us-east-2.compute.internal: null
+    ip-10-2-101-45.ec2.internal: null
+    ip-10-2-102-145.ec2.internal: null
+  vars:
+    kafka_connect_group_id: elastic
+connect_syslog:
+  hosts:
+    ip-10-18-101-86.us-east-2.compute.internal: null
+    ip-10-18-102-235.us-east-2.compute.internal: null
+    ip-10-2-101-202.ec2.internal: null
+    ip-10-2-102-191.ec2.internal: null
+  vars:
+    kafka_connect_group_id: syslog
 control_center:
   hosts:
     ip-10-2-1-51.ec2.internal: null
+  vars:
+    kafka_connect_cluster_ansible_group_names:
+      - connect_elastic
+      - connect_syslog
+    ksql_cluster_ansible_group_names:
+      - ksql_elastic
+      - ksql_syslog
 kafka_broker:
   hosts:
     ip-10-18-101-22.us-east-2.compute.internal:
@@ -85,6 +108,30 @@ kafka_broker:
       broker_id: 102
       kafka_broker_custom_properties:
         broker.rack: us-east-1
+kafka_connect:
+  children:
+    connect_elastic: null
+    connect_syslog: null
+ksql:
+  children:
+    ksql_ksql1: null
+    ksql_ksql2: null
+ksql_ksql1:
+  hosts:
+    ip-10-18-101-94.us-east-2.compute.internal: null
+    ip-10-18-102-230.us-east-2.compute.internal: null
+    ip-10-2-101-209.ec2.internal: null
+    ip-10-2-102-138.ec2.internal: null
+  vars:
+    ksql_service_id: ksql1_
+ksql_ksql2:
+  hosts:
+    ip-10-18-101-71.us-east-2.compute.internal: null
+    ip-10-18-102-158.us-east-2.compute.internal: null
+    ip-10-2-101-240.ec2.internal: null
+    ip-10-2-102-47.ec2.internal: null
+  vars:
+    ksql_service_id: ksql2_
 schema_registry:
   hosts:
     ip-10-18-101-12.us-east-2.compute.internal: null
@@ -177,3 +224,4 @@ TODO:
 * Dynamic constraints
 * Clean up outputs (how many or few do we want?)
 * add zk id (maybe)
+* more readmes
