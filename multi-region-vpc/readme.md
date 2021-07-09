@@ -25,6 +25,77 @@ Consists of the following:
 
 For now, all internal traffic is allowed; may lock this down later
 
+# cp-ansible inventory
+
+If you have a fully deployed infrastructure, you can generate a cp-ansible-friendly YAML inventory with this command (note that currently, the log placement constraints bit is a hardcoded string from the default `terraform.tfvars`)
+
+```bash
+terraform output -json inventory | yq e -P -
+```
+
+You should get something like this:
+
+```yml
+all:
+  vars:
+    ansible_become: true
+    ansible_connection: ssh
+    ansible_user: ubuntu
+    kafka_broker_custom_properties:
+      confluent.log.placement.constraints: '{"version":2,"replicas":[{"count":2,"constraints":{"rack":"us-east-1"}},{"count":2,"constraints":{"rack":"us-west-2"}}],"observers":[{"count":1,"constraints":{"rack":"us-east-1-o"}},{"count":1,"constraints":{"rack":"us-west-2-o"}}], "observerPromotionPolicy": "under-min-isr"}'
+      min.insync.replicas: "3"
+      replica.selector.class: org.apache.kafka.common.replica.RackAwareReplicaSelector
+    regenerate_ca: false
+    ssl_enabled: true
+    validate_hosts: false
+control_center:
+  hosts:
+    ip-10-2-1-51.ec2.internal: null
+kafka_broker:
+  hosts:
+    ip-10-18-101-22.us-east-2.compute.internal:
+      broker_id: 203
+      kafka_broker_custom_properties:
+        broker.rack: us-east-2-o
+    ip-10-18-101-62.us-east-2.compute.internal:
+      broker_id: 200
+      kafka_broker_custom_properties:
+        broker.rack: us-east-2
+    ip-10-18-102-92.us-east-2.compute.internal:
+      broker_id: 201
+      kafka_broker_custom_properties:
+        broker.rack: us-east-2
+    ip-10-18-103-251.us-east-2.compute.internal:
+      broker_id: 202
+      kafka_broker_custom_properties:
+        broker.rack: us-east-2
+    ip-10-2-101-15.ec2.internal:
+      broker_id: 103
+      kafka_broker_custom_properties:
+        broker.rack: us-east-1-o
+    ip-10-2-101-92.ec2.internal:
+      broker_id: 100
+      kafka_broker_custom_properties:
+        broker.rack: us-east-1
+    ip-10-2-102-17.ec2.internal:
+      broker_id: 101
+      kafka_broker_custom_properties:
+        broker.rack: us-east-1
+    ip-10-2-103-15.ec2.internal:
+      broker_id: 102
+      kafka_broker_custom_properties:
+        broker.rack: us-east-1
+schema_registry:
+  hosts:
+    ip-10-18-101-12.us-east-2.compute.internal: null
+    ip-10-2-101-89.ec2.internal: null
+zookeeper:
+  hosts:
+    ip-10-18-101-207.us-east-2.compute.internal: null
+    ip-10-2-101-163.ec2.internal: null
+    ip-10-50-101-150.us-west-2.compute.internal: null
+```
+
 # Very rough instructions (WIP, need more automation probably):
 
 **Everything past here is super hacky**
