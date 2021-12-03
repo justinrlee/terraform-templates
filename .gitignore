@@ -7,3 +7,5 @@ test.*
 run.*
 hosts.yml
 client.properties
+
+kubeconfig.*
