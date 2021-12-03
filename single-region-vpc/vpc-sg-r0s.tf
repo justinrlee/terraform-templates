@@ -1,0 +1,91 @@
+resource "aws_security_group" "r0s_allow_internal" {
+  description = "All multi-region traffic"
+  name        = "${var.cluster_name}-allow-internal"
+  vpc_id      = module.vpc_r0s.vpc_id
+
+  ingress = [{
+    description      = null,
+    protocol         = "-1",
+    cidr_blocks      = ["10.0.0.0/8"],
+    from_port        = 0,
+    to_port          = 0,
+    ipv6_cidr_blocks = null,
+    prefix_list_ids  = null,
+    security_groups  = null,
+    self             = null
+  }]
+
+  egress = [{
+    description      = null,
+    protocol         = "-1",
+    cidr_blocks      = ["10.0.0.0/8"],
+    from_port        = 0,
+    to_port          = 0,
+    ipv6_cidr_blocks = null,
+    prefix_list_ids  = null,
+    security_groups  = null,
+    self             = null
+  }]
+
+  provider = aws.r0a
+}
+
+resource "aws_security_group" "r0s_allow_ssh" {
+  description = "SSH Inbound"
+  name        = "${var.cluster_name}-allow-ssh"
+  vpc_id      = module.vpc_r0s.vpc_id
+
+  ingress = [{
+    description      = null,
+    protocol         = "tcp",
+    cidr_blocks      = ["0.0.0.0/0"],
+    from_port        = 22,
+    to_port          = 22,
+    ipv6_cidr_blocks = null,
+    prefix_list_ids  = null,
+    security_groups  = null,
+    self             = null
+  }]
+  
+  provider = aws.r0a
+}
+
+resource "aws_security_group" "r0s_allow_egress" {
+  description = "All Egress"
+  name        = "${var.cluster_name}-allow-egress"
+  vpc_id      = module.vpc_r0s.vpc_id
+
+  egress = [{
+    description      = null,
+    protocol         = "-1",
+    cidr_blocks      = ["0.0.0.0/0"],
+    from_port        = 0,
+    to_port          = 0,
+    ipv6_cidr_blocks = null,
+    prefix_list_ids  = null,
+    security_groups  = null,
+    self             = null
+  }]
+  
+  provider = aws.r0a
+}
+
+resource "aws_security_group" "r0s_allow_broker" {
+  description = "Broker Inbound"
+  name        = "${var.cluster_name}-broker"
+  vpc_id      = module.vpc_r0s.vpc_id
+
+  ingress = [{
+    description      = null,
+    protocol         = "tcp",
+    cidr_blocks      = ["0.0.0.0/0"],
+    from_port        = 9092,
+    to_port          = 9092,
+    ipv6_cidr_blocks = null,
+    prefix_list_ids  = null,
+    security_groups  = null,
+    self             = null
+  }]
+  
+  provider = aws.r0a
+}
