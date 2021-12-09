@@ -22,3 +22,7 @@ provider "aws" {
   region = var.regions[2]
   alias  = "r2a"
 }
+
+provider "dns" {
+  
+}
