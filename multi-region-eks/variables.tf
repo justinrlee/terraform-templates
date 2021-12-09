@@ -24,6 +24,20 @@ variable ec2_public_key_names {
   # example = ["justin-confluent-dev", "justinrlee-confluent-dev", "justinrlee-confluent-dev"]
 }
 
+# Zookeeper myid offset for each region
+variable "zookeeper_offsets" {
+  default = [10, 20, 30]
+}
+
+# Zookeeper myid offset for each region
+variable "kafka_offsets" {
+  default = [10, 20, 30]
+}
+
+variable "observer_offsets" {
+  default = [110, 120, 130]
+}
+
 variable "worker_image_id" {
   type = map(string)
   default = {
@@ -57,9 +71,9 @@ variable "worker_image_id" {
 # }
 
 # ###################################################################### Zookeeper
-# variable zookeeper_counts {
-#   default = [1, 1, 1]
-# }
+variable zookeeper_counts {
+  default = [3, 3, 3]
+}
 
 # variable zookeeper_instance_type {
 #   default = "t3.xlarge"
@@ -78,14 +92,14 @@ variable "worker_image_id" {
 # }
 
 # ######################################################################## Brokers
-# # Broker count is per-region
-# variable broker_counts {
-#   default = [3, 3, 0]
-# }
+# Broker count is per-region
+variable kafka_counts {
+  default = [3, 3, 0]
+}
 
-# variable observer_counts {
-#   default = [1, 1, 0]
-# }
+variable observer_counts {
+  default = [1, 1, 0]
+}
 
 # variable broker_instance_type {
 #   default = "t3.xlarge"

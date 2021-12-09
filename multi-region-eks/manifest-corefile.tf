@@ -1,4 +1,6 @@
 
+# Can't use count or for_each for the kubernetes services, because they're in different providers
+
 data "dns_a_record_set" "nlb_r0" {
   host = kubernetes_service.dns_external_r0.status[0].load_balancer[0].ingress[0].hostname
 }
@@ -11,14 +13,15 @@ data "dns_a_record_set" "nlb_r2" {
   host = kubernetes_service.dns_external_r2.status[0].load_balancer[0].ingress[0].hostname
 }
 
+
 resource "local_file" "corefile_r0" {
-  filename = "run.corefile-${var.regions_short[0]}.yml"
+  filename = "run/${var.regions_short[0]}-corefile.yml"
 
   content = templatefile(
-    "${path.module}/templates/Corefile.yml.tpl",
+    "${path.module}/templates/corefile.yml.tpl",
     {
-      ns1 = "confluent-${var.regions_short[1]}",
-      ns2 = "confluent-${var.regions_short[2]}",
+      ns1 = local.namespaces[1],
+      ns2 = local.namespaces[2],
       ns1_ip1 = data.dns_a_record_set.nlb_r1.addrs[0]
       ns1_ip2 = data.dns_a_record_set.nlb_r1.addrs[1]
       ns2_ip1 = data.dns_a_record_set.nlb_r2.addrs[0]
@@ -28,13 +31,13 @@ resource "local_file" "corefile_r0" {
 }
 
 resource "local_file" "corefile_r1" {
-  filename = "run.corefile-${var.regions_short[1]}.yml"
+  filename = "run/${var.regions_short[1]}-corefile.yml"
 
   content = templatefile(
-    "${path.module}/templates/Corefile.yml.tpl",
+    "${path.module}/templates/corefile.yml.tpl",
     {
-      ns1 = "confluent-${var.regions_short[0]}",
-      ns2 = "confluent-${var.regions_short[2]}",
+      ns1 = local.namespaces[0],
+      ns2 = local.namespaces[2],
       ns1_ip1 = data.dns_a_record_set.nlb_r0.addrs[0]
       ns1_ip2 = data.dns_a_record_set.nlb_r0.addrs[1]
       ns2_ip1 = data.dns_a_record_set.nlb_r2.addrs[0]
@@ -44,13 +47,13 @@ resource "local_file" "corefile_r1" {
 }
 
 resource "local_file" "corefile_r2" {
-  filename = "run.corefile-${var.regions_short[2]}.yml"
+  filename = "run/${var.regions_short[2]}-corefile.yml"
 
   content = templatefile(
-    "${path.module}/templates/Corefile.yml.tpl",
+    "${path.module}/templates/corefile.yml.tpl",
     {
-      ns1 = "confluent-${var.regions_short[0]}",
-      ns2 = "confluent-${var.regions_short[1]}",
+      ns1 = local.namespaces[0],
+      ns2 = local.namespaces[1],
       ns1_ip1 = data.dns_a_record_set.nlb_r0.addrs[0]
       ns1_ip2 = data.dns_a_record_set.nlb_r0.addrs[1]
       ns2_ip1 = data.dns_a_record_set.nlb_r1.addrs[0]

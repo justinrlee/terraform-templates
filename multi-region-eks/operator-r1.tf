@@ -1,6 +1,6 @@
 resource "kubernetes_namespace" "confluent_r1" {
   metadata {
-    name = "confluent-${var.regions_short[1]}"
+    name = local.namespaces[1]
   }
 
   depends_on = [
@@ -27,7 +27,7 @@ resource "helm_release" "confluent_for_kubernetes_r1" {
   repository = "https://packages.confluent.io/helm"
   chart      = "confluent-for-kubernetes"
 
-  namespace = "confluent-${var.regions_short[1]}"
+  namespace = local.namespaces[1]
 
   set {
     name = "namespaced"
