@@ -14,6 +14,16 @@ data "dns_a_record_set" "nlb_r2" {
 }
 
 
+# This doesn't actually have to be rendered, but it's more consistent to do so
+resource "local_file" "corefile_default" {
+  filename = "run/default-corefile.yml"
+
+  content = templatefile(
+    "${path.module}/templates/corefile.default.yml.tpl",
+    {}
+  )
+}
+
 resource "local_file" "corefile_r0" {
   filename = "run/${var.regions_short[0]}-corefile.yml"
 

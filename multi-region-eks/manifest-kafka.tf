@@ -1,3 +1,7 @@
+locals {
+  zookeeper_connect = "zookeeper.${local.namespaces[0]}.svc.cluster.local:2181,zookeeper.${local.namespaces[1]}.svc.cluster.local:2181,zookeeper.${local.namespaces[2]}.svc.cluster.local:2181"
+}
+
 resource "local_file" "kafka" {
   count = 3
 
@@ -6,12 +10,14 @@ resource "local_file" "kafka" {
   content = templatefile(
     "${path.module}/templates/kafka.yml.tpl",
     {
-      name = "kafka",
-      index = count.index,
       namespaces = local.namespaces,
-      offsets = var.kafka_offsets,
+      zookeeper_connect = local.zookeeper_connect,
+      index = count.index,
+
+      name = "kafka",
       counts = var.kafka_counts,
-      rack = var.regions[count.index]
+      offsets = var.kafka_offsets,
+      rack = var.regions[count.index],
     }
   )
 }
@@ -24,11 +30,13 @@ resource "local_file" "observers" {
   content = templatefile(
     "${path.module}/templates/kafka.yml.tpl",
     {
-      name = "observer",
-      index = count.index,
+      zookeeper_connect = local.zookeeper_connect,
       namespaces = local.namespaces,
-      offsets = var.observer_offsets,
+      index = count.index,
+
+      name = "observer",
       counts = var.observer_counts,
+      offsets = var.observer_offsets,
       rack = "${var.regions[count.index]}-o"
     }
   )

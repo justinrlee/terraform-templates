@@ -20,3 +20,4 @@ spec:
     server:
     - replica.selector.class=org.apache.kafka.common.replica.RackAwareReplicaSelector
     - broker.rack=${rack}
+    - zookeeper.connect=${zookeeper_connect}
