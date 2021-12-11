@@ -1,16 +1,32 @@
+# Have to wait for NLB creation and DNS propagation
+resource "time_sleep" "nlb_wait" {
+  create_duration = "600s"
+  destroy_duration = "600s"
+
+  depends_on = [
+    kubernetes_service.dns_external_r0,
+    kubernetes_service.dns_external_r1,
+    kubernetes_service.dns_external_r2,
+  ]
+}
 
 # Can't use count or for_each for the kubernetes services, because they're in different providers
-
 data "dns_a_record_set" "nlb_r0" {
   host = kubernetes_service.dns_external_r0.status[0].load_balancer[0].ingress[0].hostname
+
+  depends_on = [time_sleep.nlb_wait]
 }
 
 data "dns_a_record_set" "nlb_r1" {
   host = kubernetes_service.dns_external_r1.status[0].load_balancer[0].ingress[0].hostname
+
+  depends_on = [time_sleep.nlb_wait]
 }
 
 data "dns_a_record_set" "nlb_r2" {
   host = kubernetes_service.dns_external_r2.status[0].load_balancer[0].ingress[0].hostname
+
+  depends_on = [time_sleep.nlb_wait]
 }
 
 
