@@ -1,0 +1,2 @@
+# Ignore terraform.tfvars for testing
+terraform.tfvars
