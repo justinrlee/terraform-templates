@@ -6,21 +6,21 @@ variable "owner_name" {}
 
 # Region Settings
 # Full region name (e.g., us-east-1)
-variable "regions" {
-  default = ["us-east-1"]
+variable "region" {
+  default = "us-east-1"
 }
 
 # Region shortname
-variable "regions_short" {
-  default = ["use1"]
+variable "region_short" {
+  default = "use1"
 }
 
 # /16 prefix for each VPC (e.g., "10.2" for 10.2.0.0/16)
-variable "prefixes" {
+variable "prefix" {
   # example = ["10.2", "10.18", "10.50"]
 }
 
-variable ec2_public_key_names {
+variable ec2_public_key_name {
   # example = ["justin-confluent-dev", "justinrlee-confluent-dev", "justinrlee-confluent-dev"]
 }
 

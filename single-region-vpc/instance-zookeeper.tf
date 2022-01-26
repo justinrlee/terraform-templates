@@ -1,19 +1,19 @@
-resource "aws_instance" "zk_r0s" {
+resource "aws_instance" "zookeepers" {
   count                       = var.zookeeper_counts[0]
-  ami                         = lookup(var.aws_amis, var.regions[0])
+  ami                         = lookup(var.aws_amis, var.region)
   instance_type               = var.zookeeper_instance_type
   associate_public_ip_address = var.zookeeper_public_ip
-  key_name                    = var.ec2_public_key_names[0]
+  key_name                    = var.ec2_public_key_name
 
   iam_instance_profile = var.iam_instance_profile
 
-  subnet_id                   = var.zookeeper_public_subnet ? module.vpc_r0s.public_subnets[count.index % 3] : module.vpc_r0s.private_subnets[count.index % 3]
+  subnet_id                   = var.zookeeper_public_subnet ? module.vpc.public_subnets[count.index % 3] : module.vpc.private_subnets[count.index % 3]
   vpc_security_group_ids      = var.zookeeper_public_subnet ? [
-    aws_security_group.r0s_allow_internal.id,
-    aws_security_group.r0s_allow_egress.id,
+    aws_security_group.allow_internal.id,
+    aws_security_group.allow_egress.id,
   ] : [
-    aws_security_group.r0s_allow_internal.id,
-    aws_security_group.r0s_allow_egress.id,
+    aws_security_group.allow_internal.id,
+    aws_security_group.allow_egress.id,
   ]
   
   root_block_device {
@@ -29,6 +29,4 @@ resource "aws_instance" "zk_r0s" {
   lifecycle {
     ignore_changes = [tags]
   }
-
-  provider = aws.r0a
 }

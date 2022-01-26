@@ -1,7 +1,7 @@
-resource "aws_security_group" "r0s_allow_internal" {
+resource "aws_security_group" "allow_internal" {
   description = "All Single-Region traffic"
   name        = "${var.cluster_name}-allow-internal"
-  vpc_id      = module.vpc_r0s.vpc_id
+  vpc_id      = module.vpc.vpc_id
 
   ingress = [{
     description      = null,
@@ -27,13 +27,13 @@ resource "aws_security_group" "r0s_allow_internal" {
     self             = null
   }]
 
-  provider = aws.r0a
+  # provider = aws.r0a
 }
 
-resource "aws_security_group" "r0s_allow_ssh" {
+resource "aws_security_group" "allow_ssh" {
   description = "SSH Inbound"
   name        = "${var.cluster_name}-allow-ssh"
-  vpc_id      = module.vpc_r0s.vpc_id
+  vpc_id      = module.vpc.vpc_id
 
   ingress = [{
     description      = null,
@@ -47,13 +47,13 @@ resource "aws_security_group" "r0s_allow_ssh" {
     self             = null
   }]
   
-  provider = aws.r0a
+  # provider = aws.r0a
 }
 
-resource "aws_security_group" "r0s_allow_egress" {
+resource "aws_security_group" "allow_egress" {
   description = "All Egress"
   name        = "${var.cluster_name}-allow-egress"
-  vpc_id      = module.vpc_r0s.vpc_id
+  vpc_id      = module.vpc.vpc_id
 
   egress = [{
     description      = null,
@@ -67,13 +67,13 @@ resource "aws_security_group" "r0s_allow_egress" {
     self             = null
   }]
   
-  provider = aws.r0a
+  # provider = aws.r0a
 }
 
-resource "aws_security_group" "r0s_allow_broker" {
+resource "aws_security_group" "allow_broker" {
   description = "Broker Inbound"
   name        = "${var.cluster_name}-broker"
-  vpc_id      = module.vpc_r0s.vpc_id
+  vpc_id      = module.vpc.vpc_id
 
   ingress = [{
     description      = null,
@@ -87,5 +87,5 @@ resource "aws_security_group" "r0s_allow_broker" {
     self             = null
   }]
   
-  provider = aws.r0a
+  # provider = aws.r0a
 }

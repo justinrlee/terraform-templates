@@ -1,7 +1,7 @@
 
 output "private_dns" {
     value = [
-        aws_instance.instance_r0s.*.private_dns,
+        aws_instance.instances.*.private_dns,
     ]
 }
 

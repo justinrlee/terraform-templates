@@ -1,9 +1,9 @@
-resource "aws_instance" "instance_r0s" {
+resource "aws_instance" "instances" {
   count                       = var.instance_counts[0]
-  ami                         = lookup(var.aws_amis, var.regions[0])
+  ami                         = lookup(var.aws_amis, var.region)
   instance_type               = var.instance_type
   associate_public_ip_address = var.public_ip
-  key_name                    = var.ec2_public_key_names[0]
+  key_name                    = var.ec2_public_key_name
   
   iam_instance_profile = var.iam_instance_profile
 
@@ -23,6 +23,4 @@ resource "aws_instance" "instance_r0s" {
   lifecycle {
     ignore_changes = [tags]
   }
-
-  provider = aws.r0a
 }

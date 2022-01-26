@@ -1,14 +1,14 @@
 
-module "vpc_r0s" {
+module "vpc" {
   source = "github.com/terraform-aws-modules/terraform-aws-vpc?ref=v3.1.0"
 
-  name = "${var.cluster_name}-${var.regions_short[0]}"
+  name = "${var.cluster_name}-${var.region_short}"
 
-  cidr = "${var.prefixes[0]}.0.0/16"
+  cidr = "${var.prefix}.0.0/16"
 
-  azs             = ["${var.regions[0]}a", "${var.regions[0]}b", "${var.regions[0]}c"]
-  private_subnets = ["${var.prefixes[0]}.101.0/24", "${var.prefixes[0]}.102.0/24", "${var.prefixes[0]}.103.0/24"]
-  public_subnets  = ["${var.prefixes[0]}.1.0/24", "${var.prefixes[0]}.2.0/24", "${var.prefixes[0]}.3.0/24"]
+  azs             = ["${var.region}a", "${var.region}b", "${var.region}c"]
+  private_subnets = ["${var.prefix}.101.0/24", "${var.prefix}.102.0/24", "${var.prefix}.103.0/24"]
+  public_subnets  = ["${var.prefix}.1.0/24", "${var.prefix}.2.0/24", "${var.prefix}.3.0/24"]
 
   enable_ipv6 = false
   enable_dns_hostnames = true
@@ -27,10 +27,10 @@ module "vpc_r0s" {
   }
 
   vpc_tags = {
-    Name = "${var.cluster_name}-${var.regions_short[0]}"
+    Name = "${var.cluster_name}-${var.region_short}"
   }
 
-  providers = {
-    aws = aws.r0a
-  }
+  # providers = {
+  #   aws = aws.r0a
+  # }
 }

@@ -2,8 +2,8 @@
 cluster_name = "justin-src"
 owner_name = "Justin Lee"
 
-ec2_public_key_names = ["justinrlee-confluent-dev", "justinrlee-confluent-dev", "justinrlee-confluent-dev"]
-prefixes = ["10.2", "10.18", "10.50"]
+ec2_public_key_name = "justinrlee-confluent-dev"
+prefix = "10.2"
 
 bastion_counts = [ 1 ]
 

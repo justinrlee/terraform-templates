@@ -27,9 +27,9 @@ output inventory {
     zookeeper = {
       hosts = merge(
         zipmap(
-          aws_instance.zk_r0s.*.private_dns,
+          aws_instance.zookeepers.*.private_dns,
           [
-            for i in range(length(aws_instance.zk_r0s.*.private_dns)): null
+            for i in range(length(aws_instance.zookeepers.*.private_dns)): null
           ]
         ),
 
@@ -38,18 +38,18 @@ output inventory {
     kafka_broker = {
       hosts = merge(
         zipmap(
-          aws_instance.brokers_r0s.*.private_dns, 
+          aws_instance.brokers.*.private_dns, 
           [
-            for i in range(length(aws_instance.brokers_r0s.*.private_dns)): merge({
+            for i in range(length(aws_instance.brokers.*.private_dns)): merge({
               broker_id: i + 100,
               kafka_broker_custom_properties: {
-                "broker.rack": (i < var.broker_counts[0]) ? var.regions[0] : "${var.regions[0]}-o"
+                "broker.rack": (i < var.broker_counts[0]) ? var.region : "${var.region}-o"
               }
             },
             var.public_listener_port != null ? {
               kafka_broker_custom_listeners: {
                 client_listener: {
-                  hostname: aws_instance.brokers_r0s[i].public_dns
+                  hostname: aws_instance.brokers[i].public_dns
                 }
               }
             } : {}
@@ -61,7 +61,7 @@ output inventory {
     schema_registry = {
       hosts = merge(
         {
-          for instance in aws_instance.schema_registry_r0s.*.private_dns:
+          for instance in aws_instance.schema_registries.*.private_dns:
             instance => null
         },
       )
@@ -69,7 +69,7 @@ output inventory {
     control_center = {
       hosts = merge(
         {
-          for instance in aws_instance.control_center_r0s.*.private_dns:
+          for instance in aws_instance.control_centers.*.private_dns:
             instance => null
         },
       )

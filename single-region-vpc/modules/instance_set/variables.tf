@@ -3,9 +3,8 @@ variable instance_counts {
     # default = [2, 2, 0]
 }
 
-variable regions {
-  default = ["us-east-1"]
-  # default = ["us-east-1", "us-east-2", "us-west-2"]
+variable region {
+  # default = "us-east-1"]
 }
 
 variable "aws_amis" {
@@ -40,7 +39,7 @@ variable public_subnet {
   default = false
 }
 
-variable ec2_public_key_names {
+variable ec2_public_key_name {
 }
 
 variable public_subnets {

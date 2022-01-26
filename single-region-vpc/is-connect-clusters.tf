@@ -2,36 +2,32 @@ module "connect_workers" {
     source = "./modules/instance_set"
 
     for_each = var.connect_clusters
+    region = var.region
 
     instance_counts = each.value.counts
     instance_type = each.value.instance_type
 
-    ec2_public_key_names = var.ec2_public_key_names
+    ec2_public_key_name = var.ec2_public_key_name
     
     iam_instance_profile = var.iam_instance_profile
 
     public_subnets = [
-        module.vpc_r0s.public_subnets,
+        module.vpc.public_subnets,
     ]
 
     private_subnets = [
-        module.vpc_r0s.private_subnets,
+        module.vpc.private_subnets,
     ]
     
     public_security_groups = [
-        [aws_security_group.r0s_allow_egress.id, aws_security_group.r0s_allow_internal.id,],
+        [aws_security_group.allow_egress.id, aws_security_group.allow_internal.id,],
     ]
 
     private_security_groups = [
-        [aws_security_group.r0s_allow_egress.id, aws_security_group.r0s_allow_internal.id,],
+        [aws_security_group.allow_egress.id, aws_security_group.allow_internal.id,],
     ]
 
     cluster_name = var.cluster_name
     type = "connect"
     label = "${each.value.name}"
-
-    providers = {
-        aws.r0a = aws.r0a
-    }
-
 }
