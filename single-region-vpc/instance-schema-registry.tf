@@ -23,7 +23,7 @@ resource "aws_instance" "schema_registry_r0s" {
 
   tags = {
     Name = "${var.cluster_name}-schema-registry"
-    Provenance = "Multi-Region Terraform for ${var.cluster_name}"
+    Provenance = "Single-Region Terraform for ${var.cluster_name}"
   }
 
   lifecycle {

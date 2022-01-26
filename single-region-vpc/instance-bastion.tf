@@ -22,7 +22,7 @@ resource "aws_instance" "bastion_r0s" {
 
   tags = {
     Name = "${var.cluster_name}-bastion"
-    Provenance = "Multi-Region Terraform for ${var.cluster_name}"
+    Provenance = "Single-Region Terraform for ${var.cluster_name}"
   }
 
   lifecycle {

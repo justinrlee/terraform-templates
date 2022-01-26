@@ -23,7 +23,7 @@ resource "aws_instance" "control_center_r0s" {
 
   tags = {
     Name = "${var.cluster_name}-control-center"
-    Provenance = "Multi-Region Terraform for ${var.cluster_name}"
+    Provenance = "Single-Region Terraform for ${var.cluster_name}"
   }
 
   lifecycle {
