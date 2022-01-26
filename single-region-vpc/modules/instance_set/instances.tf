@@ -17,7 +17,7 @@ resource "aws_instance" "instance_r0s" {
 
   tags = {
     Name = "${var.cluster_name}-${var.type}-${var.label}"
-    Provenance = "Multi-Region Terraform for ${var.cluster_name}"
+    Provenance = "Single-Region Terraform for ${var.cluster_name}"
   }
 
   lifecycle {
