@@ -24,6 +24,10 @@ variable ec2_public_key_names {
   # example = ["justin-confluent-dev", "justinrlee-confluent-dev", "justinrlee-confluent-dev"]
 }
 
+variable iam_instance_profile {
+  default = null
+}
+
 
 # Defaults
 ######################################################################## Bastion
@@ -49,7 +53,7 @@ variable "bastion_delete_root_block_device_on_termination" {
 
 ###################################################################### Zookeeper
 variable zookeeper_counts {
-  default = [3]
+  default = [6]
 }
 
 variable zookeeper_instance_type {
@@ -110,7 +114,7 @@ variable schema_registry_instance_type {
 }
 
 variable schema_registry_counts {
-  default = [1]
+  default = [0]
 }
 
 variable schema_registry_public_subnet {
@@ -154,10 +158,10 @@ variable "control_center_delete_root_block_device_on_termination" {
 
 
 ################################################################# Connect
-# variable connect_clusters {
+variable connect_clusters {
 #   description = "Should be a map of maps.  Each top-level map key will be a connect cluster; each child map should have the following information:\n name: Name of Connect worker cluster\n counts: 3-tuple of number of instances in each region\n instance_type: instance type for Connect worker instances"
-#   default = {}
-# }
+  default = {}
+}
 
 ## TODO: Support external IPs / subnets
 
@@ -177,7 +181,7 @@ variable "control_center_delete_root_block_device_on_termination" {
 
 
 ################################################################# KSQL
-# variable ksql_clusters {
+variable ksqldb_clusters {
 #   description = "Should be a map of maps.  Each top-level map key will be a connect cluster; each child map should have the following information:\n name: Name of Connect worker cluster\n counts: 3-tuple of number of instances in each region\n instance_type: instance type for Connect worker instances"
-#   default = {}
-# }
+  default = {}
+}
