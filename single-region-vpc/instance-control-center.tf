@@ -5,6 +5,8 @@ resource "aws_instance" "control_center_r0s" {
   associate_public_ip_address = var.control_center_public_ip
   key_name                    = var.ec2_public_key_names[0]
 
+  iam_instance_profile = var.iam_instance_profile
+
   subnet_id                   = var.control_center_public_subnet ? module.vpc_r0s.public_subnets[count.index % 3] : module.vpc_r0s.private_subnets[count.index % 3]
   vpc_security_group_ids      = var.control_center_public_subnet ? [
     aws_security_group.r0s_allow_internal.id,
