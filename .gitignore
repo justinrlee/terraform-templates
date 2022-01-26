@@ -5,7 +5,8 @@
 
 test.*
 run.*
+run/
 hosts.yml
 client.properties
 
-kubeconfig.*
+kubeconfig*
