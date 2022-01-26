@@ -78,6 +78,46 @@ output inventory {
       #   ksql_cluster_ansible_group_names = [for connect_group in module.connect_workers: "ksql_${connect_group.label}"]
       # }
     },
+    kafka_connect = {
+      children = {
+        for connect_cluster in module.connect_workers:
+          "x_connect_${connect_cluster.label}" => null
+      }
+    },
+    ksql = {
+      children = {
+        for ksqldb_cluster in module.ksqldb_clusters:
+          "x_ksql_${ksqldb_cluster.label}" => null
+      }
+    }
   },
+  {
+    for connect_cluster in module.connect_workers:
+    "x_connect_${connect_cluster.label}" => {
+      vars: {
+        kafka_connect_group_id: connect_cluster.label
+      },
+      hosts = merge(
+        {
+          for worker in connect_cluster.private_dns[0]:
+            worker => null
+        },
+      )
+    }
+  },
+  {
+    for ksqldb_cluster in module.ksqldb_clusters:
+    "x_ksql_${ksqldb_cluster.label}" => {
+      vars: {
+        ksql_service_id: "${ksqldb_cluster.label}"
+      },
+      hosts = merge(
+        {
+          for worker in ksqldb_cluster.private_dns[0]:
+            worker => null
+        },
+      )
+    }
+  }
   )   
 }
