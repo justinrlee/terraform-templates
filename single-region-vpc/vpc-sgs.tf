@@ -1,5 +1,5 @@
 resource "aws_security_group" "r0s_allow_internal" {
-  description = "All multi-region traffic"
+  description = "All Single-Region traffic"
   name        = "${var.cluster_name}-allow-internal"
   vpc_id      = module.vpc_r0s.vpc_id
 
