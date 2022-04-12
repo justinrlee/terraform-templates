@@ -177,15 +177,21 @@ From bastion host:
 
 Install other stuff:
 ```bash
-sudo apt-get update
-sudo apt-add-repository --yes --update ppa:ansible/ansible
+# Ubuntu 18.04 comes with python3; install python3-pip
 
-sudo apt-get install python3-pip software-properties-common ansible openjdk-11-jre-headless -y
+sudo apt-get update
+# sudo apt-add-repository --yes --update ppa:ansible/ansible
+
+sudo apt-get install python3-pip  openjdk-11-jre-headless -y
+# sudo apt-get install software-properties-common ansible -y
+
+# Use module instead of pip3 directly
+python3 -m pip install ansible
 
 
 git clone https://github.com/confluentinc/cp-ansible
 cd cp-ansible
-git checkout 6.2.0-post
+git checkout 6.2.1-post
 
 cp ../hosts.yml .
 ```

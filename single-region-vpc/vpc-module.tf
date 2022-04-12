@@ -13,7 +13,7 @@ module "vpc" {
   enable_ipv6 = false
   enable_dns_hostnames = true
 
-  enable_nat_gateway = true
+  enable_nat_gateway = var.enable_nat_gateway
   single_nat_gateway = false
 
   public_subnet_tags = {

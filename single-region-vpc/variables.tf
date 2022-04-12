@@ -28,6 +28,10 @@ variable iam_instance_profile {
   default = null
 }
 
+variable enable_nat_gateway {
+  default = true
+}
+
 
 # Defaults
 ######################################################################## Bastion

@@ -18,5 +18,8 @@ variable "aws_amis" {
     # "us-east-2"      = "ami-063e88ad6c9af427d"
     # "us-west-1"      = "ami-05620e35978c63272"
     # "us-west-2"      = "ami-0b7d93899b51ff83b"
+
+    # Centos 8
+    # "us-east-1"      = "ami-05d7cb15bfbf13b6d"
   }
 }
