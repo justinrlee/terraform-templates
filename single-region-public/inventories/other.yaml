@@ -1,0 +1,9 @@
+all:
+  vars:
+    # ansible_become: true
+    ansible_connection: ssh
+    # ansible_user: root
+    ansible_os_family: Debian
+    regenerate_ca: false
+    validate_hosts: false
+    ssl_enabled: true
