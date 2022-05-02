@@ -22,6 +22,13 @@ output "inventory" {
         ansible_become     = true
         # ssl_enabled = true
         validate_hosts = false
+
+        kafka_broker_custom_listeners = {
+          client = {
+            name = "CLIENT"
+            port = 9093
+          }
+        }
         # regenerate_ca = false
         # kafka_broker_custom_properties = merge({
         #   "replica.selector.class" = "org.apache.kafka.common.replica.RackAwareReplicaSelector"
@@ -54,27 +61,22 @@ output "inventory" {
       )
     },
     kafka_broker = {
-      hosts = merge(
-        zipmap(
-          # aws_instance.brokers.*.private_dns, 
-          local.merged_broker_private_dns,
-          [
-            for i in range(length(local.merged_broker_private_dns)) : merge({
-              broker_id : i + 100,
-              # kafka_broker_custom_properties: {
-              #   "broker.rack": (i < var.broker_count) ? var.region : "${var.region}-o"
-              # }
-              },
-              # var.public_listener_port != null ? {
-              #   kafka_broker_custom_listeners: {
-              #     client_listener: {
-              #       hostname: aws_instance.brokers[i].public_dns
-              #     }
-              #   }
-              # } : {}
-            )
-          ]
-        ),
+      hosts = zipmap(
+        [ for broker in local.all_brokers: broker.private_dns ],
+        [
+          for i in range(length(local.all_brokers)) : merge ({
+            broker_id = i + 100,
+            kafka_broker_custom_listeners = {
+              client = {
+                # hostname = true ? local.all_brokers[i].public_dns : local.all_brokers[i].private_dns
+                hostname = local.all_brokers[i][var.client_listener]
+              }
+            },
+            # kafka_broker_custom_properties = {
+            #   "broker.rack": (i < var.broker_count) ? var.region : "${var.region}-o"
+            # }
+          })
+        ]
       )
     },
     schema_registry = {
@@ -91,6 +93,10 @@ output "inventory" {
           for instance in aws_instance.control_centers.*.private_dns :
           instance => null
         },
+        var.bastion_for_c3 ? {
+          for instance in aws_instance.bastions.*.private_dns :
+          instance => null
+        }: null
       )
       # vars = {
       #   kafka_connect_cluster_ansible_group_names = [for connect_group in module.connect_workers: "connect_${connect_group.label}"],

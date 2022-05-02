@@ -1,5 +1,5 @@
 resource "aws_instance" "control_centers" {
-  count                       = var.control_center_count
+  count                       = var.extra_control_center_count
   ami                         = lookup(var.aws_amis, var.region)
   instance_type               = var.control_center_instance_type
   associate_public_ip_address = true

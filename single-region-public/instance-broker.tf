@@ -37,3 +37,15 @@ resource "aws_instance" "brokers" {
     ignore_changes = [tags]
   }
 }
+
+# TODO: Need to slice to get first X brokers
+locals {
+  all_brokers = (var.binpack_zookeeper_brokers ?
+    concat(aws_instance.zookeepers, aws_instance.brokers)
+    : aws_instance.brokers
+  )
+}
+
+output test {
+  value = [for broker in local.all_brokers: broker.id]
+}

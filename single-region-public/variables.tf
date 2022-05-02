@@ -36,6 +36,15 @@ variable "binpack_zookeeper_brokers" {
   default = true
 }
 
+# should be the name of terraform property on EC2 instance: "private_dns" or "public_dns" work well
+variable "client_listener" {
+  default = "private_dns"
+}
+
+variable bastion_for_c3 {
+  default = true
+}
+
 # Defaults
 ######################################################################## Bastion
 variable "bastion_count" {
@@ -149,7 +158,8 @@ variable "control_center_instance_type" {
   default = "t3.medium"
 }
 
-variable "control_center_count" {
+# By default, we use the bastion as a C3 instance (assuming bastion_for_c3 = true); this is for extra C3 instances
+variable "extra_control_center_count" {
   default = 0
 }
 
