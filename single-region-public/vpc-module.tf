@@ -6,7 +6,7 @@ module "vpc" {
 
   cidr = "${var.prefix}.0.0/16"
 
-  azs = ["${var.region}a", "${var.region}b", "${var.region}c"]
+  azs            = ["${var.region}a", "${var.region}b", "${var.region}c"]
   public_subnets = ["${var.prefix}.1.0/24", "${var.prefix}.2.0/24", "${var.prefix}.3.0/24"]
 
   enable_ipv6          = false

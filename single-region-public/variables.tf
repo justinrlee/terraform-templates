@@ -41,7 +41,7 @@ variable "client_listener" {
   default = "private_dns"
 }
 
-variable bastion_for_c3 {
+variable "bastion_for_c3" {
   default = true
 }
 

@@ -46,6 +46,6 @@ locals {
   )
 }
 
-output test {
-  value = [for broker in local.all_brokers: broker.id]
+output "test" {
+  value = [for broker in local.all_brokers : broker.id]
 }

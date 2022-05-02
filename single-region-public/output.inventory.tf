@@ -62,9 +62,9 @@ output "inventory" {
     },
     kafka_broker = {
       hosts = zipmap(
-        [ for broker in local.all_brokers: broker.private_dns ],
+        [for broker in local.all_brokers : broker.private_dns],
         [
-          for i in range(length(local.all_brokers)) : merge ({
+          for i in range(length(local.all_brokers)) : merge({
             broker_id = i + 100,
             kafka_broker_custom_listeners = {
               client = {
@@ -96,7 +96,7 @@ output "inventory" {
         var.bastion_for_c3 ? {
           for instance in aws_instance.bastions.*.private_dns :
           instance => null
-        }: null
+        } : null
       )
       # vars = {
       #   kafka_connect_cluster_ansible_group_names = [for connect_group in module.connect_workers: "connect_${connect_group.label}"],
