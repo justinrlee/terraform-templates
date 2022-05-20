@@ -12,6 +12,18 @@ locals {
   # fewer brokers than zookeepers: use first x zookeepers
 }
 
+output inventory_bastion_ldap {
+  value = {
+    all = {
+      vars = {
+        kafka_broker_custom_properties = {
+          "ldap.java.naming.provider.url" = "ldap://${aws_instance.bastions[0].private_dns}:10389"
+        }
+      }
+    }
+  }
+}
+
 # TODO: if fewer than three brokers, set all default replication factors to 0 (and disable other features?)
 output "inventory" {
   value = merge({
@@ -29,6 +41,11 @@ output "inventory" {
             port = 9093
           }
         }
+
+        # Need to inject bastion into generated inventory rather than merged inventory
+        # kafka_broker_custom_properties = {
+        #   "ldap.java.naming.provider.url" = "ldap://${aws_instance.bastions[0].private_dns}:10389"
+        # }
         # regenerate_ca = false
         # kafka_broker_custom_properties = merge({
         #   "replica.selector.class" = "org.apache.kafka.common.replica.RackAwareReplicaSelector"
