@@ -13,6 +13,7 @@ resource "aws_instance" "bastions" {
     aws_security_group.allow_ssh.id,
     aws_security_group.allow_internal.id,
     aws_security_group.allow_egress.id,
+    aws_security_group.control_center.id,
   ]
 
   root_block_device {
