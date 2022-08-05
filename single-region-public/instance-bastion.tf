@@ -18,7 +18,7 @@ resource "aws_instance" "bastions" {
 
   root_block_device {
     delete_on_termination = var.bastion_delete_root_block_device_on_termination
-    volume_size           = 16
+    volume_size           = 32
   }
 
   tags = {

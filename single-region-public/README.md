@@ -8,7 +8,7 @@ TODO: manual certificate generation
 terraform output -json inventory | yq -P e - > run/inventory.yaml
 terraform output -json inventory_bastion_ldap | yq -P e - > run/ldap.yaml
 
-yq '. *= load("inventories/rbac-futurama.yaml") | . *= load("run/ldap.yaml")' run/inventory.yaml
+yq '. *= load("inventory/rbac-futurama.yaml") | . *= load("run/ldap.yaml")' run/inventory.yaml
 ```
 
 # CentOS Setup

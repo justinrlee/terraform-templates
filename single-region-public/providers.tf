@@ -18,6 +18,7 @@ provider "aws" {
       "tf_last_modified" = var.date_updated
       "Owner"            = var.owner_name
       "Environment"      = var.environment_name
+      "owner_email"      = var.owner_contact
     }
   }
 }
