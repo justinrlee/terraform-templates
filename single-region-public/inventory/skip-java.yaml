@@ -1,0 +1,3 @@
+all:
+  vars:
+    install_java: false

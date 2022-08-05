@@ -1,0 +1,8 @@
+all:
+  vars:
+    # Ansible connection
+    ansible_become: true
+    ansible_connection: ssh
+    ansible_user: centos
+    ansible_os_family: RedHat
+    validate_hosts: false
