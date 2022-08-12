@@ -21,7 +21,8 @@ iam_instance_profile = null
 client_listener = "public_dns"
 
 aws_amis = {
-  "us-east-1"      = "ami-0192e2547e058b4e1"
+  # justin-packer-centos-1655742322
+  "us-east-1"      = "ami-0cf4ce46d7a86e24a"
 }
 
 bastion_instance_type = "t3.xlarge"

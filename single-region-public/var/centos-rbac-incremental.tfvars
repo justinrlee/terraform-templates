@@ -1,8 +1,3 @@
-# Default tfvars
-# environment_name = "justin-srp-centos-rbac"
-# owner_name = "Justin Lee"
-
-# ec2_public_key_name = "justinrlee-confluent-dev"
 prefix = "10.9"
 
 bastion_count = 1
@@ -22,6 +17,7 @@ iam_instance_profile = null
 client_listener = "public_dns"
 
 aws_amis = {
+  # justin-packer-centos-1655742322
   "us-east-1"      = "ami-0cf4ce46d7a86e24a"
 }
 

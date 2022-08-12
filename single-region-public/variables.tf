@@ -42,7 +42,7 @@ variable "binpack_zookeeper_brokers" {
 
 # should be the name of terraform property on EC2 instance: "private_dns" or "public_dns" work well
 variable "client_listener" {
-  default = "private_dns"
+  default = "public_dns"
 }
 
 variable "bastion_for_c3" {

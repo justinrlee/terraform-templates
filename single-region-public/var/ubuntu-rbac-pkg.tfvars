@@ -22,7 +22,10 @@ client_listener = "public_dns"
 
 aws_amis = {
   # Prebaked Ubuntu 20.04 with git, docker, ansible, java
-  "us-east-1"      = "ami-05953d32a6cf53f65"
+  # justin-packer-ubuntu-1655684014
+  "us-east-1"      = "ami-00e519b15d7a6e830"
+  # justin-packer-ubuntu-1655687335-7.1.1 (includes 7.1.1 installed via APT)
+  # "us-east-1"      = ami-05953d32a6cf53f65
 }
 
 bastion_instance_type = "t3.xlarge"

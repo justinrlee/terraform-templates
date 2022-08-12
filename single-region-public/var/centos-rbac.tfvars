@@ -21,6 +21,7 @@ iam_instance_profile = null
 client_listener = "public_dns"
 
 aws_amis = {
+  # justin-packer-centos-1655742322
   "us-east-1"      = "ami-0cf4ce46d7a86e24a"
 }
 
