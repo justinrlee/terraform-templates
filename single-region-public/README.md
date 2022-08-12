@@ -24,7 +24,7 @@ SSH into the bastion, and run this:
 bash prep.sh
 ```
 
-# Generate inventory
+# Generate inventory manually
 
 ```bash
 terraform apply -var-file var/centos-rbac.tfvars
@@ -40,7 +40,7 @@ BASTION=$(terraform output -json bastion | jq -r '.public_dns[0]')
 scp run/host.yaml centos@${BASTION}:~/host.yaml
 ```
 
-# CentOS Setup
+# CentOS Setup (do this manually)
 ```bash
 terraform output bastion
 

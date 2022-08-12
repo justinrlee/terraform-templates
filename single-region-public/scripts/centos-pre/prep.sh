@@ -17,11 +17,11 @@ ansible -i host.yaml -m ping all
 
 bash cert_gen.sh
 
-git clone --branch 7.1.1-post https://github.com/confluentinc/cp-ansible.git
+git clone --branch 7.1.3-post https://github.com/confluentinc/cp-ansible.git
 
 cd cp-ansible
 ansible-galaxy collection build
-ansible-galaxy collection install confluent-platform-7.1.1.tar.gz
+ansible-galaxy collection install confluent-platform-7.1.3.tar.gz
 ansible-galaxy collection list
 
 cd ..
