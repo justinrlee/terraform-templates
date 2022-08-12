@@ -1,8 +1,8 @@
 # Default tfvars
-environment_name = "justin-srp-ubuntu-rbac"
-owner_name = "Justin Lee"
+# environment_name = "justin-srp-ubuntu-rbac"
+# owner_name = "Justin Lee"
 
-ec2_public_key_name = "justinrlee-confluent-dev"
+# ec2_public_key_name = "justinrlee-confluent-dev"
 # prefix = "10.10"
 
 bastion_count = 1
