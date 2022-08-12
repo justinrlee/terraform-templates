@@ -15,9 +15,6 @@ extra_control_center_count = 1
 # schema_registry_count = 0
 schema_registry_count = 1
 
-iam_instance_profile = null
-# iam_instance_profile = "Justin-Secrets"
-
 client_listener = "public_dns"
 
 aws_amis = {
