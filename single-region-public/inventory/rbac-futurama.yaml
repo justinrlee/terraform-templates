@@ -143,6 +143,8 @@ all:
       # ldap.group.member.attribute: member
       # ldap.group.member.attribute.pattern: cn=(.*),ou=people,dc=planetexpress,dc=com
 
+      reserved.broker.max.id: 10000
+
     ##### Control Center management mode
     control_center_custom_properties:
       confluent.controlcenter.mode.enable: management

@@ -3,17 +3,17 @@ environment_name = "justin-srp-centos-rbac"
 owner_name = "Justin Lee"
 
 ec2_public_key_name = "justinrlee-confluent-dev"
-prefix = "10.9"
+prefix = "10.10"
 
 bastion_count = 1
 
-zookeeper_count = 10
+zookeeper_count = 3
+# zookeeper_count = 10
 
-broker_count = 0
+extra_control_center_count = 1
 
-extra_control_center_count = 2
-
-schema_registry_count = 4
+# schema_registry_count = 0
+schema_registry_count = 1
 
 iam_instance_profile = null
 # iam_instance_profile = "Justin-Secrets"
@@ -40,4 +40,6 @@ bastion_for_c3 = false
 
 zones = [2, 4, 6]
 
+
+broker_count = 0
 zonal_broker_count = 4

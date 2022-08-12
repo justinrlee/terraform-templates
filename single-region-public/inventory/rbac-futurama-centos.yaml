@@ -38,7 +38,7 @@ all:
 
     ##### Confluent Cluster Registry
     kafka_broker_cluster_name: production
-    kafka_schema_registry_cluster_name: schema_registry
+    schema_registry_cluster_name: schema_registry
 
     ##### Which Java package to install (from yum)
     # redhat_java_package_name: java-11-openjdk
@@ -149,6 +149,8 @@ all:
       # ldap.group.name.attribute: cn
       # ldap.group.member.attribute: member
       # ldap.group.member.attribute.pattern: cn=(.*),ou=people,dc=planetexpress,dc=com
+
+      reserved.broker.max.id: 10000
 
     ##### Control Center management mode
     control_center_custom_properties:

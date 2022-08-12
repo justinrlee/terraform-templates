@@ -6,8 +6,10 @@ module "vpc" {
 
   cidr = "${var.prefix}.0.0/16"
 
-  azs            = ["${var.region}a", "${var.region}b", "${var.region}c"]
-  public_subnets = ["${var.prefix}.1.0/24", "${var.prefix}.2.0/24", "${var.prefix}.3.0/24"]
+  azs            = [for zone in var.zones: "${var.region_short}-az${zone}"]
+  public_subnets = [for zone in var.zones: "${var.prefix}.${zone}.0/24"]
+  # azs            = ["${var.region}a", "${var.region}b", "${var.region}c"]
+  # public_subnets = ["${var.prefix}.1.0/24", "${var.prefix}.2.0/24", "${var.prefix}.3.0/24"]
 
   enable_ipv6          = false
   enable_dns_hostnames = true

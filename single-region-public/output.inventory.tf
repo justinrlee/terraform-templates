@@ -1,29 +1,3 @@
-locals {
-  merged_broker_private_dns = (var.binpack_zookeeper_brokers ?
-    (local.total_brokers >= var.zookeeper_count ?
-      concat(aws_instance.zookeepers.*.private_dns, aws_instance.brokers.*.private_dns) :
-      slice(aws_instance.zookeepers.*.private_dns, 0, local.total_brokers)
-    )
-  : aws_instance.brokers.*.private_dns)
-
-  # three scenarios if binpacking:
-  # more brokers than zookeepers: combine broekrs and zookeepers
-  # same number of brokers and zookeepers: combine brokers and zookeepers (will be no bk, so this is fine)
-  # fewer brokers than zookeepers: use first x zookeepers
-}
-
-output inventory_bastion_ldap {
-  value = {
-    all = {
-      vars = {
-        kafka_broker_custom_properties = {
-          "ldap.java.naming.provider.url" = "ldap://${aws_instance.bastions[0].private_dns}:10389"
-        }
-      }
-    }
-  }
-}
-
 # TODO: if fewer than three brokers, set all default replication factors to 0 (and disable other features?)
 output "inventory" {
   value = merge({
@@ -94,7 +68,66 @@ output "inventory" {
             # }
           })
         ]
-      )
+      ),
+      children = {
+        "kafka_broker_rack_a": null,
+        "kafka_broker_rack_b": null,
+        "kafka_broker_rack_c": null,
+      }
+    },
+    kafka_broker_rack_a = {
+      vars = {
+        kafka_broker_custom_properties = {
+          "broker.rack" = var.zonal_broker_rack ? "rack-${var.zones[0]}" : null
+        }
+      },
+      hosts = {
+        for broker in aws_instance.brokers_zone_a:
+          broker.private_dns => {
+            broker_id = tonumber(join("", slice(split(".", broker.private_ip), 2, 4))),
+            kafka_broker_custom_listeners = {
+              client = {
+                hostname = broker.public_dns
+              }
+            }
+          }
+      }
+    },
+    kafka_broker_rack_b = {
+      vars = {
+        kafka_broker_custom_properties = {
+          "broker.rack" = var.zonal_broker_rack ? "rack-${var.zones[1]}" : null
+        }
+      },
+      hosts = {
+        for broker in aws_instance.brokers_zone_b:
+          broker.private_dns => {
+            broker_id = tonumber(join("", slice(split(".", broker.private_ip), 2, 4))),
+            kafka_broker_custom_listeners = {
+              client = {
+                hostname = broker.public_dns
+              }
+            }
+          }
+      }
+    },
+    kafka_broker_rack_c = {
+      vars = {
+        kafka_broker_custom_properties = {
+          "broker.rack" = var.zonal_broker_rack ? "rack-${var.zones[2]}" : null
+        }
+      },
+      hosts = {
+        for broker in aws_instance.brokers_zone_c:
+          broker.private_dns => {
+            broker_id = tonumber(join("", slice(split(".", broker.private_ip), 2, 4))),
+            kafka_broker_custom_listeners = {
+              client = {
+                hostname = broker.public_dns
+              }
+            }
+          }
+      }
     },
     schema_registry = {
       hosts = merge(

@@ -7,12 +7,13 @@ prefix = "10.9"
 
 bastion_count = 1
 
-zookeeper_count = 10
+zookeeper_count = 3
+# zookeeper_count = 10
 
-broker_count = 0
 
 extra_control_center_count = 2
 
+# schema_registry_count = 0
 schema_registry_count = 4
 
 iam_instance_profile = null
@@ -40,4 +41,6 @@ bastion_for_c3 = false
 
 zones = [2, 4, 6]
 
+
+broker_count = 0
 zonal_broker_count = 4

@@ -19,6 +19,10 @@ variable "region_short" {
   default = "use1"
 }
 
+variable "zones" {
+  default = [1, 2, 5]
+}
+
 # /16 prefix for each VPC (e.g., "10.2" for 10.2.0.0/16)
 variable "prefix" {
   # example = ["10.2", "10.18", "10.50"]
@@ -92,10 +96,22 @@ variable "zookeeper_delete_root_block_device_on_termination" {
 ######################################################################## Brokers
 # Broker count is per-region
 variable "broker_count" {
-  default = 4
+  default = 0
+}
+
+variable "zonal_broker_count" {
+  default = 2
+}
+
+variable "zonal_broker_rack" {
+  default = true
 }
 
 variable "observer_count" {
+  default = 0
+}
+
+variable zonal_observer_count {
   default = 0
 }
 
