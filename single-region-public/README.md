@@ -1,32 +1,28 @@
-# Ubuntu (Prebuilt)
+# Ubuntu (Prebuilt - does most stuff for you)
 
 ```bash
-# terraform apply -var-file var/ubuntu-rbac.tfvars
 terraform apply -var-file var/ubuntu-rbac-pkg.tfvars
 bash scripts/ubuntu-pre/local.sh
-# bash scripts/centos-pre/local.sh
 ```
 
-SSH in
+SSH into the bastion, and run this:
 
 ```bash
 bash prep.sh
 ```
 
+# CentOS (Prebuilt - does most stuff for you)
+
 ```bash
-# terraform apply -var-file var/ubuntu-rbac.tfvars
-terraform apply -var-file var/ubuntu-rbac-pkg.tfvars
-# bash scripts/ubuntu-pre/local.sh
+terraform apply -var-file var/centos-rbac-pkg.tfvars
 bash scripts/centos-pre/local.sh
 ```
 
-SSH in
+SSH into the bastion, and run this:
 
 ```bash
 bash prep.sh
 ```
-
-
 
 # Generate inventory
 
@@ -118,7 +114,7 @@ keytool -exportcert -alias caroot -keystore /var/ssl/private/control_center.trus
 ```
 
 ```bash
-/usr/local/bin/confluent login --url https://ip-10-9-3-30.ec2.internal:8090 --ca-cert-path /root/ca.pem
+/usr/local/bin/confluent login --url https://ip-10-9-6-100.ec2.internal:8090 --ca-cert-path /root/ca.pem
 ```
 
 kafka client
