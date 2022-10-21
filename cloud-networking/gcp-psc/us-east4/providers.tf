@@ -19,5 +19,5 @@ provider "confluent" {
   # cloud_api_secret = var.confluent_cloud_api_secret
 }
 
-# This is global
+# I think this is global
 data "google_client_config" "provider" {}

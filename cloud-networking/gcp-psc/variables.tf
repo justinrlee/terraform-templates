@@ -6,16 +6,6 @@ variable "environment_name" {
   }
 }
 
-variable "regions" {
-}
-
-variable google_project {
-
-}
-
-variable "owner" {
-}
-
-variable "namespace" {
-  default = "confluent-proxy"
-}
+variable "regions" {}
+variable "google_project" {}
+variable "owner" {}
