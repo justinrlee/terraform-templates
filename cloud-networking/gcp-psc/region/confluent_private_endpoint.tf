@@ -28,15 +28,15 @@ resource "google_compute_forwarding_rule" "psc_endpoint_ilb" {
 }
 
 # Firewall
-resource "google_compute_firewall" "allow-https-kafka" {
-  name    = "${var.environment_name}-ccloud-firewall-${local.network_id}"
-  network = data.google_compute_network.vpc.id
+# resource "google_compute_firewall" "allow_https_kafka" {
+#   name    = "${var.environment_name}-ccloud-firewall-${local.network_id}"
+#   network = data.google_compute_network.vpc.id
 
-  allow {
-    protocol = "tcp"
-    ports    = ["443", "9092"]
-  }
+#   allow {
+#     protocol = "tcp"
+#     ports    = ["443", "9092"]
+#   }
 
-  direction          = "EGRESS"
-  destination_ranges = [data.google_compute_subnetwork.subnet.ip_cidr_range]
-}
+#   direction          = "EGRESS"
+#   destination_ranges = [data.google_compute_subnetwork.subnet.ip_cidr_range]
+# }
