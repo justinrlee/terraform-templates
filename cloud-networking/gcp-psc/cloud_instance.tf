@@ -43,4 +43,8 @@ resource "google_compute_instance" "default" {
   metadata = {
     "ssh-keys" : "ubuntu:${local.sshkey}"
   }
+
+  depends_on = [
+    google_compute_subnetwork.subnet
+  ]
 }

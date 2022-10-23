@@ -1,4 +1,4 @@
-environment_name = "justin-lee"
+environment_name = "justinlee-psc"
 owner            = "justinlee"
 
 google_project = "sales-engineering-206314"
@@ -11,7 +11,7 @@ regions = {
       "us-east1-c",
       "us-east1-d",
     ]
-  }
+  },
   "us-east4" = {
     cidr = "10.164.0.0/16"
     zones = [
@@ -19,5 +19,13 @@ regions = {
       "us-east4-b",
       "us-east4-c",
     ]
-  }
+  },
+  # "us-east5" = {
+  #   cidr = "10.165.0.0/16"
+  #   zones = [
+  #     "us-east5-a",
+  #     "us-east5-b",
+  #     "us-east5-c",
+  #   ]
+  # },
 }

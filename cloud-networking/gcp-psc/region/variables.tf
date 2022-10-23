@@ -26,3 +26,7 @@ variable "external" {
 variable "internal" {
   default = true
 }
+
+variable "external_proxy_whitelist" {
+  default = "0.0.0.0/0"
+}

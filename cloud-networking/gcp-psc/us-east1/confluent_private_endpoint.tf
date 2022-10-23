@@ -28,7 +28,7 @@ resource "google_compute_forwarding_rule" "psc_endpoint_ilb" {
 }
 
 # Firewall
-resource "google_compute_firewall" "allow-https-kafka" {
+resource "google_compute_firewall" "allow_https_kafka" {
   name    = "${var.environment_name}-ccloud-firewall-${local.network_id}"
   network = data.google_compute_network.vpc.id
 
