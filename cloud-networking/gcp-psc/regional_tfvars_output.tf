@@ -1,7 +1,7 @@
 resource "local_file" "tfvars" {
   for_each = var.regions
 
-  filename = "${path.module}/${each.key}/terraform.tfvars"
+  filename = "${path.module}/region_${each.key}/terraform.tfvars"
 
   content = templatefile("${path.module}/configurations/region.tfvars.tpl",
     {

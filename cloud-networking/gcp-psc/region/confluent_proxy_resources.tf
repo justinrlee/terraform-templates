@@ -83,12 +83,13 @@ resource "kubernetes_deployment" "nginx" {
   }
 }
 
-resource "kubernetes_service" "nginx" {
+resource "kubernetes_service" "external_nginx" {
   count      = var.external ? 1 : 0
   depends_on = [kubernetes_namespace.proxy]
 
   spec {
     load_balancer_ip = google_compute_address.external_proxy[0].address
+    load_balancer_source_ranges = var.external_proxy_whitelist
 
     selector = {
       "app.kubernetes.io/name" = "nginx"
@@ -110,7 +111,7 @@ resource "kubernetes_service" "nginx" {
   }
 
   metadata {
-    name      = "nginx"
+    name      = "nginx-external"
     namespace = var.namespace
   }
 }
