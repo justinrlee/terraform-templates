@@ -8,7 +8,7 @@ Note: GCP is different from AWS and Azure, in these significant ways:
 * GCP PSC endpoints cannot be accessed from other regions
 * GCP VCPs ('networks') are global, and then have a 'subnetwork' for each region.
 
-## Infra terraform
+## Infra terraform (top-level directory)
 Infrastructure repo (top-level terraform) creates infrastructure that everything in this depends on.
 
 It uses these variables:

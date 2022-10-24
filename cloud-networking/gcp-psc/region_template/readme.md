@@ -1,50 +1,37 @@
-# Confluent Cloud in GCP, with PSC
+# Region terraform (Child directory)
+Create a copy of the `/region` terraform directory for _each_ region you want to do this for (at `region_<regionname>`). Each region terraform will create the following resources:
 
-Rough dependency tree:
+`_parent_data.tf`: No resources, only data reads
 
-`cloud_network.tf`: No dependencies
-* VPC parent
-* Subnetwork for one region parent
-* Subnetwork for second regoin parent
+`confluent_infra.tf`:
+* Confluent Cloud Network (CCN) configured for PSC in the relevant zones
+* PSC Access (PrivateLink Access) granting the project access to the network
 
-<!-- `cloud_vm.tf` Dependent on `gcp_infra`: One SSH-able VM in each region
-* aws_security_group.all_traffic
-    * aws_security_group_rule.egress
-    * aws_security_group_rule.ingress_home
-    * aws_security_group_rule.ingress_https
-    * aws_security_group_rule.ingress_internal
-* aws_instance.pre[0] -->
+`confluent_kafka_cluster.tf`:
+* Dedicated, Single-Zone PSC cluster in the CCN
 
-`confluent_infra.tf` No dependencies: Confluent environment, network, RBAC role binding (EnvironmentAdmin)
-* confluent_environment.demo
-    * confluent_network.network (for each region)
-        * confluent_private_link_access.gcp
-<!-- * confluent_service_account.justin_tf_child
-    * confluent_role_binding.justin_tf_child_env -->
+`gcp_private_endpoint.tf`:
+* 3x private static IP, one for each AZ
+* 3x private endpoint forwarding rule, pointing the static IP at the PSC endpoint
+* (Optional) static private IP for proxy LB
+* (Optional) static public IP for proxy LB
+* (Private and public can be toggled individually; assumption is that you have at least one)
 
-`confluent_kafka_cluster.tf`: Dependent on `confluent_infra.tf`; Confluent cluster and API key
-* confluent_kafka_cluster.dedicated
-<!-- * confluent_api_key.justin_tf_child -->
+`gcp_private_zone.tf`:
+* Private DNS Zone
+* 1x record set for top-level wildcard
+    * For local region, three private static IPs (PSC private endpoints)
+    * For all other regions, one private (or public) static IP (pointing at the internal or external proxy LB)
+* 1x record set for *each* zonal wildcard, each with 1 entry
+    * For local region, one private static IPs (PSC private endpoint)
+    * For all other regions, one private (or public) static IP (pointing at the internal or external proxy LB)
 
-`confluent_private_endpoint.tf`: Dependent on `cloud_network.tf` and `confluent_infra.tf` (but not confluent cluster or VM)
-* aws_vpc_endpoint.privatelink
+`cloud_proxy_infra.tf`:
+* GKE cluster (in-region)
 
-* `confluent_private_zone.tf`: Dependent on `cloud_network.tf` and `confluent_private_endpoint.tf`
-    * aws_route53_record.privatelink
-    * aws_route53_record.privatelink_zonal["use1-az1"]
-    * aws_route53_record.privatelink_zonal["use1-az2"]
-    * aws_route53_record.privatelink_zonal["use1-az5"]
-* aws_security_group.privatelink
-
-`confluent_proxy.tf`: Dependent on `cloud_network.tf`
-In each region:
-  * Regional GKE cluster in each region
-  * Static IP address for proxy in each region
-Todo: look at Autopilot
-
-`confluent_proxy_gke_<regionname>.tf`: For each region, in the GKE cluster
-* All of the provider information relevant to the k8s cluster (for_each doesn't work with either multiple providers or providers in modules)
-* Namespace
-* Configmap
-* Deployment
-* LB Service
+`kubernetes_proxy_resources.tf`:
+* Namespace for proxy layer
+* ConfigMap for NGINX
+* Deployment for NGINX
+* (Optional) Internal LoadBalancer Service for NGINX
+* (Optional) External LoadBalancer Service for NGINX
