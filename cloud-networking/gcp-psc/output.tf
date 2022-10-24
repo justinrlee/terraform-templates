@@ -14,6 +14,12 @@ output "zz_jump_box" {
   # sensitive = true
 }
 
+output "zz_next_steps" {
+  value = {
+    for r,v in var.regions: "${r}" => "\ncp -rpv region_template/* _region_${r}\ncd _region_${r}\nterraform init\nterraform apply"
+  }
+}
+
 output "environment_name" { value = var.environment_name }
 
 output "owner" { value = var.owner }

@@ -9,7 +9,6 @@ provider "kubernetes" {
   token                  = data.google_client_config.provider.access_token
 }
 
-
 resource "kubernetes_namespace" "proxy" {
   depends_on = [google_container_cluster.proxy]
 

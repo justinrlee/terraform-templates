@@ -29,7 +29,7 @@ This terraform will consist of these resources:
 `confluent_infra.tf`: No dependencies
 * Confluent 'environment' for provisioning Confluent resources in it (assumes you already have a Confluent org)
 
-`region_tfvars.output.tf`: Depends on everything else
+`tfvars.regional.tf`: Depends on everything else
 * For each region, will generate a tfvars file for the region-specific Terraform (at `region_<regionname>/terraform.tfvars`)
 
 ## Region terraform
@@ -37,19 +37,38 @@ Create a copy of the `/region` terraform directory for _each_ region you want to
 
 `_parent_data.tf`: No resources, only data reads
 
-`confluent_infra.tf`: For each region:
+`confluent_infra.tf`:
 * Confluent Cloud Network (CCN) configured for PSC in the relevant zones
 * PSC Access (PrivateLink Access) granting the project access to the network
 
 `confluent_kafka_cluster.tf`:
 * Dedicated, Single-Zone PSC cluster in the CCN
 
-`confluent_private_endpoint.tf`:
+`gcp_private_endpoint.tf`:
 * 3x private static IP, one for each AZ
 * 3x private endpoint forwarding rule, pointing the static IP at the PSC endpoint
+* (Optional) static private IP for proxy LB
+* (Optional) static public IP for proxy LB
+* (Private and public can be toggled individually; assumption is that you have at least one)
 
+`gcp_private_zone.tf`:
+* Private DNS Zone
+* 1x record set for top-level wildcard
+    * For local region, three private static IPs (PSC private endpoints)
+    * For all other regions, one private (or public) static IP (pointing at the internal or external proxy LB)
+* 1x record set for *each* zonal wildcard, each with 1 entry
+    * For local region, one private static IPs (PSC private endpoint)
+    * For all other regions, one private (or public) static IP (pointing at the internal or external proxy LB)
 
+`cloud_proxy_infra.tf`:
+* GKE cluster (in-region)
 
+`kubernetes_proxy_resources.tf`:
+* Namespace for proxy layer
+* ConfigMap for NGINX
+* Deployment for NGINX
+* (Optional) Internal LoadBalancer Service for NGINX
+* (Optional) External LoadBalancer Service for NGINX
 
 ## Example usage
 
@@ -102,94 +121,95 @@ zz_jump_box = {
   "justinlee-psc-us-east1" = "35.196.145.50"
   "justinlee-psc-us-east4" = "34.86.2.33"
 }
+zz_next_steps = {
+  "us-east1" = <<-EOT
+  
+  cp -rpv region_template/* _region_us-east1
+  cd _region_us-east1
+  terraform init
+  terraform apply
+  EOT
+  "us-east4" = <<-EOT
+  
+  cp -rpv region_template/* _region_us-east4
+  cd _region_us-east4
+  terraform init
+  terraform apply
+  EOT
+}
 ```
 
 See created directories:
 
 ```
 gcp-psc % ls -alh
-total 200
-drwxr-xr-x  23 jlee  staff   736B Oct 24 10:58 .
+total 240
+drwxr-xr-x  23 jlee  staff   736B Oct 24 11:31 .
 drwxr-xr-x   3 jlee  staff    96B Oct 20 10:38 ..
+drwxr-xr-x   3 jlee  staff    96B Oct 24 11:19 _region_us-east1
+drwxr-xr-x   3 jlee  staff    96B Oct 24 11:19 _region_us-east4
 ...
-drwxr-xr-x  14 jlee  staff   448B Oct 24 10:54 region
-...
-drwxr-xr-x  18 jlee  staff   576B Oct 24 10:57 region_us-east1
-drwxr-xr-x  18 jlee  staff   576B Oct 24 10:57 region_us-east4
+drwxr-xr-x  14 jlee  staff   448B Oct 24 10:54 region_template
 ...
 ```
 
 See generated tfvars:
 
 ```
-gcp-psc % ls region_*
-region_us-east1:
+gcp-psc % ls _region_*
+_region_us-east1:
 terraform.tfvars
 
-region_us-east4:
+_region_us-east4:
 terraform.tfvars
 ```
 
-To create a child region, copy the `_region_tpl` template directory 
+To create a child region, copy the `region_template` template directory to the generated region directory:
+
+```bash
+gcp-psc % cp -rpv region_template/* _region_us-east1
+region_template/_parent_data.tf -> _region_us-east1/_parent_data.tf
+region_template/confluent_infra.tf -> _region_us-east1/confluent_infra.tf
+region_template/confluent_kafka_cluster.tf -> _region_us-east1/confluent_kafka_cluster.tf
+region_template/confluent_private_endpoint.tf -> _region_us-east1/confluent_private_endpoint.tf
+region_template/confluent_private_zone.tf -> _region_us-east1/confluent_private_zone.tf
+region_template/confluent_proxy.tf -> _region_us-east1/confluent_proxy.tf
+region_template/confluent_proxy_resources.tf -> _region_us-east1/confluent_proxy_resources.tf
+region_template/output.tf -> _region_us-east1/output.tf
+region_template/providers.tf -> _region_us-east1/providers.tf
+region_template/readme.md -> _region_us-east1/readme.md
+region_template/sample.tfvars -> _region_us-east1/sample.tfvars
+region_template/variables.tf -> _region_us-east1/variables.tf
+```
+
+Then cd into the generated directory, init, and run:
 
 ```
-gcp-psc % cp -rpv _region_tpl region_us-east
-_region_tpl -> region_us-east
-_region_tpl/output.tf -> region_us-east/output.tf
-_region_tpl/confluent_infra.tf -> region_us-east/confluent_infra.tf
-_region_tpl/confluent_private_endpoint.tf -> region_us-east/confluent_private_endpoint.tf
-_region_tpl/confluent_kafka_cluster.tf -> region_us-east/confluent_kafka_cluster.tf
-_region_tpl/_parent_data.tf -> region_us-east/_parent_data.tf
-_region_tpl/providers.tf -> region_us-east/providers.tf
-_region_tpl/readme.md -> region_us-east/readme.md
-_region_tpl/confluent_proxy.tf -> region_us-east/confluent_proxy.tf
-_region_tpl/sample.tfvars -> region_us-east/sample.tfvars
-_region_tpl/variables.tf -> region_us-east/variables.tf
-_region_tpl/confluent_proxy_resources.tf -> region_us-east/confluent_proxy_resources.tf
-_region_tpl/confluent_private_zone.tf -> region_us-east/confluent_private_zone.tf
+gcp-psc % cd _region_us-east1
+
+_region_us-east1 % terraform init
+...
+... Output omitted
+...
+
+_region_us-east1 % terraform apply
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+ <= read (data resources)
+
+...
+... Output omitted
+...
+
+Plan: 20 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + internal_proxy_endpoint = (known after apply)
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
 ```
-
-
-## Example
-
-<!-- `cloud_vm.tf` Dependent on `gcp_infra`: One SSH-able VM in each region
-* aws_security_group.all_traffic
-    * aws_security_group_rule.egress
-    * aws_security_group_rule.ingress_home
-    * aws_security_group_rule.ingress_https
-    * aws_security_group_rule.ingress_internal
-* aws_instance.pre[0] -->
-
-`confluent_infra.tf` No dependencies: Confluent environment, network, RBAC role binding (EnvironmentAdmin)
-* confluent_environment.demo
-    * confluent_network.network (for each region)
-        * confluent_private_link_access.gcp
-<!-- * confluent_service_account.justin_tf_child
-    * confluent_role_binding.justin_tf_child_env -->
-
-`confluent_kafka_cluster.tf`: Dependent on `confluent_infra.tf`; Confluent cluster and API key
-* confluent_kafka_cluster.dedicated
-<!-- * confluent_api_key.justin_tf_child -->
-
-`confluent_private_endpoint.tf`: Dependent on `cloud_network.tf` and `confluent_infra.tf` (but not confluent cluster or VM)
-* aws_vpc_endpoint.privatelink
-
-* `confluent_private_zone.tf`: Dependent on `cloud_network.tf` and `confluent_private_endpoint.tf`
-    * aws_route53_record.privatelink
-    * aws_route53_record.privatelink_zonal["use1-az1"]
-    * aws_route53_record.privatelink_zonal["use1-az2"]
-    * aws_route53_record.privatelink_zonal["use1-az5"]
-* aws_security_group.privatelink
-
-`confluent_proxy.tf`: Dependent on `cloud_network.tf`
-In each region:
-  * Regional GKE cluster in each region
-  * Static IP address for proxy in each region
-Todo: look at Autopilot
-
-`confluent_proxy_gke_<regionname>.tf`: For each region, in the GKE cluster
-* All of the provider information relevant to the k8s cluster (for_each doesn't work with either multiple providers or providers in modules)
-* Namespace
-* Configmap
-* Deployment
-* LB Service
