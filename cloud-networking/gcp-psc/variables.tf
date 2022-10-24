@@ -17,5 +17,5 @@ variable "external_proxy" {
   default = false
 }
 variable "external_proxy_whitelist" {
-  default = "0.0.0.0/0"
+  default = ["0.0.0.0/0"]
 }

@@ -7,7 +7,11 @@ confluent_environment_id     = "${confluent_environment_id}"
 
 internal                       = "${internal}"
 external                       = "${external}"
-external_proxy_whitelist       = "${external_proxy_whitelist}"
+external_proxy_whitelist       = [
+  %{ for whitelist in external_proxy_whitelist ~}
+    "${whitelist}",
+  %{ endfor ~}
+]
 
 region                       = "${region}"
 google_compute_subnetwork_name = "${google_compute_subnetwork_name}"

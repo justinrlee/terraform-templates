@@ -12,7 +12,7 @@ resource "local_file" "tfvars" {
       confluent_environment_id       = confluent_environment.demo.id,
       internal                       = var.internal_proxy,
       external                       = var.external_proxy,
-      external_proxy_whitelist       = var.external_proxy_whitelist,
+      external_proxy_whitelist       = var.external_proxy_whitelist
       google_compute_subnetwork_name = google_compute_subnetwork.subnet[each.key].name,
       region : each.key,
       zones = each.value.zones,
