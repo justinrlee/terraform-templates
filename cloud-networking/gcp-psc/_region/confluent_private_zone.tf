@@ -1,5 +1,3 @@
-data "google_compute_regions" "available" {}
-
 resource "google_dns_managed_zone" "psc_endpoint_hz" {
   name     = "${var.environment_name}-${var.region}-ccloud-${local.network_id}"
   dns_name = "${local.dns_domain}."

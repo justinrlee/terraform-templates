@@ -1,9 +1,4 @@
 
-# Comes from parent
-data "confluent_environment" "confluent_environment" {
-  id = var.confluent_environment_id
-}
-
 resource "confluent_network" "network" {
   display_name     = "${var.region}-psc"
   cloud            = "GCP"
@@ -20,7 +15,6 @@ resource "confluent_network" "network" {
     # prevent_destroy = true
   }
 }
-
 
 resource "confluent_private_link_access" "gcp" {
   display_name = "GCP Private Service Connect"

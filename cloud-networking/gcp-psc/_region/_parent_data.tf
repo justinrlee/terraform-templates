@@ -14,5 +14,11 @@ data "google_compute_subnetwork" "subnet" {
   region  = var.region
   project = var.google_project
   name    = var.google_compute_subnetwork_name
-
 }
+
+# Comes from parent
+data "confluent_environment" "confluent_environment" {
+  id = var.confluent_environment_id
+}
+
+data "google_compute_regions" "available" {}
