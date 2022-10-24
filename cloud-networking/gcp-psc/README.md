@@ -49,7 +49,8 @@ Create a copy of the `/region` terraform directory for _each_ region you want to
 * 3x private endpoint forwarding rule, pointing the static IP at the PSC endpoint
 * (Optional) static private IP for proxy LB
 * (Optional) static public IP for proxy LB
-* (Private and public can be toggled individually; assumption is that you have at least one)
+
+Private and public can be toggled individually; assumption is that you have at least one
 
 `gcp_private_zone.tf`:
 * Private DNS Zone
@@ -212,4 +213,8 @@ Do you want to perform these actions?
   Only 'yes' will be accepted to approve.
 
   Enter a value: yes
+
+...
+... Output omitted
+...
 ```
