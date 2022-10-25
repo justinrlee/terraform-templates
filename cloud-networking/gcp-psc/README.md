@@ -86,7 +86,7 @@ This terraform will consist of these resources:
 * Subnetwork for each region
 
 `cloud_instance.tf`: (optional) depends on cloud_network.tf:
-* (Ubuntu) Bastion host in each subnet
+* (Ubuntu) Bastion host in each subnet (could be used for Replicator, can also be used for testing)
 * Firewall allowing SSH into the bastion host
 
 `confluent_infra.tf`: No dependencies
