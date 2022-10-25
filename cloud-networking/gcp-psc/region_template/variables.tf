@@ -30,3 +30,28 @@ variable "internal" {
 variable "external_proxy_whitelist" {
   default = "0.0.0.0/0"
 }
+
+# Toggles to disable certain capabilities
+
+variable "dedicated_cluster" {
+  default = true
+}
+
+variable "dedicated_ckus" {
+  default = 1
+}
+
+variable "dedicated_maz" {
+  default = false
+}
+
+# Workaround for lack of assertion in TF < 1.2
+resource "null_resource" "maz_2_cku" {
+  count = (var.dedicated_cluster && var.dedicated_maz && var.dedicated_ckus < 2) ? "ERROR: Multi-AZ clusters need at least 2 CKUs" : 0
+}
+
+
+
+// TODO: make flaggable:
+// CCN (proxy for peering instead)
+// Remote regions

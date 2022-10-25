@@ -50,7 +50,7 @@ Create a copy of the `/region` terraform directory for _each_ region you want to
 * (Optional) static private IP for proxy LB
 * (Optional) static public IP for proxy LB
 
-Private and public can be toggled individually; assumption is that you have at least one
+_Private and public can be toggled individually; assumption is that you have at least one_
 
 `gcp_private_zone.tf`:
 * Private DNS Zone

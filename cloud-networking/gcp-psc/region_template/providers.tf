@@ -12,7 +12,7 @@ provider "google" {
 }
 
 provider "confluent" {
-  # Sourced from /Users/jlee/git/justinrlee/private-terraform/ccloud/strategic/creds:
+  # Sourced from /Users/jlee/git/justinrlee/private-terraform/ccloud/strategic/creds :
   # * CONFLUENT_CLOUD_API_KEY
   # cloud_api_key    = var.confluent_cloud_api_key
   # * CONFLUENT_CLOUD_API_SECRET

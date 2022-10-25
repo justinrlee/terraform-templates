@@ -5,3 +5,5 @@ output "external_proxy_endpoint" {
 output "internal_proxy_endpoint" {
   value = var.internal ? google_compute_address.internal_proxy[0].address : null
 }
+
+// TODO: Output cluster info
