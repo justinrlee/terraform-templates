@@ -1,5 +1,68 @@
 # Confluent Cloud in GCP, with PSC
 
+```mermaid
+%%{init: {"theme": "neutral", "logLevel": 1 }}%%
+flowchart LR
+    K1[Confluent Kafka Cluster]
+    K2[Confluent Kafka Cluster]
+    PSC1((PSC\nEndpoint))
+    PSC2((PSC\nEndpoint))
+    NGINX1A[NGINX]
+    NGINX1B[NGINX]
+    NGINX1C[NGINX]
+    NGINX2A[NGINX]
+    NGINX2B[NGINX]
+    NGINX2C[NGINX]
+    GLB1[LoadBalancer\nService]
+    GLB2[LoadBalancer\nService]
+    R1[Replicator]
+    R2[Replicator]
+
+        subgraph Region 1 Confluent Network
+            K1
+        end
+        subgraph Region 2 Confluent Network
+            K2
+        end
+
+    subgraph Customer VPC
+        subgraph SN1[Region 1 Subnetwork]
+            R1
+
+            subgraph GKE1[GKE Cluster]
+                GLB1
+                    NGINX1A
+                    NGINX1B
+                    NGINX1C
+            end
+            PSC1
+        end
+        subgraph SN2[Region 2 Subnetwork]
+            R2
+            subgraph GKE2[GKE Cluster]
+                GLB2
+                    NGINX2A
+                    NGINX2B
+                    NGINX2C
+            end
+            PSC2
+        end
+    end
+
+
+    GLB1 --> NGINX1A & NGINX1B & NGINX1C --> PSC1
+    GLB2 --> NGINX2A & NGINX2B & NGINX2C --> PSC2
+
+    PSC1 ===> K1
+    PSC2 ===> K2
+
+    R1 --> PSC1
+    R1 --> GLB2
+
+    R2 --> GLB1
+    R2 --> PSC2
+```
+
 This project has two levels of Terraform:
 * One to automate the creation of 'infrastructure' (potentially, these would be things managed by the customer's existing automation)
 * One to automate the creation of Confluent-specific infrastructure, on a per-region basis
