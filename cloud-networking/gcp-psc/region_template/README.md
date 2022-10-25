@@ -42,6 +42,7 @@ _Private and public can be toggled individually; assumption is that you have at 
 ---
 
 ```mermaid
+%%{init: {"theme": "forest", "logLevel": 1 }}%%
 erDiagram
     parent_data ||--|| confluent_infra: ""
     parent_data ||--|| gcp_gke_cluster: ""
