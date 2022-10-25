@@ -16,6 +16,8 @@ Create a copy of the `/region` terraform directory for _each_ region you want to
 `gcp_private_endpoint.tf`: depends on `confluent_infra.tf`
 * 3x private static IP, one for each AZ
 * 3x private endpoint forwarding rule, pointing the static IP at the PSC endpoint
+
+`gcp_proxy_ip.tf`: depends on parent only
 * (Optional) static private IP for proxy LB
 * (Optional) static public IP for proxy LB
 
@@ -30,107 +32,70 @@ _Private and public can be toggled individually; assumption is that you have at 
     * For local region, one private static IPs (PSC private endpoint)
     * For all other regions, one private (or public) static IP (pointing at the internal or external proxy LB)
 
-`kubernetes_proxy_resources.tf`: depends on `gcp_gke_cluster.tf` and `gcp_private_endpoint.tf`
+`kubernetes_proxy_resources.tf`: depends on `gcp_gke_cluster.tf` and `gcp_proxy_ip.tf`
 * Namespace for proxy layer
 * ConfigMap for NGINX
 * Deployment for NGINX
 * (Optional) Internal LoadBalancer Service for NGINX
 * (Optional) External LoadBalancer Service for NGINX
 
-```mermaid
-erDiagram
-  subgraph confluent
-    confluent_kafka_cluster --> confluent_infra
-
-  end
-
-  subgraph gcp
-    gcp_private_zone --> gcp_private_endpoint
-    kubernetes_proxy_resources --> gcp_gke_cluster
-    kubernetes_proxy_resources --> gcp_private_endpoint
-  end
-
-    confluent_infra --> parent
-    gcp_gke_cluster --> parent
-    gcp_private_endpoint --> confluent_infra
-    gcp_private_zone --> confluent_infra
-
-```
-
-```mermaid
-graph
-  subgraph confluent
-    confluent_kafka_cluster --> confluent_infra
-
-  end
-
-  subgraph gcp
-    gcp_private_zone --> gcp_private_endpoint
-    kubernetes_proxy_resources --> gcp_gke_cluster
-    kubernetes_proxy_resources --> gcp_private_endpoint
-  end
-
-    confluent_infra --> parent
-    gcp_gke_cluster --> parent
-    gcp_private_endpoint --> confluent_infra
-    gcp_private_zone --> confluent_infra
-
-```
-
-
-```mermaid
-graph
-  subgraph confluent
-    confluent_infra --> confluent_kafka_cluster
-
-  end
-
-  subgraph gcp
-    gcp_private_endpoint --> gcp_private_zone
-    gcp_gke_cluster --> kubernetes_proxy_resources
-    gcp_private_endpoint --> kubernetes_proxy_resources
-  end
-
-    parent --> confluent_infra
-    parent --> gcp_gke_cluster
-    confluent_infra --> gcp_private_endpoint
-    confluent_infra --> gcp_private_zone
-
-```
-
-```mermaid
-graph
-  subgraph confluent
-    confluent_infra --> confluent_kafka_cluster
-
-  end
-
-  subgraph gcp
-    gcp_private_endpoint --> gcp_private_zone
-    gcp_gke_cluster --> kubernetes_proxy_resources
-    gcp_private_endpoint --> kubernetes_proxy_resources
-  end
-
-    parent --> confluent_infra
-    parent --> gcp_gke_cluster
-    confluent_infra --> gcp_private_endpoint
-    confluent_infra --> gcp_private_zone
-```
+---
 
 ```mermaid
 erDiagram
-    confluent_infra ||--|| confluent_kafka_cluster: ""
-    confluent_infra {
-      x y
-    }
-
-    gcp_private_endpoint ||--|| gcp_private_zone: ""
-    gcp_gke_cluster ||--|| kubernetes_proxy_resources: ""
-    gcp_private_endpoint ||--|| kubernetes_proxy_resources: ""
-
-
-    parent ||--|| confluent_infra: ""
-    parent ||--|| gcp_gke_cluster: ""
+    parent_data ||--|| confluent_infra: ""
+    parent_data ||--|| gcp_gke_cluster: ""
+    parent_data ||--|| gcp_proxy_ip: ""
     confluent_infra ||--|| gcp_private_endpoint: ""
     confluent_infra ||--|| gcp_private_zone: ""
+    confluent_infra ||--|| confluent_kafka_cluster: ""
+    gcp_gke_cluster ||--|| kubernetes_proxy_resources: ""
+    gcp_private_endpoint ||--|| gcp_private_zone: ""
+    gcp_proxy_ip ||--|| kubernetes_proxy_resources: ""
+
+    confluent_infra {
+      confluent_network network
+      confluent_private_link_access gcp
+    }
+
+    confluent_kafka_cluster {
+      confluent_kafka_cluster kafka
+    }
+
+    gcp_gke_cluster {
+      google_container_cluster proxy
+    }
+
+    gcp_private_endpoint {
+      google_compute_address psc_endpoint_ip_0
+      google_compute_address psc_endpoint_ip_1
+      google_compute_address psc_endpoint_ip_2
+      google_compute_forwarding_rule psc_endpoint_ilb_0
+      google_compute_forwarding_rule psc_endpoint_ilb_1
+      google_compute_forwarding_rule psc_endpoint_ilb_2
+    }
+
+    gcp_proxy_ip {
+      google_compute_address external_proxy
+      google_compute_address internal_proxy
+    }
+
+    gcp_private_zone {
+      google_dns_managed_zone ccn_zone
+      google_dns_record_set psc_regional
+      google_dns_record_set psc_zonal_0
+      google_dns_record_set psc_zonal_1
+      google_dns_record_set psc_zonal_2
+    }
+    kubernetes_proxy_resources {
+      google_container_cluster proxy
+      kubernetes_namespace proxy
+      kubernetes_config_map nginx
+      kubernetes_deployment nginx
+      kubernetes_service external_nginx
+      kubernetes_service internal_nginx
+    }
+
+
 ```
+

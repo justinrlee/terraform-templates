@@ -27,27 +27,6 @@ resource "google_compute_forwarding_rule" "psc_endpoint_ilb" {
   ip_address            = google_compute_address.psc_endpoint_ip[each.key].id
 }
 
-# Static External IP for proxy load balancer
-resource "google_compute_address" "external_proxy" {
-  count = var.external ? 1 : 0
-
-  name = "${var.environment_name}-${var.region}-proxy-ip"
-
-  region = var.region
-
-  address_type = "EXTERNAL"
-}
-
-resource "google_compute_address" "internal_proxy" {
-  count = var.internal ? 1 : 0
-  name  = "${var.environment_name}-${var.region}-internal-proxy-ip"
-
-  subnetwork = var.google_compute_subnetwork_name
-
-  region       = var.region
-  address_type = "INTERNAL"
-}
-
 # Firewall
 # resource "google_compute_firewall" "allow_https_kafka" {
 #   name    = "${var.environment_name}-ccloud-firewall-${local.network_id}"

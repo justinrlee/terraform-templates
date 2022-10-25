@@ -32,27 +32,32 @@ This terraform will consist of these resources:
 `tfvars.regional.tf`: Depends on everything else
 * For each region, will generate a tfvars file for the region-specific Terraform (at `region_<regionname>/terraform.tfvars`)
 
-## Region terraform
+# Region terraform
 Create a copy of the `/region` terraform directory for _each_ region you want to do this for (at `region_<regionname>`). Each region terraform will create the following resources:
 
 `_parent_data.tf`: No resources, only data reads
 
-`confluent_infra.tf`:
+`confluent_infra.tf`: depends on parent only
 * Confluent Cloud Network (CCN) configured for PSC in the relevant zones
 * PSC Access (PrivateLink Access) granting the project access to the network
 
-`confluent_kafka_cluster.tf`:
+`confluent_kafka_cluster.tf`: depends on `confluent_infra.tf`
 * Dedicated, Single-Zone PSC cluster in the CCN
 
-`gcp_private_endpoint.tf`:
+`gcp_gke_cluster.tf`: depends on parent only
+* GKE cluster (in-region)
+
+`gcp_private_endpoint.tf`: depends on `confluent_infra.tf`
 * 3x private static IP, one for each AZ
 * 3x private endpoint forwarding rule, pointing the static IP at the PSC endpoint
+
+`gcp_proxy_ip.tf`: depends on parent only
 * (Optional) static private IP for proxy LB
 * (Optional) static public IP for proxy LB
 
 _Private and public can be toggled individually; assumption is that you have at least one_
 
-`gcp_private_zone.tf`:
+`gcp_private_zone.tf`: depends on `confluent_infra.tf`, `gcp_private_endpoint.tf`
 * Private DNS Zone
 * 1x record set for top-level wildcard
     * For local region, three private static IPs (PSC private endpoints)
@@ -61,16 +66,12 @@ _Private and public can be toggled individually; assumption is that you have at 
     * For local region, one private static IPs (PSC private endpoint)
     * For all other regions, one private (or public) static IP (pointing at the internal or external proxy LB)
 
-`cloud_proxy_infra.tf`:
-* GKE cluster (in-region)
-
-`kubernetes_proxy_resources.tf`:
+`kubernetes_proxy_resources.tf`: depends on `gcp_gke_cluster.tf` and `gcp_proxy_ip.tf`
 * Namespace for proxy layer
 * ConfigMap for NGINX
 * Deployment for NGINX
 * (Optional) Internal LoadBalancer Service for NGINX
 * (Optional) External LoadBalancer Service for NGINX
-
 ## Example usage
 
 In the top-level directory:
