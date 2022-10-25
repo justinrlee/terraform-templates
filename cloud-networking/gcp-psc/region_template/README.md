@@ -42,7 +42,7 @@ _Private and public can be toggled individually; assumption is that you have at 
 ---
 
 ```mermaid
-%%{init: {"theme": "dark", "logLevel": 1 }}%%
+%%{init: {"theme": "neutral", "logLevel": 1 }}%%
 erDiagram
     parent_data ||--|| confluent_infra: ""
     parent_data ||--|| gcp_gke_cluster: ""
