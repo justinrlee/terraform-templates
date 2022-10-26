@@ -3,10 +3,10 @@
 ```mermaid
 %%{init: {"theme": "neutral", "logLevel": 1 }}%%
 flowchart LR
-    K1[Confluent Kafka Cluster]
-    K2[Confluent Kafka Cluster]
-    PSC1((PSC\nEndpoint))
-    PSC2((PSC\nEndpoint))
+    K1[Dedicated Confluent Kafka Cluster]
+    K2[Dedicated Confluent Kafka Cluster]
+    PSC1((3x PSC\nEndpoints))
+    PSC2((3x PSC\nEndpoints))
     NGINX1A[NGINX]
     NGINX1B[NGINX]
     NGINX1C[NGINX]
@@ -18,15 +18,15 @@ flowchart LR
     R1[Replicator]
     R2[Replicator]
 
-        subgraph Region 1 Confluent Network
+        subgraph CCN2[Region 2: Confluent Cloud Network]
             K1
         end
-        subgraph Region 2 Confluent Network
+        subgraph CCN1[Region 1: Confluent Cloud Network]
             K2
         end
 
     subgraph Customer VPC
-        subgraph SN1[Region 1 Subnetwork]
+        subgraph SN1[Region 2 Subnetwork]
             R1
 
             subgraph GKE1[GKE Cluster]
@@ -37,7 +37,7 @@ flowchart LR
             end
             PSC1
         end
-        subgraph SN2[Region 2 Subnetwork]
+        subgraph SN2[Region 1 Subnetwork]
             R2
             subgraph GKE2[GKE Cluster]
                 GLB2
@@ -53,14 +53,14 @@ flowchart LR
     GLB1 --> NGINX1A & NGINX1B & NGINX1C --> PSC1
     GLB2 --> NGINX2A & NGINX2B & NGINX2C --> PSC2
 
-    PSC1 ===> K1
-    PSC2 ===> K2
+    PSC1 ==> K1
+    PSC2 ==> K2
 
-    R1 --> PSC1
-    R1 --> GLB2
+    R1 -- produce --> PSC1
+    R1 -- consume --> GLB2
 
-    R2 --> GLB1
-    R2 --> PSC2
+    R2 -- consume --> GLB1
+    R2 -- produce --> PSC2
 ```
 
 This project has two levels of Terraform:
