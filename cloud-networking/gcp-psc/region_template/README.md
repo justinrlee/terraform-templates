@@ -89,7 +89,6 @@ erDiagram
       google_dns_record_set psc_zonal_2
     }
     kubernetes_proxy_resources {
-      google_container_cluster proxy
       kubernetes_namespace proxy
       kubernetes_config_map nginx
       kubernetes_deployment nginx
