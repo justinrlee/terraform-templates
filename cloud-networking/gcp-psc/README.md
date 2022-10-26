@@ -281,4 +281,12 @@ Do you want to perform these actions?
 ...
 ... Output omitted
 ...
+
+
+Apply complete! Resources: 20 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+internal_proxy_endpoint = "10.161.0.11"
+kafka_endpoint = "lkc-rrpj8p-pll2ep.us-east1.gcp.glb.confluent.cloud:9092"
 ```
