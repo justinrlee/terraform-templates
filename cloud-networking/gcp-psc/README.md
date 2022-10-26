@@ -1,7 +1,7 @@
 # Confluent Cloud in GCP, with PSC
 
 ```mermaid
-%%{init: {"theme": "neutral", "logLevel": 1 }}%%
+%%{init: {"theme": "neutral", "logLevel": 1, "flowchart": {"rankSpacing": 40}}}%%
 flowchart LR
     K1[Dedicated Confluent Kafka Cluster]
     K2[Dedicated Confluent Kafka Cluster]
@@ -25,19 +25,24 @@ flowchart LR
             K2
         end
 
-    subgraph Customer VPC
-        subgraph SN1[Region 2 Subnetwork]
-            R1
+    classDef padding fill:none,stroke:none
 
-            subgraph GKE1[GKE Cluster]
-                GLB1
-                    NGINX1A
-                    NGINX1B
-                    NGINX1C
+    subgraph vpc[Customer VPC]
+      subgraph pad1[ ]
+        subgraph SN1[Region 2 Subnetwork]
+            subgraph pad2[ ]
+              R1
+              subgraph GKE1[GKE Cluster]
+                  GLB1
+                      NGINX1A
+                      NGINX1B
+                      NGINX1C
+              end
+              PSC1
             end
-            PSC1
         end
         subgraph SN2[Region 1 Subnetwork]
+          subgraph pad3[ ]
             R2
             subgraph GKE2[GKE Cluster]
                 GLB2
@@ -46,8 +51,12 @@ flowchart LR
                     NGINX2C
             end
             PSC2
+          end
         end
+      end
     end
+
+    class pad1,pad2,pad3 padding
 
 
     GLB1 --> NGINX1A & NGINX1B & NGINX1C --> PSC1
