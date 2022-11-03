@@ -20,12 +20,4 @@ regions = {
       "us-east4-c",
     ]
   },
-  # "us-east5" = {
-  #   cidr = "10.165.0.0/16"
-  #   zones = [
-  #     "us-east5-a",
-  #     "us-east5-b",
-  #     "us-east5-c",
-  #   ]
-  # },
 }

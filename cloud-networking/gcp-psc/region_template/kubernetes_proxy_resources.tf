@@ -66,8 +66,8 @@ resource "kubernetes_deployment" "nginx" {
           volume_mount {
             name       = "config"
             mount_path = "/etc/nginx/nginx.conf"
-            read_only  = true
             sub_path   = "nginx.conf"
+            read_only  = true
           }
         }
 
@@ -81,40 +81,6 @@ resource "kubernetes_deployment" "nginx" {
     }
   }
 }
-
-resource "kubernetes_service" "external_nginx" {
-  count      = var.external ? 1 : 0
-  depends_on = [kubernetes_namespace.proxy]
-
-  spec {
-    load_balancer_ip = google_compute_address.external_proxy[0].address
-    load_balancer_source_ranges = var.external_proxy_whitelist
-
-    selector = {
-      "app.kubernetes.io/name" = "nginx"
-    }
-    # session_affinity = "ClientIP"
-    port {
-      name        = "kafka"
-      port        = 9092
-      target_port = 9092
-    }
-    port {
-      name        = "https"
-      port        = 443
-      target_port = 443
-    }
-
-    type = "LoadBalancer"
-
-  }
-
-  metadata {
-    name      = "nginx-external"
-    namespace = var.namespace
-  }
-}
-
 
 resource "kubernetes_service" "internal_nginx" {
   count      = var.internal ? 1 : 0
@@ -149,5 +115,38 @@ resource "kubernetes_service" "internal_nginx" {
       "networking.gke.io/load-balancer-type"                         = "Internal"
       "networking.gke.io/internal-load-balancer-allow-global-access" = "true"
     }
+  }
+}
+
+resource "kubernetes_service" "external_nginx" {
+  count      = var.external ? 1 : 0
+  depends_on = [kubernetes_namespace.proxy]
+
+  spec {
+    load_balancer_ip = google_compute_address.external_proxy[0].address
+    load_balancer_source_ranges = var.external_proxy_whitelist
+
+    selector = {
+      "app.kubernetes.io/name" = "nginx"
+    }
+    # session_affinity = "ClientIP"
+    port {
+      name        = "kafka"
+      port        = 9092
+      target_port = 9092
+    }
+    port {
+      name        = "https"
+      port        = 443
+      target_port = 443
+    }
+
+    type = "LoadBalancer"
+
+  }
+
+  metadata {
+    name      = "nginx-external"
+    namespace = var.namespace
   }
 }

@@ -1,0 +1,127 @@
+---
+# These are references for the resources created by the Terraform Kubernetes provider in `kubernetes_proxy_resources.tf`
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: confluent-proxy
+  labels:
+    kubernetes.io/metadata.name: confluent-proxy
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: confluent-proxy
+data:
+  nginx.conf: |-
+    events {}
+
+    stream {
+        map $ssl_preread_server_name $targetBackend {
+          default $ssl_preread_server_name;
+      }
+
+      server {
+        listen 9092;
+
+        proxy_connect_timeout 1s;
+        proxy_timeout 3s;
+        resolver 169.254.169.254;
+
+        proxy_pass $targetBackend:9092;
+        ssl_preread on;
+      }
+
+      server {
+        listen 443;
+
+        proxy_connect_timeout 1s;
+        proxy_timeout 3s;
+        resolver 169.254.169.254;
+
+        proxy_pass $targetBackend:443;
+        ssl_preread on;
+      }
+    }
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: confluent-proxy
+  labels:
+    app: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+        app.kubernetes.io/name: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.21.6
+        volumeMounts:
+        - name: config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: nginx-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-internal
+  namespace: confluent-proxy
+  annotations:
+    networking.gke.io/load-balancer-type: Internal
+    networking.gke.io/internal-load-balancer-allow-global-access: "true"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.161.0.3
+  ports:
+  - name: kafka
+    port: 9092
+    protocol: TCP
+    targetPort: 9092
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 443
+  selector:
+    app.kubernetes.io/name: nginx
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-external
+  namespace: confluent-proxy
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 34.138.157.161
+  loadBalancerSourceRanges:
+  - 74.96.240.64/32
+  ports:
+  - name: kafka
+    nodePort: 31184
+    port: 9092
+    protocol: TCP
+    targetPort: 9092
+  - name: https
+    nodePort: 30274
+    port: 443
+    protocol: TCP
+    targetPort: 443
+  selector:
+    app.kubernetes.io/name: nginx
