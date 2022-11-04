@@ -21,3 +21,5 @@ regions = {
     ]
   },
 }
+
+external_proxy = true
