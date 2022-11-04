@@ -1,3 +1,4 @@
 .terraform
 archive
 _region_*
+_generated_dns
