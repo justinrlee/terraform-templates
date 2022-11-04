@@ -1,22 +1,26 @@
 # Confluent Cloud in GCP, with PSC
 
+## Internal PSC Proxies
 ```mermaid
 %%{init: {"theme": "neutral", "logLevel": 1, "flowchart": {"rankSpacing": 40}}}%%
 flowchart LR
     K1[Dedicated Confluent Kafka Cluster]
     K2[Dedicated Confluent Kafka Cluster]
-    PSC1((3x PSC\nEndpoints))
-    PSC2((3x PSC\nEndpoints))
+    PSC1(("PSC\nEndpoints\n(3x)"))
+    PSC2(("PSC\nEndpoints\n(3x)"))
     NGINX1A[NGINX]
     NGINX1B[NGINX]
     NGINX1C[NGINX]
     NGINX2A[NGINX]
     NGINX2B[NGINX]
     NGINX2C[NGINX]
-    GLB1[LoadBalancer\nService]
-    GLB2[LoadBalancer\nService]
+    GLB1[Internal\nLoadBalancer\nService]
+    GLB2[Internal\nLoadBalancer\nService]
     R1[Replicator]
     R2[Replicator]
+
+    DNS1[("Private DNS Zone\n(Region 1)")]
+    DNS2[("Private DNS Zone\n(Region 2)")]
 
         subgraph CCN2[Region 2: Confluent Cloud Network]
             K1
@@ -33,10 +37,10 @@ flowchart LR
             subgraph pad2[ ]
               R1
               subgraph GKE1[GKE Cluster]
-                  GLB1
-                      NGINX1A
-                      NGINX1B
-                      NGINX1C
+                GLB1
+                NGINX1A
+                NGINX1B
+                NGINX1C
               end
               PSC1
             end
@@ -45,15 +49,18 @@ flowchart LR
           subgraph pad3[ ]
             R2
             subgraph GKE2[GKE Cluster]
-                GLB2
-                    NGINX2A
-                    NGINX2B
-                    NGINX2C
+              GLB2
+              NGINX2A
+              NGINX2B
+              NGINX2C
             end
             PSC2
           end
         end
       end
+      
+      DNS1
+      DNS2
     end
 
     class pad1,pad2,pad3 padding
@@ -71,6 +78,9 @@ flowchart LR
     R2 -- consume --> GLB1
     R2 -- produce --> PSC2
 ```
+
+_Note: Provided Terraform does not currently cover Replicator._
+
 
 This project has two levels of Terraform:
 * One to automate the creation of 'infrastructure' (potentially, these would be things managed by the customer's existing automation)

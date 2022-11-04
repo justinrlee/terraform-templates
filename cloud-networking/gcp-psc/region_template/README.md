@@ -41,6 +41,57 @@ _Private and public can be toggled individually; assumption is that you have at 
 
 ---
 
+
+## External PSC Proxies
+
+```mermaid
+%%{init: {"theme": "neutral", "logLevel": 1, "flowchart": {"rankSpacing": 40}}}%%
+flowchart LR
+    K1[Dedicated Confluent Kafka Cluster]
+    PSC1(("PSC\nEndpoints\n(3x)"))
+    NGINX["NGINX (3x)"]
+    GLB1["External\nLoadBalancer\nService"]
+    GLBDNS["External\nLoadBalancer\nService"]
+    DNS["CoreDNS (3x)"]
+
+    CLIENT["External Client"]
+
+    subgraph CCN[Confluent Cloud Network]
+        K1
+    end
+
+    classDef padding fill:none,stroke:none
+
+    subgraph vpc[Customer VPC]
+      subgraph pad1[ ]
+        subgraph SN1[Subnetwork]
+            subgraph pad2[ ]
+              subgraph GKE1[GKE Cluster]
+                GLB1
+                NGINX
+                GLBDNS
+                DNS
+              end
+              PSC1
+            end
+        end
+      end
+    end
+
+    class pad1,pad2,pad3 padding
+    
+    GLBDNS --> DNS
+
+    GLB1 --> NGINX --> PSC1
+
+    PSC1 ==> K1
+
+    CLIENT -.-> GLBDNS
+    CLIENT --> GLB1
+```
+
+## Resource Map
+
 ```mermaid
 %%{init: {"theme": "neutral", "logLevel": 1 }}%%
 erDiagram
@@ -53,6 +104,14 @@ erDiagram
     gcp_gke_cluster ||--|| kubernetes_proxy_resources: ""
     gcp_private_endpoint ||--|| gcp_private_zone: ""
     gcp_proxy_ip ||--|| kubernetes_proxy_resources: ""
+
+    parent_data ||--|| gcp_dns_ip: ""
+    confluent_infra ||--|| local_domain_list: ""
+    local_domain_list ||--|| generated_coredns_config: ""
+    gcp_proxy_ip ||--|| generated_coredns_config: ""
+
+    generated_coredns_config ||--|| kubernetes_dns_resources: ""
+    gcp_dns_ip ||--|| kubernetes_dns_resources: ""
 
     confluent_infra {
       confluent_network network
@@ -94,6 +153,25 @@ erDiagram
       kubernetes_deployment nginx
       kubernetes_service external_nginx
       kubernetes_service internal_nginx
+    }
+
+    local_domain_list {
+      local domains
+    }
+
+    gcp_dns_ip {
+      google_compute_address external_coredns
+    }
+
+    generated_coredns_config {
+      local_file external_dns_db
+      local_file Corefile
+    }
+
+    kubernetes_dns_resources {
+      kubernetes_config_map external_coredns
+      kubernetes_deployment external_coredns
+      kubernetes_service external_coredns
     }
 
 
