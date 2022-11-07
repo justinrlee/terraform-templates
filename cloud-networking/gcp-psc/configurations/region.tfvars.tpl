@@ -8,8 +8,9 @@ google_compute_network_name  = "${google_compute_network_name}"
 confluent_environment_id     = "${confluent_environment_id}"
 
 # Set up internal-facing, external-facing, or dual proxies
-internal                       = "${internal}"
-external                       = "${external}"
+internal_proxy               = "${internal_proxy}"
+external_proxy               = "${external_proxy}"
+external_dns                 = "${external_dns}"
 # Whitelist for source IPs for the external-facing proxy (if applicable)
 external_proxy_whitelist       = [
   %{ for whitelist in external_proxy_whitelist ~}

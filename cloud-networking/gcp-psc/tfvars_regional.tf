@@ -10,8 +10,9 @@ resource "local_file" "tfvars" {
       google_project                 = var.google_project
       google_compute_network_name    = google_compute_network.vpc.name,
       confluent_environment_id       = confluent_environment.demo.id,
-      internal                       = var.internal_proxy,
-      external                       = var.external_proxy,
+      internal_proxy                 = var.internal_proxy,
+      external_proxy                 = var.external_proxy,
+      external_dns                   = var.external_proxy,
       external_proxy_whitelist       = var.external_proxy_whitelist
       google_compute_subnetwork_name = google_compute_subnetwork.subnet[each.key].name,
       region : each.key,

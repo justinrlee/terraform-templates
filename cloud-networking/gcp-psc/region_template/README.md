@@ -1,4 +1,20 @@
 # Region terraform (Child directory)
+
+**There are three main modes for this Terraform template:**
+
+* Create an internal proxy layer (for cross-region PSC access)
+* Create an external proxy layer + external DNS server (for client access from outside of GCP)
+* Both of the above
+
+These are controlled by these variables:
+
+* `internal`: Defaults to true
+* `external`: Defaults to false
+
+(If you set both to true, you get both)
+
+## How to use:
+
 Create a copy of the `/region` terraform directory for _each_ region you want to do this for (at `region_<regionname>`). Each region terraform will create the following resources:
 
 `_parent_data.tf`: No resources, only data reads
@@ -42,7 +58,74 @@ _Private and public can be toggled individually; assumption is that you have at 
 ---
 
 
-## External PSC Proxies
+
+## Resource Map (Internal Only)
+
+```mermaid
+%%{init: {"theme": "neutral", "logLevel": 1 }}%%
+erDiagram
+    parent_data ||--|| confluent_infra: ""
+    parent_data ||--|| gcp_gke_cluster: ""
+    parent_data ||--|| gcp_proxy_ip: ""
+    confluent_infra ||--|| gcp_private_endpoint: ""
+    confluent_infra ||--|| gcp_private_zone: ""
+    confluent_infra ||--|| confluent_kafka_cluster: ""
+    gcp_gke_cluster ||--|| kubernetes_proxy_resources: ""
+    gcp_private_endpoint ||--|| gcp_private_zone: ""
+    gcp_proxy_ip ||--|| kubernetes_proxy_resources: ""
+
+    confluent_infra ||--|| local_domain_list: ""
+
+    confluent_infra {
+      confluent_network network
+      confluent_private_link_access gcp
+    }
+
+    confluent_kafka_cluster {
+      confluent_kafka_cluster kafka
+    }
+
+    gcp_gke_cluster {
+      google_container_cluster proxy
+    }
+
+    gcp_private_endpoint {
+      google_compute_address psc_endpoint_ip_0
+      google_compute_address psc_endpoint_ip_1
+      google_compute_address psc_endpoint_ip_2
+      google_compute_forwarding_rule psc_endpoint_ilb_0
+      google_compute_forwarding_rule psc_endpoint_ilb_1
+      google_compute_forwarding_rule psc_endpoint_ilb_2
+    }
+
+    gcp_proxy_ip {
+      google_compute_address internal_proxy
+    }
+
+    gcp_private_zone {
+      google_dns_managed_zone ccn_zone
+      google_dns_record_set psc_regional
+      google_dns_record_set psc_zonal_0
+      google_dns_record_set psc_zonal_1
+      google_dns_record_set psc_zonal_2
+    }
+
+    kubernetes_proxy_resources {
+      kubernetes_namespace proxy
+      kubernetes_config_map nginx
+      kubernetes_deployment nginx
+      kubernetes_service internal_nginx
+    }
+
+    local_domain_list {
+      local domains
+    }
+```
+
+---
+
+
+## External PSC Proxy + DNS Server
 
 ```mermaid
 %%{init: {"theme": "neutral", "logLevel": 1, "flowchart": {"rankSpacing": 40}}}%%
@@ -50,8 +133,8 @@ flowchart LR
     K1[Dedicated Confluent Kafka Cluster]
     PSC1(("PSC\nEndpoints\n(3x)"))
     NGINX["NGINX (3x)"]
-    GLB1["External\nLoadBalancer\nService"]
-    GLBDNS["External\nLoadBalancer\nService"]
+    GLB1["External NGINX\nLoadBalancer\nKubernetes Service"]
+    GLBDNS["External CoreDNS\nLoadBalancer\nKubernetesService"]
     DNS["CoreDNS (3x)"]
 
     CLIENT["External Client"]
@@ -137,6 +220,91 @@ erDiagram
 
     gcp_proxy_ip {
       google_compute_address external_proxy
+    }
+
+    gcp_private_zone {
+      google_dns_managed_zone ccn_zone
+      google_dns_record_set psc_regional
+      google_dns_record_set psc_zonal_0
+      google_dns_record_set psc_zonal_1
+      google_dns_record_set psc_zonal_2
+    }
+    kubernetes_proxy_resources {
+      kubernetes_namespace proxy
+      kubernetes_config_map nginx
+      kubernetes_deployment nginx
+      kubernetes_service external_nginx
+    }
+
+    local_domain_list {
+      local domains
+    }
+
+    gcp_dns_ip {
+      google_compute_address external_coredns
+    }
+
+    generated_coredns_config {
+      local_file external_dns_db
+      local_file Corefile
+    }
+
+    kubernetes_dns_resources {
+      kubernetes_config_map external_coredns
+      kubernetes_deployment external_coredns
+      kubernetes_service external_coredns
+    }
+```
+
+---
+
+## Resource Map (Internal + External)
+
+```mermaid
+%%{init: {"theme": "neutral", "logLevel": 1 }}%%
+erDiagram
+    parent_data ||--|| confluent_infra: ""
+    parent_data ||--|| gcp_gke_cluster: ""
+    parent_data ||--|| gcp_proxy_ip: ""
+    confluent_infra ||--|| gcp_private_endpoint: ""
+    confluent_infra ||--|| gcp_private_zone: ""
+    confluent_infra ||--|| confluent_kafka_cluster: ""
+    gcp_gke_cluster ||--|| kubernetes_proxy_resources: ""
+    gcp_private_endpoint ||--|| gcp_private_zone: ""
+    gcp_proxy_ip ||--|| kubernetes_proxy_resources: ""
+
+    parent_data ||--|| gcp_dns_ip: ""
+    confluent_infra ||--|| local_domain_list: ""
+    local_domain_list ||--|| generated_coredns_config: ""
+    gcp_proxy_ip ||--|| generated_coredns_config: ""
+
+    generated_coredns_config ||--|| kubernetes_dns_resources: ""
+    gcp_dns_ip ||--|| kubernetes_dns_resources: ""
+
+    confluent_infra {
+      confluent_network network
+      confluent_private_link_access gcp
+    }
+
+    confluent_kafka_cluster {
+      confluent_kafka_cluster kafka
+    }
+
+    gcp_gke_cluster {
+      google_container_cluster proxy
+    }
+
+    gcp_private_endpoint {
+      google_compute_address psc_endpoint_ip_0
+      google_compute_address psc_endpoint_ip_1
+      google_compute_address psc_endpoint_ip_2
+      google_compute_forwarding_rule psc_endpoint_ilb_0
+      google_compute_forwarding_rule psc_endpoint_ilb_1
+      google_compute_forwarding_rule psc_endpoint_ilb_2
+    }
+
+    gcp_proxy_ip {
+      google_compute_address external_proxy
       google_compute_address internal_proxy
     }
 
@@ -173,7 +341,4 @@ erDiagram
       kubernetes_deployment external_coredns
       kubernetes_service external_coredns
     }
-
-
 ```
-

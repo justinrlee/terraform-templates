@@ -1,5 +1,7 @@
+# TODO: Generate different Corefile file per region
+
 resource "local_file" "external_dns_db" {
-  count      = var.external ? 1 : 0
+  count      = var.external_dns ? 1 : 0
   filename = "${path.module}/../_generated_dns/${confluent_network.network.dns_domain}"
 
   content = templatefile("${path.module}/../configurations/dns_db.tpl",
@@ -18,10 +20,10 @@ resource "local_file" "external_dns_db" {
 }
 
 resource "local_file" "Corefile" {
-  count      = var.external ? 1 : 0
+  count      = var.external_dns ? 1 : 0
   # for_each = var.regions
 
-  filename = "${path.module}/../_generated_dns/Corefile"
+  filename = "${path.module}/../_generated_dns/${confluent_network.network.dns_domain}_Corefile"
 
   content = templatefile("${path.module}/../configurations/Corefile.tpl",
     {

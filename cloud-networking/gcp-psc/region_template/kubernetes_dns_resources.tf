@@ -1,13 +1,13 @@
 
 resource "kubernetes_config_map" "external_coredns" {
-  count      = var.external ? 1 : 0
+  count      = var.external_dns ? 1 : 0
   metadata {
     name      = "coredns"
     namespace = var.namespace
   }
 
   binary_data = merge({
-    "Corefile" = "${filebase64("${path.module}/../_generated_dns/Corefile")}"
+    "Corefile" = "${filebase64(local_file.Corefile[0].filename)}"
   }, {
     for domain in local.domains: "${domain}" => "${filebase64("${path.module}/../_generated_dns/${domain}")}"
   })
@@ -20,7 +20,7 @@ resource "kubernetes_config_map" "external_coredns" {
 }
 
 resource "kubernetes_deployment" "external_coredns" {
-  count      = var.external ? 1 : 0
+  count      = var.external_dns ? 1 : 0
   depends_on = [kubernetes_config_map.external_coredns]
 
   metadata {
@@ -85,7 +85,7 @@ resource "kubernetes_deployment" "external_coredns" {
 }
 
 resource "kubernetes_service" "external_coredns" {
-  count = true ? 1 : 0
+  count = var.external_dns ? 1 : 0
   depends_on = [kubernetes_deployment.external_coredns]
 
   spec {

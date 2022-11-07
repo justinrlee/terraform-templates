@@ -1,9 +1,9 @@
 output "external_proxy_endpoint" {
-  value = var.external ? google_compute_address.external_proxy[0].address : null
+  value = var.external_proxy ? google_compute_address.external_proxy[0].address : null
 }
 
 output "internal_proxy_endpoint" {
-  value = var.internal ? google_compute_address.internal_proxy[0].address : null
+  value = var.internal_proxy ? google_compute_address.internal_proxy[0].address : null
 }
 
 output "kafka_endpoint" {
@@ -11,7 +11,7 @@ output "kafka_endpoint" {
 }
 
 output "external_dns_endpoint" {
-  value = google_compute_address.external_coredns[0].address
+  value = var.external_dns ? google_compute_address.external_coredns[0].address: null
 }
 
 output "external_whitelist" {

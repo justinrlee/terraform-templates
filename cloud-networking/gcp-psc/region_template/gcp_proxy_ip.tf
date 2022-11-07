@@ -1,6 +1,6 @@
 # Static External IP for proxy load balancer
 resource "google_compute_address" "external_proxy" {
-  count = var.external ? 1 : 0
+  count = var.external_proxy ? 1 : 0
 
   name = "${var.environment_name}-${var.region}-proxy-ip"
 
@@ -10,7 +10,7 @@ resource "google_compute_address" "external_proxy" {
 }
 
 resource "google_compute_address" "internal_proxy" {
-  count = var.internal ? 1 : 0
+  count = var.internal_proxy ? 1 : 0
   name  = "${var.environment_name}-${var.region}-internal-proxy-ip"
 
   subnetwork = var.google_compute_subnetwork_name

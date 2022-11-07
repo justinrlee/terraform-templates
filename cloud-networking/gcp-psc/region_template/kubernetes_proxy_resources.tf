@@ -83,7 +83,7 @@ resource "kubernetes_deployment" "nginx" {
 }
 
 resource "kubernetes_service" "internal_nginx" {
-  count      = var.internal ? 1 : 0
+  count      = var.internal_proxy ? 1 : 0
   depends_on = [kubernetes_namespace.proxy]
 
   spec {
@@ -119,7 +119,7 @@ resource "kubernetes_service" "internal_nginx" {
 }
 
 resource "kubernetes_service" "external_nginx" {
-  count      = var.external ? 1 : 0
+  count      = var.external_proxy ? 1 : 0
   depends_on = [kubernetes_namespace.proxy]
 
   spec {

@@ -19,11 +19,15 @@ variable "google_compute_subnetwork_name" {}
 variable "confluent_environment_id" {}
 
 # Can create internal, external, or both proxies
-variable "external" {
+variable "external_proxy" {
   default = false
 }
 
-variable "internal" {
+variable "external_dns" {
+  default = false
+}
+
+variable "internal_proxy" {
   default = true
 }
 
