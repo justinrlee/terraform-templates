@@ -134,7 +134,7 @@ flowchart LR
     PSC1(("PSC\nEndpoints\n(3x)"))
     NGINX["NGINX (3x)"]
     GLB1["External NGINX\nLoadBalancer\nKubernetes Service"]
-    GLBDNS["External CoreDNS\nLoadBalancer\nKubernetesService"]
+    GLBDNS["External CoreDNS\nLoadBalancer\nKubernetes Service"]
     DNS["CoreDNS (3x)"]
 
     CLIENT["External Client"]
