@@ -1,0 +1,20 @@
+$ORIGIN godj4p.us-east-1.aws.confluent.cloud.
+@	3600 IN	SOA sns.dns.icann.org. noc.dns.icann.org. 2017042745 7200 3600 1209600 3600
+	3600 IN NS a.iana-servers.net.
+	3600 IN NS b.iana-servers.net.
+
+* 60 A 10.161.0.100
+* 60 A 10.161.0.101
+* 60 A 10.161.0.102
+
+*.us-east-1a 60 A 10.161.0.100
+*.us-east-1a 60 A 10.161.0.101
+*.us-east-1a 60 A 10.161.0.102
+
+*.us-east-1b 60 A 10.161.0.100
+*.us-east-1b 60 A 10.161.0.101
+*.us-east-1b 60 A 10.161.0.102
+
+*.us-east-1c 60 A 10.161.0.100
+*.us-east-1c 60 A 10.161.0.101
+*.us-east-1c 60 A 10.161.0.102

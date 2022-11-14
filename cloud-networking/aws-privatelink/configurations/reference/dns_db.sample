@@ -1,0 +1,13 @@
+$ORIGIN pd44vp.us-east1.gcp.confluent.cloud.
+@	3600 IN	SOA sns.dns.icann.org. noc.dns.icann.org. 2017042745 7200 3600 1209600 3600
+	3600 IN NS a.iana-servers.net.
+	3600 IN NS b.iana-servers.net.
+
+* 60 A 10.161.0.100
+*.us-east1-d 60 A 10.161.0.100
+
+* 60 A 10.161.0.101
+*.us-east1-c 60 A 10.161.0.101
+
+* 60 A 10.161.0.102
+*.us-east1-b 60 A 10.161.0.102
