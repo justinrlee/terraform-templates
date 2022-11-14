@@ -223,6 +223,8 @@ erDiagram
     cloud_infra ||--|| joint_private_endpoint: ""
     joint_private_endpoint ||--|| joint_private_zone: ""
 
+    kubernetes_proxy_service ||--|| generated_coredns_config: ""
+
     
     cloud_infra {
       module vpc

@@ -3,18 +3,18 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 18.30"
 
-  cluster_name    = "${var.environment_name}"
+  cluster_name    = var.environment_name
   cluster_version = var.eks_version
 
-  vpc_id          = module.vpc.vpc_id
-  subnet_ids      = module.vpc.public_subnets
+  vpc_id     = module.vpc.vpc_id
+  subnet_ids = module.vpc.public_subnets
 
   eks_managed_node_groups = {
     default = {
-      name = "default" 
+      name = "default"
 
-      min_size = 3
-      max_size = 3
+      min_size     = 3
+      max_size     = 3
       desired_size = 3
 
       ami_type = "BOTTLEROCKET_x86_64"
@@ -26,7 +26,7 @@ module "eks" {
       # capacity_type  = "SPOT"
     }
   }
-  
+
   # Necessary for AWS Load Balancer Controller to work properly
   node_security_group_additional_rules = {
     ingress_self_all = {
@@ -50,16 +50,16 @@ module "eks" {
     ingress_cluster_tcp = {
       description                   = "Cluster to node upper ports/protocols"
       protocol                      = "tcp"
-      from_port                  = 1025
-      to_port                    = 65535
+      from_port                     = 1025
+      to_port                       = 65535
       type                          = "ingress"
       source_cluster_security_group = true
     }
   }
 
-  tags = { 
+  tags = {
     owner_email = var.owner
-    Terraform = true
+    Terraform   = true
   }
 
   cluster_timeouts = {

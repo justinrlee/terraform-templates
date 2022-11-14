@@ -46,7 +46,7 @@ resource "aws_vpc_endpoint" "privatelink" {
     aws_security_group.privatelink.id,
   ]
 
-  subnet_ids          = module.vpc.public_subnets
+  subnet_ids = module.vpc.public_subnets
   # subnet_ids          = [for subnet in aws_subnet.subnets: subnet.id]
   private_dns_enabled = false
 

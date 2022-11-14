@@ -1,5 +1,5 @@
 resource "aws_key_pair" "test" {
-  key_name   = "${var.environment_name}"
+  key_name   = var.environment_name
   public_key = file("~/.ssh/id_rsa.pub")
 }
 
@@ -42,7 +42,7 @@ resource "aws_security_group" "bastion_allow_egress" {
     security_groups  = null,
     self             = null
   }]
-  
+
   depends_on = [
     module.vpc
   ]
@@ -55,21 +55,21 @@ resource "aws_instance" "bastion" {
   associate_public_ip_address = true
   key_name                    = aws_key_pair.test.key_name
 
-  subnet_id                   = module.vpc.public_subnets[0]
+  subnet_id = module.vpc.public_subnets[0]
   # subnet_id                   = aws_subnet.subnets[var.zones[0]].id
-  
-  vpc_security_group_ids      = [
+
+  vpc_security_group_ids = [
     aws_security_group.bastion_ssh.id,
     aws_security_group.bastion_allow_egress.id,
   ]
-  
+
   root_block_device {
     delete_on_termination = true
-    volume_size = 40
+    volume_size           = 40
   }
 
   tags = {
-    Name = "${var.environment_name}-bastion"
+    Name       = "${var.environment_name}-bastion"
     Provenance = "Cloud Networking for ${var.environment_name}"
   }
 

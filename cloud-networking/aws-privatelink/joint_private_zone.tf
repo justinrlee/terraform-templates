@@ -33,10 +33,10 @@ resource "aws_route53_record" "zonal" {
 
   zone_id = aws_route53_zone.privatelink.zone_id
   name    = "*.${each.key}.${confluent_network.network.dns_domain}"
-  type = "CNAME"
-  ttl = "60"
+  type    = "CNAME"
+  ttl     = "60"
   records = [
-    for dns_entry in aws_vpc_endpoint.privatelink.dns_entry: dns_entry.dns_name if (
+    for dns_entry in aws_vpc_endpoint.privatelink.dns_entry : dns_entry.dns_name if(
       length(regexall(matchkeys(data.aws_availability_zones.available.names, data.aws_availability_zones.available.zone_ids, [each.key])[0], dns_entry.dns_name)) > 0
     )
   ]
