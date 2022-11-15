@@ -180,8 +180,10 @@ flowchart LR
 * ConfigMap for NGINX
 * Deployment for NGINX
 
-`kubernetes_proxy_service.tf`: runs on EKS, depends on `kubernetes_proxy_resources` and AWS LBC (`cloud_kubernetes_controller`)
+`cloud_static_endpoint_proxy.tf`: Static endpoints for NGINX LoadBalancer service
 * 3x Elastic IPs (for load balancer)
+
+`kubernetes_proxy_service.tf`: runs on EKS, depends on `kubernetes_proxy_resources` and AWS LBC (`cloud_kubernetes_controller`)
 * External LoadBalancer Service for NGINX
 
 `generated_coredns_config.tf`: depends on `confluent_infra.tf`
@@ -192,8 +194,10 @@ flowchart LR
 * ConfigMap for CoreDNS
 * Deployment for CoreDNS
 
-`kubernetes_dns_service.tf`: runs on EKS, depends on `kubernetes_dns_resources` and AWS LBC (`cloud_kubernetes_controller`)
+`cloud_static_endpoint_dns.tf`: Static endpoints for DNS LoadBalancer service
 * 3x Elastic IPs (for load balancer)
+
+`kubernetes_dns_service.tf`: runs on EKS, depends on `kubernetes_dns_resources` and AWS LBC (`cloud_kubernetes_controller`)
 * External LoadBalancer Service for CoreDNS
 
 ## Resource Map
@@ -201,17 +205,20 @@ flowchart LR
 ```mermaid
 %%{init: {"theme": "neutral", "logLevel": 1 }}%%
 erDiagram
-    variables ||--|| cloud_infra: ""
+    cloud ||--|| cloud_infra: ""
     cloud_infra ||--|| cloud_instance: ""
     cloud_infra ||--|| cloud_kubernetes_cluster: ""
     cloud_kubernetes_cluster ||--|| cloud_kubernetes_controller: ""
     cloud_kubernetes_cluster ||--|| kubernetes_proxy_resources: ""
     cloud_kubernetes_cluster ||--|| kubernetes_dns_resources: ""
 
+    cloud ||--|| cloud_static_endpoint_proxy: ""
+    cloud ||--|| cloud_static_endpoint_dns: ""
+
     cloud_kubernetes_controller ||--|| kubernetes_proxy_service: ""
     cloud_kubernetes_controller ||--|| kubernetes_dns_service: ""
 
-    variables ||--|| confluent_environment: ""
+    confluent ||--|| confluent_environment: ""
     confluent_environment ||--|| confluent_infra: ""
     confluent_infra ||--|| confluent_kafka_cluster: ""
 
@@ -223,9 +230,23 @@ erDiagram
     cloud_infra ||--|| joint_private_endpoint: ""
     joint_private_endpoint ||--|| joint_private_zone: ""
 
-    kubernetes_proxy_service ||--|| generated_coredns_config: ""
+    cloud_static_endpoint_proxy ||--|| generated_coredns_config: ""
 
-    
+    cloud_static_endpoint_proxy ||--|| kubernetes_proxy_service: ""
+    cloud_static_endpoint_dns ||--|| kubernetes_dns_service: ""
+
+    cloud_static_endpoint_proxy {
+      aws_eip nginx_0
+      aws_eip nginx_1
+      aws_eip nginx_2
+    }
+
+    cloud_static_endpoint_dns {
+      aws_eip dns_0
+      aws_eip dns_1
+      aws_eip dns_2
+    }
+
     cloud_infra {
       module vpc
     }
@@ -281,9 +302,6 @@ erDiagram
     }
     
     kubernetes_proxy_service {
-      aws_eip nginx_0
-      aws_eip nginx_1
-      aws_eip nginx_2
       kubernetes_service external_nginx
     }
 
@@ -300,9 +318,6 @@ erDiagram
     kubernetes_dns_resources ||--|| kubernetes_dns_service: ""
 
     kubernetes_dns_service {
-      aws_eip dns_0
-      aws_eip dns_1
-      aws_eip dns_2
       kubernetes_service external_coredns
     }
 ```
