@@ -1,0 +1,36 @@
+apiVersion: platform.confluent.io/v1beta1
+# Confluent Replicator is built as a connector, and so will use the `Connect` CRD.
+kind: Connect
+metadata:
+  name: replicator
+  namespace: confluent
+spec:
+  replicas: 3
+  image:
+    application: confluentinc/cp-enterprise-replicator:7.3.1
+    init: confluentinc/confluent-init-container:2.5.0
+  podTemplate:
+    envVars:
+      - name: CLASSPATH
+        value: /usr/share/java/kafka-connect-replicator/replicator-rest-extension-7.3.0.jar
+  configOverrides:
+    server:
+      # To activate the monitoring extension, configure this property
+      - rest.extension.classes=io.confluent.connect.replicator.monitoring.ReplicatorMonitoringExtension
+      # This specifies that Replicator is the Connector configured
+      # I don't think this actually does anything in distributed mode?
+      # - connector.class=io.confluent.connect.replicator.ReplicatorSourceConnector
+  dependencies:
+    kafka:
+      bootstrapEndpoint: <destination-ccloud-endpoint:9092>
+      authentication:
+        type: plain
+        jaasConfig:
+          # Note that this is the same content as kafka-dst-plain, but is used differently
+          secretRef: kafka-connect-worker
+      tls:
+        enabled: true
+        ignoreTrustStoreConfig: true 
+  mountedSecrets:
+  - secretRef: kafka-dst-plain
+  - secretRef: kafka-src-plain
