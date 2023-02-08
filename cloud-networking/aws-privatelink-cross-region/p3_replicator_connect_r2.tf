@@ -11,6 +11,10 @@ resource "kubernetes_secret" "connect_r2" {
     })
   }
 
+  depends_on = [
+    kubernetes_namespace.r2,
+  ]
+
   provider = kubernetes.r2
 }
 
@@ -28,6 +32,10 @@ resource "kubernetes_secret" "rep2_r2" {
     })
   }
 
+  depends_on = [
+    kubernetes_namespace.r2,
+  ]
+
   provider = kubernetes.r2
 }
 
@@ -44,6 +52,10 @@ resource "kubernetes_secret" "rep2_r1" {
       bootstrap = confluent_kafka_cluster.r1.bootstrap_endpoint,
     })
   }
+
+  depends_on = [
+    kubernetes_namespace.r2,
+  ]
 
   provider = kubernetes.r2
 }
@@ -110,6 +122,10 @@ resource "kubernetes_manifest" "r2" {
     }
   }
 
+  depends_on = [
+    helm_release.r2
+  ]
+
   provider = kubernetes.r2
 }
 
@@ -151,6 +167,10 @@ resource "kubernetes_manifest" "replicator_r2" {
       }
     }
   }
+
+  depends_on = [
+    helm_release.r2
+  ]
 
   provider = kubernetes.r2
 }

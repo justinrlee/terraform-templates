@@ -47,9 +47,9 @@ resource "confluent_api_key" "sa1_r1" {
     }
   }
 
-  lifecycle {
-    prevent_destroy = true
-  }
+  # lifecycle {
+  #   prevent_destroy = true
+  # }
 }
 
 # API key for R1 Replicator to access remote
@@ -75,7 +75,7 @@ resource "confluent_api_key" "sa1_r2" {
     }
   }
 
-  lifecycle {
-    prevent_destroy = true
-  }
+  # lifecycle {
+  #   prevent_destroy = true
+  # }
 }
