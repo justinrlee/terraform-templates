@@ -48,5 +48,10 @@ resource "aws_subnet" "r1" {
     "kubernetes.io/role/elb" = 1
   }
 
+  # Create an pseudo-implicit dependency on VPC < IGW < Default Route < Subnet < EKS Cluster so EKS isn't created until the route is up
+  depends_on = [
+    aws_route.r1_default,
+  ]
+
   provider = aws.r1
 }
