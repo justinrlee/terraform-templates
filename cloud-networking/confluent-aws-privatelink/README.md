@@ -1,6 +1,6 @@
 # Confluent Cloud AWS PrivateLink Clusters
 
-This is an example of how to expose a Confluent Cloud AWS PrivateLink cluster to clients outside of AWS
+This is an example of how provision an AWS VPC and a Confluent PrivateLink cluster connected to the VPC.
 
 # Resources
 
