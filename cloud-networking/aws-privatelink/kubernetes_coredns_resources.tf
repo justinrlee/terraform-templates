@@ -1,7 +1,7 @@
 # # WIP - needs to be modified
 
 resource "kubernetes_config_map" "external_coredns" {
-  count = var.external_dns ? 1 : 0
+  count = var.external_coredns_nlb ? 1 : 0
   metadata {
     name      = "coredns"
     namespace = var.namespace
@@ -22,7 +22,7 @@ resource "kubernetes_config_map" "external_coredns" {
 }
 
 resource "kubernetes_deployment" "external_coredns" {
-  count      = var.external_dns ? 1 : 0
+  count      = var.external_coredns_nlb ? 1 : 0
   depends_on = [kubernetes_config_map.external_coredns]
 
   metadata {

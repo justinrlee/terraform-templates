@@ -13,7 +13,6 @@ variable "aws_amis" {
     "us-west-1" = "ami-064562725417500be",
     "us-west-2" = "ami-0066d036f9777ec38",
   }
-
 }
 
 variable "region" {}
@@ -34,13 +33,22 @@ variable "internal_proxy" {
   default = false
 }
 
-variable "external_proxy" {
+variable "external_nginx_nlb" {
   default = true
 }
 
-variable "external_dns" {
+variable "external_proxy_classic" {
+  default = false
+}
+
+variable "external_coredns_nlb" {
   default = true
 }
+
+variable "external_coredns_classic" {
+  default = false
+}
+
 
 variable "external_proxy_whitelist" {
   default = ["0.0.0.0/0"]

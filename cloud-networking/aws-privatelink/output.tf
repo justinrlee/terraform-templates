@@ -10,10 +10,10 @@ output "bootstrap_server" {
   value = var.dedicated_cluster ? confluent_kafka_cluster.dedicated[0].bootstrap_endpoint : null
 }
 
-output "proxy_endpoint" {
-  value = aws_eip.nginx[*].public_ip
+output "nginx_nlb_endpoint" {
+  value = aws_eip.nginx_nlb[*].public_ip
 }
 
-output "dns_endpoint" {
-  value = aws_eip.dns[*].public_ip
+output "coredns_nlb_endpoint" {
+  value = aws_eip.coredns_nlb[*].public_ip
 }

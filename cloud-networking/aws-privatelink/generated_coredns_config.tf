@@ -1,5 +1,5 @@
 resource "local_file" "external_dns_db" {
-  count    = var.external_dns ? 1 : 0
+  count    = var.external_coredns_nlb ? 1 : 0
   filename = "${path.module}/_generated_dns/${confluent_network.network.dns_domain}"
 
   content = templatefile("${path.module}/configurations/dns_db.tpl",
@@ -11,14 +11,14 @@ resource "local_file" "external_dns_db" {
       zones = var.zones
 
       endpoints = [
-        for eip in aws_eip.nginx : eip.public_ip
+        for eip in aws_eip.nginx_nlb : eip.public_ip
       ]
     }
   )
 }
 
 resource "local_file" "Corefile" {
-  count = var.external_dns ? 1 : 0
+  count = var.external_coredns_nlb ? 1 : 0
 
   filename = "${path.module}/_generated_dns/${confluent_network.network.dns_domain}_Corefile"
 

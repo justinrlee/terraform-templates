@@ -3,7 +3,6 @@ resource "aws_key_pair" "test" {
   public_key = file("~/.ssh/id_rsa.pub")
 }
 
-
 resource "aws_security_group" "bastion_ssh" {
   description = "SSH"
   name        = "${var.environment_name}-allow-ssh"
