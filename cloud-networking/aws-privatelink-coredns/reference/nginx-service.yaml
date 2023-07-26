@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: confluent-proxy
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
+    service.beta.kubernetes.io/aws-load-balancer-eip-allocations: eipalloc-aaa,eipalloc-bbb,eipalloc-ccc
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+  name: nginx-external-nlb
+spec:
+  type: LoadBalancer
+  loadBalancerClass: service.k8s.aws/nlb
+  ports:
+  - name: kafka
+    port: 9092
+    protocol: TCP
+    targetPort: 9092
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 443
+  selector:
+    app.kubernetes.io/name: nginx
