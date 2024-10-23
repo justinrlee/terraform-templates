@@ -32,6 +32,7 @@ Comments:
 ![kafka-proxy v2](https://github.com/user-attachments/assets/1370338b-46c4-452d-b6e6-2d10cf9c21cf)
 
 kafka-proxy instances all have identical configurations:
+
 * all advertised listener rewrites
 * all listeners (9092, 10000-10143)
 * only zonal listeners are actually accessed. for example:
@@ -47,6 +48,7 @@ Continue broker mappings as follows:
     az3-a: bootstrap, broker 4/10/16/22 ... 142 (max 25 listeners)
     az3-b: bootstrap, broker 5/11/17/23 ... 143 (max 25 listeners)
 
+```
 ./kafka-proxy server \
     --tls-enable \
     --bootstrap-server-mapping "pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9092,kafka.customer.domain:9092" \
@@ -63,3 +65,4 @@ Continue broker mappings as follows:
     --bootstrap-server-mapping "b10-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9110,kafka-az2-b.customer.domain:9110" \
     --bootstrap-server-mapping "b11-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9111,kafka-az3-b.customer.domain:9111" \
     ...
+```
