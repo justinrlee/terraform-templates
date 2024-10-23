@@ -28,3 +28,5 @@ Comments:
     * Each broker gets a unique port (e.g. broker 0 is port 10000, broker 1 is 10001)
     * Advertised hostnames are mapped to the AZ that the broker exists in (e.g. if broker 0 is in apse1-az1, it'll be exposed by an NLB in apse1-az1)
     * Within an AZ, brokers are distributed evenly between the two NLBs (since AWS has a a limit of 25 listeners per NLB)
+
+![kafka-proxy v2](https://github.com/user-attachments/assets/1370338b-46c4-452d-b6e6-2d10cf9c21cf)
