@@ -33,9 +33,9 @@ resource "aws_security_group" "allow_internal" {
   }]
 }
 
-resource "aws_security_group" "allow_home" {
-  description = "All from home"
-  name        = "${var.environment_name}-allow-home"
+resource "aws_security_group" "bastion" {
+  description = "Bastion"
+  name        = "${var.environment_name}-bastion-ingress"
   vpc_id      = aws_vpc.main.id
 
   ingress = [{
@@ -58,17 +58,30 @@ resource "aws_security_group" "nlb" {
   name        = "${var.environment_name}-nlb"
   vpc_id      = aws_vpc.main.id
 
-  ingress = [{
-    description      = null,
-    protocol         = "tcp",
-    cidr_blocks      = ["0.0.0.0/0"],
-    from_port        = var.min_kafka_port,
-    to_port          = var.max_kafka_port,
-    ipv6_cidr_blocks = null,
-    prefix_list_ids  = null,
-    security_groups  = null,
-    self             = null
-  }]
+  ingress = [
+    {
+      description      = null,
+      protocol         = "tcp",
+      cidr_blocks      = ["0.0.0.0/0"],
+      from_port        = var.kafka_boostrap_port,
+      to_port          = var.kafka_boostrap_port,
+      ipv6_cidr_blocks = null,
+      prefix_list_ids  = null,
+      security_groups  = null,
+      self             = null
+    },
+    {
+      description      = null,
+      protocol         = "tcp",
+      cidr_blocks      = ["0.0.0.0/0"],
+      from_port        = local.min_kafka_port,
+      to_port          = local.max_kafka_port,
+      ipv6_cidr_blocks = null,
+      prefix_list_ids  = null,
+      security_groups  = null,
+      self             = null
+    },
+  ]
 
   egress = [{
     description      = null,
@@ -84,7 +97,7 @@ resource "aws_security_group" "nlb" {
 }
 
 resource "aws_security_group" "proxy" {
-  description = "target group allow from nlb"
+  description = "allow traffic from NLB to target group"
   name        = "${var.environment_name}-allow-nlb"
   vpc_id      = aws_vpc.main.id
 }

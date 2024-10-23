@@ -5,7 +5,7 @@ resource "aws_network_interface" "bastion" {
 
   security_groups = [
     aws_security_group.allow_internal.id,
-    aws_security_group.allow_home.id,
+    aws_security_group.bastion.id,
   ]
 
   subnet_id = local.public_subnets_ids[0]

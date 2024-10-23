@@ -15,7 +15,7 @@ locals {
     for nlb,brokers in local.brokers:
       [
         for broker in brokers: 
-          "    --bootstrap-server-mapping \"b${broker}-${var.bootstrap_server},0.0.0.0:${9100 + broker},${var.proxy_endpoints[nlb]}.${var.proxy_dns_zone}:${9100 + broker}\""
+          "    --bootstrap-server-mapping \"b${broker}-${var.bootstrap_server},0.0.0.0:${var.port_broker_start + broker},${var.proxy_endpoints[nlb]}.${var.proxy_dns_zone}:${var.port_broker_start + broker}\""
       ]
   ]))
 

@@ -50,7 +50,7 @@ resource "aws_lb_listener" "bootstrap_az3_b" {
   load_balancer_arn = aws_lb.az3_b.arn
   port              = 9092
   protocol          = "TLS"
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  ssl_policy        = var.ssl_policy
   certificate_arn   = var.certificate_arn
 
   default_action {
@@ -103,7 +103,7 @@ resource "aws_lb_listener" "broker_az3_b" {
   load_balancer_arn = aws_lb.az3_b.arn
   port              = tonumber(each.key)
   protocol          = "TLS"
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  ssl_policy        = var.ssl_policy
   certificate_arn   = var.certificate_arn
 
   default_action {

@@ -39,30 +39,54 @@ variable "zones" {
 # # /16 prefix for each VPC (e.g., "10.2" for 10.2.0.0/16)
 variable "prefix" {}
 
-############## Firewall variables
 # Used for bastion host
 variable "myip" {}
 
-variable "min_kafka_port" {
+############## Listener configurations
+
+
+variable "kafka_boostrap_port" {
   default = 9092
 }
 
-variable "max_kafka_port" {
-  # dynamic ports are 9100 - 9243 (for 144 brokers)
-  default = 9243
+variable "port_broker_start" {
+  default = 10000
 }
 
-############## NLB variables
-variable "port_broker_start" {
-  default = 9100
-}
-# TODO consolidate with below
-variable "port_broker_end" {
-  default = 9243
-}
 variable "brokers_per_nlb" {
   default = 24
 }
+
+# SSL Policy used for TLS listeners
+# See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html for more details
+variable "ssl_policy" {
+  default = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+}
+
+locals {
+  total_brokers = var.brokers_per_nlb * 6
+  min_kafka_port = var.port_broker_start
+  max_kafka_port = var.port_broker_start + local.total_brokers - 1
+}
+
+# variable "min_kafka_port" {
+#   default = 9092
+# }
+
+# variable "max_kafka_port" {
+#   # dynamic ports are 9100 - 9243 (for 144 brokers)
+#   default = 9243
+# }
+
+############## NLB variables
+# variable "port_broker_start" {
+#   default = 9100
+# }
+# # TODO consolidate with below
+# variable "port_broker_end" {
+#   default = 9243
+# }
+
 
 variable "certificate_arn" {}
 
@@ -80,16 +104,16 @@ variable "proxy_dns_zone" {
   default = "confluent.justinrlee.io"
 }
 variable "proxy_bootstrap" {
-  default = "kp"
+  default = "kafka"
 }
 variable "proxy_endpoints" {
   default = {
-    "az1_a" = "kp-az1-a",
-    "az2_a" = "kp-az2-a",
-    "az3_a" = "kp-az3-a",
-    "az1_b" = "kp-az1-b",
-    "az2_b" = "kp-az2-b",
-    "az3_b" = "kp-az3-b",
+    "az1_a" = "kafka-az1-a",
+    "az2_a" = "kafka-az2-a",
+    "az3_a" = "kafka-az3-a",
+    "az1_b" = "kafka-az1-b",
+    "az2_b" = "kafka-az2-b",
+    "az3_b" = "kafka-az3-b",
   }
 }
 
