@@ -41,12 +41,12 @@ kafka-proxy instances all have identical configurations:
     * az3: 9092, 10002, 10005, 10008, 10011 ... 10143
 
 Continue broker mappings as follows:
-    az1-a: bootstrap, broker 0 /6/12/18 ... 138 (max 25 listeners)
-    az1-b: bootstrap, broker 1 /7/13/19 ... 139 (max 25 listeners)
-    az2-a: bootstrap, broker 2 /8/14/20 ... 140 (max 25 listeners)
-    az2-b: bootstrap, broker 3 /9/15/21 ... 141 (max 25 listeners)
-    az3-a: bootstrap, broker 4/10/16/22 ... 142 (max 25 listeners)
-    az3-b: bootstrap, broker 5/11/17/23 ... 143 (max 25 listeners)
+    * az1-a: bootstrap, broker  0 /  6 / 12 / 18 ... 138 (max 25 listeners)
+    * az1-b: bootstrap, broker  1 /  7 / 13 / 19 ... 139 (max 25 listeners)
+    * az2-a: bootstrap, broker  2 /  8 / 14 / 20 ... 140 (max 25 listeners)
+    * az2-b: bootstrap, broker  3 /  9 / 15 / 21 ... 141 (max 25 listeners)
+    * az3-a: bootstrap, broker  4 / 10 / 16 / 22 ... 142 (max 25 listeners)
+    * az3-b: bootstrap, broker  5 / 11 / 17 / 23 ... 143 (max 25 listeners)
 
 ```
 ./kafka-proxy server \
