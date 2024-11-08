@@ -54,7 +54,7 @@ variable "port_broker_start" {
 }
 
 variable "brokers_per_nlb" {
-  default = 48
+  default = 24
 }
 
 # SSL Policy used for TLS listeners
@@ -64,7 +64,7 @@ variable "ssl_policy" {
 }
 
 locals {
-  total_brokers = var.brokers_per_nlb * 3
+  total_brokers = var.brokers_per_nlb * 6
   min_kafka_port = var.port_broker_start
   max_kafka_port = var.port_broker_start + local.total_brokers - 1
 }
@@ -108,17 +108,23 @@ variable "proxy_bootstrap" {
 }
 variable "proxy_endpoints" {
   default = {
-    "az1" = "kafka-az1",
-    "az2" = "kafka-az2",
-    "az3" = "kafka-az3",
+    "az1_a" = "kafka-az1-a",
+    "az2_a" = "kafka-az2-a",
+    "az3_a" = "kafka-az3-a",
+    "az1_b" = "kafka-az1-b",
+    "az2_b" = "kafka-az2-b",
+    "az3_b" = "kafka-az3-b",
   }
 }
 
 variable "zone_broker_offsets" {
   default = {
-    "az1" = 0,
-    "az2" = 1,
-    "az3" = 2,
+    "az1_a" = 0,
+    "az2_a" = 1,
+    "az3_a" = 2,
+    "az1_b" = 3,
+    "az2_b" = 4,
+    "az3_b" = 5,
   }
 }
 

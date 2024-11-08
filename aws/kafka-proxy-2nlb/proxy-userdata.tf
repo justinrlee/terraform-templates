@@ -1,11 +1,14 @@
 locals {
   brokers = {
     for nlb in [
-        "az1",
-        "az2",
-        "az3",
+        "az1_a",
+        "az2_a",
+        "az3_a",
+        "az1_b",
+        "az2_b",
+        "az3_b",
       ]:
-      nlb => range(var.zone_broker_offsets[nlb], var.zone_broker_offsets[nlb] + var.brokers_per_nlb * 3, 3)
+      nlb => range(var.zone_broker_offsets[nlb], var.zone_broker_offsets[nlb] + var.brokers_per_nlb * 6, 6)
   }
       
   bootstrap_server_mappings = sort(flatten([

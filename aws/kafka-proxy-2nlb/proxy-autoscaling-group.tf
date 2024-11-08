@@ -41,8 +41,10 @@ resource "aws_autoscaling_group" "proxy_az1" {
   vpc_zone_identifier = [aws_subnet.private["az1"].id]
 
   target_group_arns = concat(
-    [aws_lb_target_group.bootstrap_az1.id],
-    [for k, v in aws_lb_target_group.broker_az1: v.id],
+    [aws_lb_target_group.bootstrap_az1_a.id],
+    [aws_lb_target_group.bootstrap_az1_b.id],
+    [for k, v in aws_lb_target_group.broker_az1_a: v.id],
+    [for k, v in aws_lb_target_group.broker_az1_b: v.id],
   )
 }
 
@@ -61,8 +63,10 @@ resource "aws_autoscaling_group" "proxy_az2" {
   vpc_zone_identifier = [aws_subnet.private["az2"].id]
 
   target_group_arns = concat(
-    [aws_lb_target_group.bootstrap_az2.id],
-    [for k, v in aws_lb_target_group.broker_az2: v.id],
+    [aws_lb_target_group.bootstrap_az2_a.id],
+    [aws_lb_target_group.bootstrap_az2_b.id],
+    [for k, v in aws_lb_target_group.broker_az2_a: v.id],
+    [for k, v in aws_lb_target_group.broker_az2_b: v.id],
   )
 }
 
@@ -81,7 +85,9 @@ resource "aws_autoscaling_group" "proxy_az3" {
   vpc_zone_identifier = [aws_subnet.private["az3"].id]
 
   target_group_arns = concat(
-    [aws_lb_target_group.bootstrap_az3.id],
-    [for k, v in aws_lb_target_group.broker_az3: v.id],
+    [aws_lb_target_group.bootstrap_az3_a.id],
+    [aws_lb_target_group.bootstrap_az3_b.id],
+    [for k, v in aws_lb_target_group.broker_az3_a: v.id],
+    [for k, v in aws_lb_target_group.broker_az3_b: v.id],
   )
 }

@@ -9,13 +9,13 @@ Does the following:
     * 3x Private Subnets (for Kafka-Proxy)
     * NAT Gateway for each private subnet
 * In each AZ, create the following:
-    * 2x NLB (6 total)
-    * 25 NLB TLS listeners for each NLB (50 per AZ, 150 total)
+    * 1x NLB (3 total)
+    * 49 NLB TLS listeners for each NLB (49 per AZ, 147 total)
         * 1x bootstrap listener (9092)
-        * 24x broker listeners
-    * 1x target group for each listenre (50 per AZ, 150 total)
+        * 48x broker listeners
+    * 1x target group for each listenre (49 per AZ, 147 total)
     * ASG with EC2 instances running kafka-proxy
-* Each NLB is responsible for 24 brokers (supports 144 total brokers, i.e. 192 CKU ultra cluster)
+* Each NLB is responsible for 48 brokers (supports 144 total brokers, i.e. 192 CKU ultra cluster)
 
 kafka-proxy is configured as follows:
 * TLS termination in front of kafka-proxy (on NLB)
@@ -27,9 +27,6 @@ Comments:
 * Kafka-Proxy remaps advertised listeners, as follows:
     * Each broker gets a unique port (e.g. broker 0 is port 10000, broker 1 is 10001)
     * Advertised hostnames are mapped to the AZ that the broker exists in (e.g. if broker 0 is in apse1-az1, it'll be exposed by an NLB in apse1-az1)
-    * Within an AZ, brokers are distributed evenly between the two NLBs (since AWS has a a limit of 25 listeners per NLB)
-
-![kafka-proxy v2](https://github.com/user-attachments/assets/1370338b-46c4-452d-b6e6-2d10cf9c21cf)
 
 kafka-proxy instances all have identical configurations:
 
@@ -42,28 +39,26 @@ kafka-proxy instances all have identical configurations:
 
 Continue broker mappings as follows:
 * each NLB is responsible for 1/2 of the brokers in its respective zone
-    * az1-a: bootstrap, broker  0 /  6 / 12 / 18 ... 138 (max 25 listeners)
-    * az1-b: bootstrap, broker  1 /  7 / 13 / 19 ... 139 (max 25 listeners)
-    * az2-a: bootstrap, broker  2 /  8 / 14 / 20 ... 140 (max 25 listeners)
-    * az2-b: bootstrap, broker  3 /  9 / 15 / 21 ... 141 (max 25 listeners)
-    * az3-a: bootstrap, broker  4 / 10 / 16 / 22 ... 142 (max 25 listeners)
-    * az3-b: bootstrap, broker  5 / 11 / 17 / 23 ... 143 (max 25 listeners)
+    * az1-a: bootstrap, broker 0 / 3 / 6 /  9 ... 141 (max 49 listeners)
+    * az1-b: bootstrap, broker 1 / 4 / 7 / 10 ... 142 (max 49 listeners)
+    * az2-a: bootstrap, broker 2 / 5 / 8 / 11 ... 143 (max 49 listeners)
 
+Kafka-Proxy will be started via a userdata that downloads the kafka-proxy binary and starts it with a script that looks roughly like this:
 ```
 ./kafka-proxy server \
     --tls-enable \
     --bootstrap-server-mapping "pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9092,kafka.customer.domain:9092" \
-    --bootstrap-server-mapping "b0-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9100,kafka-az1-a.customer.domain:9100" \
-    --bootstrap-server-mapping "b1-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9101,kafka-az2-a.customer.domain:9101" \
-    --bootstrap-server-mapping "b2-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9102,kafka-az3-a.customer.domain:9102" \
-    --bootstrap-server-mapping "b3-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9103,kafka-az1-b.customer.domain:9103" \
-    --bootstrap-server-mapping "b4-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9104,kafka-az2-b.customer.domain:9104" \
-    --bootstrap-server-mapping "b5-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9105,kafka-az3-b.customer.domain:9105" \
-    --bootstrap-server-mapping "b6-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9106,kafka-az1-a.customer.domain:9106" \
-    --bootstrap-server-mapping "b7-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9107,kafka-az2-a.customer.domain:9107" \
-    --bootstrap-server-mapping "b8-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9108,kafka-az3-a.customer.domain:9108" \
-    --bootstrap-server-mapping "b9-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9109,kafka-az1-b.customer.domain:9109" \
-    --bootstrap-server-mapping "b10-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9110,kafka-az2-b.customer.domain:9110" \
-    --bootstrap-server-mapping "b11-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9111,kafka-az3-b.customer.domain:9111" \
+    --bootstrap-server-mapping "b0-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9100,kafka-az1.customer.domain:9100" \
+    --bootstrap-server-mapping "b1-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9101,kafka-az2.customer.domain:9101" \
+    --bootstrap-server-mapping "b2-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9102,kafka-az3.customer.domain:9102" \
+    --bootstrap-server-mapping "b3-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9103,kafka-az1.customer.domain:9103" \
+    --bootstrap-server-mapping "b4-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9104,kafka-az2.customer.domain:9104" \
+    --bootstrap-server-mapping "b5-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9105,kafka-az3.customer.domain:9105" \
+    --bootstrap-server-mapping "b6-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9106,kafka-az1.customer.domain:9106" \
+    --bootstrap-server-mapping "b7-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9107,kafka-az2.customer.domain:9107" \
+    --bootstrap-server-mapping "b8-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9108,kafka-az3.customer.domain:9108" \
+    --bootstrap-server-mapping "b9-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9109,kafka-az1.customer.domain:9109" \
+    --bootstrap-server-mapping "b10-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9110,kafka-az2.customer.domain:9110" \
+    --bootstrap-server-mapping "b11-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9111,kafka-az3.customer.domain:9111" \
     ...
 ```
