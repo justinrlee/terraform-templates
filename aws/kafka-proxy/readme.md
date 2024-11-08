@@ -38,27 +38,30 @@ kafka-proxy instances all have identical configurations:
     * az3: 9092, 10002, 10005, 10008, 10011 ... 10143
 
 Continue broker mappings as follows:
-* each NLB is responsible for 1/2 of the brokers in its respective zone
-    * az1-a: bootstrap, broker 0 / 3 / 6 /  9 ... 141 (max 49 listeners)
-    * az1-b: bootstrap, broker 1 / 4 / 7 / 10 ... 142 (max 49 listeners)
-    * az2-a: bootstrap, broker 2 / 5 / 8 / 11 ... 143 (max 49 listeners)
+* each NLB is responsible for only the brokers in its respective zone
+    * az1: bootstrap, broker 0 / 3 / 6 /  9 ... 141 (49 listeners)
+    * az1: bootstrap, broker 1 / 4 / 7 / 10 ... 142 (49 listeners)
+    * az2: bootstrap, broker 2 / 5 / 8 / 11 ... 143 (49 listeners)
 
 Kafka-Proxy will be started via a userdata that downloads the kafka-proxy binary and starts it with a script that looks roughly like this:
-```
+
+```shell
 ./kafka-proxy server \
     --tls-enable \
     --bootstrap-server-mapping "pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9092,kafka.customer.domain:9092" \
-    --bootstrap-server-mapping "b0-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9100,kafka-az1.customer.domain:9100" \
-    --bootstrap-server-mapping "b1-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9101,kafka-az2.customer.domain:9101" \
-    --bootstrap-server-mapping "b2-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9102,kafka-az3.customer.domain:9102" \
-    --bootstrap-server-mapping "b3-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9103,kafka-az1.customer.domain:9103" \
-    --bootstrap-server-mapping "b4-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9104,kafka-az2.customer.domain:9104" \
-    --bootstrap-server-mapping "b5-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9105,kafka-az3.customer.domain:9105" \
-    --bootstrap-server-mapping "b6-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9106,kafka-az1.customer.domain:9106" \
-    --bootstrap-server-mapping "b7-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9107,kafka-az2.customer.domain:9107" \
-    --bootstrap-server-mapping "b8-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9108,kafka-az3.customer.domain:9108" \
-    --bootstrap-server-mapping "b9-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9109,kafka-az1.customer.domain:9109" \
-    --bootstrap-server-mapping "b10-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9110,kafka-az2.customer.domain:9110" \
-    --bootstrap-server-mapping "b11-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:9111,kafka-az3.customer.domain:9111" \
-    ...
+    --bootstrap-server-mapping "b0-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:10000,kafka-az1.customer.domain:10000" \
+    --bootstrap-server-mapping "b1-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:10001,kafka-az2.customer.domain:10001" \
+    --bootstrap-server-mapping "b2-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:10002,kafka-az3.customer.domain:10002" \
+    --bootstrap-server-mapping "b3-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:10003,kafka-az1.customer.domain:10003" \
+    --bootstrap-server-mapping "b4-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:10004,kafka-az2.customer.domain:10004" \
+    --bootstrap-server-mapping "b5-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:10005,kafka-az3.customer.domain:10005" \
+    --bootstrap-server-mapping "b6-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:10006,kafka-az1.customer.domain:10006" \
+    --bootstrap-server-mapping "b7-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:10007,kafka-az2.customer.domain:10007" \
+    --bootstrap-server-mapping "b8-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:10008,kafka-az3.customer.domain:10008" \
+    ... \
+    --bootstrap-server-mapping "b141-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:10008,kafka-az1.customer.domain:10141" \
+    --bootstrap-server-mapping "b142-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:10008,kafka-az2.customer.domain:10142" \
+    --bootstrap-server-mapping "b143-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud:9092,0.0.0.0:10008,kafka-az3.customer.domain:10143"
 ```
+
+![kafka-proxy v2 - 1nlb](https://github.com/user-attachments/assets/415928f5-ae7d-48c9-b9e8-ed650dd56b5b)
