@@ -2,7 +2,7 @@ environment_name = "justinrlee-two-region"
 
 ############################################################ R0
 region_r0 = "ap-southeast-1"
-prefix_r0 = "10.41"
+prefix_r0 = "10.39"
 region_short_r0 = "apse1"
 zones_r0 = {
     "az1" = {
@@ -40,7 +40,7 @@ instances_r0 = {
 
 ############################################################ R1
 region_r1 = "ap-southeast-2"
-prefix_r1 = "10.42"
+prefix_r1 = "10.55"
 region_short_r1 = "apse2"
 zones_r1 = {
     "az1" = {
