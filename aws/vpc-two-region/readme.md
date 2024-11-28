@@ -1,5 +1,11 @@
 # Two Region VPC
 
+**Intentionally does not work unless you provide a Terraform variable file (samples in `var/`)**
+
+```bash
+terraform apply -var-file var/sample.tfvars
+```
+
 Does the same as one-region-vpc, except with two regions, which are also peered together.
 
 Takes the following as variable objects:
