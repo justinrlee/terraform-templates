@@ -52,7 +52,7 @@ resource "aws_subnet" "public_r1" {
 }
 
 resource "aws_subnet" "private_r1" {
-  for_each = var.zones_r1
+  for_each = var.enable_private ? var.zones_r1 : {}
 
   vpc_id = aws_vpc.main_r1.id
 
@@ -72,7 +72,7 @@ resource "aws_subnet" "private_r1" {
 }
 
 resource "aws_eip" "nat_gateway_zonal_r1" {
-  for_each = var.zones_r1
+  for_each = var.enable_private ? var.zones_r1 : {}
   domain = "vpc"
 
   tags = merge(
@@ -85,7 +85,7 @@ resource "aws_eip" "nat_gateway_zonal_r1" {
 }
 
 resource "aws_nat_gateway" "zonal_r1" {
-  for_each = var.zones_r1
+  for_each = var.enable_private ? var.zones_r1 : {}
 
   allocation_id = aws_eip.nat_gateway_zonal_r1[each.key].id
   subnet_id = aws_subnet.public_r1[each.key].id
@@ -100,7 +100,7 @@ resource "aws_nat_gateway" "zonal_r1" {
 }
 
 resource "aws_route_table" "private_zonal_r1" {
-  for_each = var.zones_r1
+  for_each = var.enable_private ? var.zones_r1 : {}
 
   vpc_id = aws_vpc.main_r1.id
 
@@ -112,7 +112,8 @@ resource "aws_route_table" "private_zonal_r1" {
 }
 
 resource "aws_route" "private_nat_gateway_r1" {
-  for_each = var.zones_r1
+  for_each = var.enable_private ? var.zones_r1 : {}
+
   route_table_id = aws_route_table.private_zonal_r1[each.key].id
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.zonal_r1[each.key].id
@@ -121,7 +122,7 @@ resource "aws_route" "private_nat_gateway_r1" {
 }
 
 resource "aws_route_table_association" "private_r1" {
-  for_each = var.zones_r1
+  for_each = var.enable_private ? var.zones_r1 : {}
 
   subnet_id      = aws_subnet.private_r1[each.key].id
   route_table_id = aws_route_table.private_zonal_r1[each.key].id

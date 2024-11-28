@@ -13,7 +13,7 @@ instances_r0 = {
       private_count = 0,
   },
   "az3" = {
-      public_count = 0,
+      public_count = 1,
       private_count = 0,
   },
 }
@@ -28,7 +28,7 @@ instances_r1 = {
       private_count = 0,
   },
   "az3" = {
-      public_count = 0,
+      public_count = 1,
       private_count = 0,
   },
 }
