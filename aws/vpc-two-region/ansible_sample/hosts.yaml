@@ -18,11 +18,11 @@ all:
 
 kafka_controller:
   hosts:
-    ip-10-41-1-10.ap-southeast-1.compute.internal:
-    ip-10-41-2-10.ap-southeast-1.compute.internal:
-    ip-10-41-3-10.ap-southeast-1.compute.internal:
-    ip-10-42-1-10.ap-southeast-2.compute.internal:
-    ip-10-42-2-10.ap-southeast-2.compute.internal:
+    ip-10-39-1-10.ap-southeast-1.compute.internal:
+    ip-10-39-2-10.ap-southeast-1.compute.internal:
+    ip-10-39-3-10.ap-southeast-1.compute.internal:
+    ip-10-55-1-10.ap-southeast-2.compute.internal:
+    ip-10-55-2-10.ap-southeast-2.compute.internal:
 kafka_broker:
   children:
     kafka_broker_r0:
@@ -34,12 +34,12 @@ kafka_broker_r0:
       broker.rack: ap-southeast-1
 
   hosts:
-    ip-10-41-1-10.ap-southeast-1.compute.internal:
-    ip-10-41-1-11.ap-southeast-1.compute.internal:
-    ip-10-41-2-10.ap-southeast-1.compute.internal:
-    ip-10-41-2-11.ap-southeast-1.compute.internal:
-    ip-10-41-3-10.ap-southeast-1.compute.internal:
-    ip-10-41-3-11.ap-southeast-1.compute.internal:
+    ip-10-39-1-10.ap-southeast-1.compute.internal:
+    ip-10-39-1-11.ap-southeast-1.compute.internal:
+    ip-10-39-2-10.ap-southeast-1.compute.internal:
+    ip-10-39-2-11.ap-southeast-1.compute.internal:
+    ip-10-39-3-10.ap-southeast-1.compute.internal:
+    ip-10-39-3-11.ap-southeast-1.compute.internal:
 
 kafka_broker_r1:
   vars:
@@ -47,10 +47,10 @@ kafka_broker_r1:
       broker.rack: ap-southeast-2
 
   hosts:
-    ip-10-42-1-10.ap-southeast-2.compute.internal:
-    ip-10-42-1-11.ap-southeast-2.compute.internal:
-    ip-10-42-2-10.ap-southeast-2.compute.internal:
-    ip-10-42-2-11.ap-southeast-2.compute.internal:
-    ip-10-42-3-10.ap-southeast-2.compute.internal:
-    ip-10-42-3-11.ap-southeast-2.compute.internal:
+    ip-10-55-1-10.ap-southeast-2.compute.internal:
+    ip-10-55-1-11.ap-southeast-2.compute.internal:
+    ip-10-55-2-10.ap-southeast-2.compute.internal:
+    ip-10-55-2-11.ap-southeast-2.compute.internal:
+    ip-10-55-3-10.ap-southeast-2.compute.internal:
+    ip-10-55-3-11.ap-southeast-2.compute.internal:
 

@@ -1,0 +1,42 @@
+all:
+  vars:
+    ansible_become: true
+    ansible_connection: ssh
+    ansible_user: ubuntu
+
+    confluent_package_version: 7.7.1
+
+    kafka_broker_custom_properties:
+      confluent.log.placement.constraints: '{"version":2,"replicas":[{"count":1,"constraints":{"rack":"ap-southeast-1"}},{"count":1,"constraints":{"rack":"ap-southeast-2"}}],"observers":[{"count":0,"constraints":{"rack":"ap-southeast-1"}},{"count":0,"constraints":{"rack":"ap-southeast-2"}}],"observerPromotionPolicy":"under-min-isr"}'
+      min.insync.replicas: "2"
+      replica.selector.class: org.apache.kafka.common.replica.RackAwareReplicaSelector
+
+      num.replica.fetchers: 1
+      replica.socket.receive.buffer.bytes: "-1"
+      socket.receive.buffer.bytes: "-1"
+      socket.send.buffer.bytes: "-1"
+
+kafka_controller:
+  hosts:
+    ip-10-39-1-10.ap-southeast-1.compute.internal:
+kafka_broker:
+  children:
+    kafka_broker_r0:
+    kafka_broker_r1:
+
+kafka_broker_r0:
+  vars:
+    kafka_broker_custom_properties:
+      broker.rack: ap-southeast-1
+
+  hosts:
+    ip-10-39-1-10.ap-southeast-1.compute.internal:
+
+kafka_broker_r1:
+  vars:
+    kafka_broker_custom_properties:
+      broker.rack: ap-southeast-2
+
+  hosts:
+    ip-10-55-1-10.ap-southeast-2.compute.internal:
+
