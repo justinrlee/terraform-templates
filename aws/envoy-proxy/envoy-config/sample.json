@@ -1,0 +1,904 @@
+{
+  "static_resources": {
+    "listeners": [
+      {
+        "address": {
+          "socket_address": {
+            "address": "0.0.0.0",
+            "port_value": 9092
+          }
+        },
+        "filter_chains": [
+          {
+            "filters": [
+              {
+                "name": "envoy.filters.network.kafka_broker",
+                "typed_config": {
+                  "@type": "type.googleapis.com/envoy.extensions.filters.network.kafka_broker.v3.KafkaBroker",
+                  "stat_prefix": "listener",
+                  "id_based_broker_address_rewrite_spec": {
+                    "rules": [
+                      {
+                        "id": 0,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9100
+                      },
+                      {
+                        "id": 1,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9101
+                      },
+                      {
+                        "id": 2,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9102
+                      },
+                      {
+                        "id": 3,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9103
+                      },
+                      {
+                        "id": 4,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9104
+                      },
+                      {
+                        "id": 5,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9105
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "name": "envoy.filters.network.tcp_proxy",
+                "typed_config": {
+                  "@type": "type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy",
+                  "stat_prefix": "tcp",
+                  "cluster": "bootstrap"
+                }
+              }
+            ],
+            "transport_socket": {
+              "name": "envoy.transport_sockets.tls",
+              "typed_config": {
+                "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext",
+                "common_tls_context": {
+                  "tls_certificates": [
+                    {
+                      "certificate_chain": {
+                        "filename": "certs/server.crt"
+                      },
+                      "private_key": {
+                        "filename": "certs/server.key"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "address": {
+          "socket_address": {
+            "address": "0.0.0.0",
+            "port_value": 9100
+          }
+        },
+        "filter_chains": [
+          {
+            "filters": [
+              {
+                "name": "envoy.filters.network.kafka_broker",
+                "typed_config": {
+                  "@type": "type.googleapis.com/envoy.extensions.filters.network.kafka_broker.v3.KafkaBroker",
+                  "stat_prefix": "listener",
+                  "id_based_broker_address_rewrite_spec": {
+                    "rules": [
+                      {
+                        "id": 0,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9100
+                      },
+                      {
+                        "id": 1,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9101
+                      },
+                      {
+                        "id": 2,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9102
+                      },
+                      {
+                        "id": 3,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9103
+                      },
+                      {
+                        "id": 4,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9104
+                      },
+                      {
+                        "id": 5,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9105
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "name": "envoy.filters.network.tcp_proxy",
+                "typed_config": {
+                  "@type": "type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy",
+                  "stat_prefix": "tcp",
+                  "cluster": "b0"
+                }
+              }
+            ],
+            "transport_socket": {
+              "name": "envoy.transport_sockets.tls",
+              "typed_config": {
+                "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext",
+                "common_tls_context": {
+                  "tls_certificates": [
+                    {
+                      "certificate_chain": {
+                        "filename": "certs/server.crt"
+                      },
+                      "private_key": {
+                        "filename": "certs/server.key"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "address": {
+          "socket_address": {
+            "address": "0.0.0.0",
+            "port_value": 9101
+          }
+        },
+        "filter_chains": [
+          {
+            "filters": [
+              {
+                "name": "envoy.filters.network.kafka_broker",
+                "typed_config": {
+                  "@type": "type.googleapis.com/envoy.extensions.filters.network.kafka_broker.v3.KafkaBroker",
+                  "stat_prefix": "listener",
+                  "id_based_broker_address_rewrite_spec": {
+                    "rules": [
+                      {
+                        "id": 0,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9100
+                      },
+                      {
+                        "id": 1,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9101
+                      },
+                      {
+                        "id": 2,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9102
+                      },
+                      {
+                        "id": 3,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9103
+                      },
+                      {
+                        "id": 4,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9104
+                      },
+                      {
+                        "id": 5,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9105
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "name": "envoy.filters.network.tcp_proxy",
+                "typed_config": {
+                  "@type": "type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy",
+                  "stat_prefix": "tcp",
+                  "cluster": "b1"
+                }
+              }
+            ],
+            "transport_socket": {
+              "name": "envoy.transport_sockets.tls",
+              "typed_config": {
+                "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext",
+                "common_tls_context": {
+                  "tls_certificates": [
+                    {
+                      "certificate_chain": {
+                        "filename": "certs/server.crt"
+                      },
+                      "private_key": {
+                        "filename": "certs/server.key"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "address": {
+          "socket_address": {
+            "address": "0.0.0.0",
+            "port_value": 9102
+          }
+        },
+        "filter_chains": [
+          {
+            "filters": [
+              {
+                "name": "envoy.filters.network.kafka_broker",
+                "typed_config": {
+                  "@type": "type.googleapis.com/envoy.extensions.filters.network.kafka_broker.v3.KafkaBroker",
+                  "stat_prefix": "listener",
+                  "id_based_broker_address_rewrite_spec": {
+                    "rules": [
+                      {
+                        "id": 0,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9100
+                      },
+                      {
+                        "id": 1,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9101
+                      },
+                      {
+                        "id": 2,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9102
+                      },
+                      {
+                        "id": 3,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9103
+                      },
+                      {
+                        "id": 4,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9104
+                      },
+                      {
+                        "id": 5,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9105
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "name": "envoy.filters.network.tcp_proxy",
+                "typed_config": {
+                  "@type": "type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy",
+                  "stat_prefix": "tcp",
+                  "cluster": "b2"
+                }
+              }
+            ],
+            "transport_socket": {
+              "name": "envoy.transport_sockets.tls",
+              "typed_config": {
+                "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext",
+                "common_tls_context": {
+                  "tls_certificates": [
+                    {
+                      "certificate_chain": {
+                        "filename": "certs/server.crt"
+                      },
+                      "private_key": {
+                        "filename": "certs/server.key"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "address": {
+          "socket_address": {
+            "address": "0.0.0.0",
+            "port_value": 9103
+          }
+        },
+        "filter_chains": [
+          {
+            "filters": [
+              {
+                "name": "envoy.filters.network.kafka_broker",
+                "typed_config": {
+                  "@type": "type.googleapis.com/envoy.extensions.filters.network.kafka_broker.v3.KafkaBroker",
+                  "stat_prefix": "listener",
+                  "id_based_broker_address_rewrite_spec": {
+                    "rules": [
+                      {
+                        "id": 0,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9100
+                      },
+                      {
+                        "id": 1,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9101
+                      },
+                      {
+                        "id": 2,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9102
+                      },
+                      {
+                        "id": 3,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9103
+                      },
+                      {
+                        "id": 4,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9104
+                      },
+                      {
+                        "id": 5,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9105
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "name": "envoy.filters.network.tcp_proxy",
+                "typed_config": {
+                  "@type": "type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy",
+                  "stat_prefix": "tcp",
+                  "cluster": "b3"
+                }
+              }
+            ],
+            "transport_socket": {
+              "name": "envoy.transport_sockets.tls",
+              "typed_config": {
+                "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext",
+                "common_tls_context": {
+                  "tls_certificates": [
+                    {
+                      "certificate_chain": {
+                        "filename": "certs/server.crt"
+                      },
+                      "private_key": {
+                        "filename": "certs/server.key"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "address": {
+          "socket_address": {
+            "address": "0.0.0.0",
+            "port_value": 9104
+          }
+        },
+        "filter_chains": [
+          {
+            "filters": [
+              {
+                "name": "envoy.filters.network.kafka_broker",
+                "typed_config": {
+                  "@type": "type.googleapis.com/envoy.extensions.filters.network.kafka_broker.v3.KafkaBroker",
+                  "stat_prefix": "listener",
+                  "id_based_broker_address_rewrite_spec": {
+                    "rules": [
+                      {
+                        "id": 0,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9100
+                      },
+                      {
+                        "id": 1,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9101
+                      },
+                      {
+                        "id": 2,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9102
+                      },
+                      {
+                        "id": 3,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9103
+                      },
+                      {
+                        "id": 4,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9104
+                      },
+                      {
+                        "id": 5,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9105
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "name": "envoy.filters.network.tcp_proxy",
+                "typed_config": {
+                  "@type": "type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy",
+                  "stat_prefix": "tcp",
+                  "cluster": "b4"
+                }
+              }
+            ],
+            "transport_socket": {
+              "name": "envoy.transport_sockets.tls",
+              "typed_config": {
+                "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext",
+                "common_tls_context": {
+                  "tls_certificates": [
+                    {
+                      "certificate_chain": {
+                        "filename": "certs/server.crt"
+                      },
+                      "private_key": {
+                        "filename": "certs/server.key"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "address": {
+          "socket_address": {
+            "address": "0.0.0.0",
+            "port_value": 9105
+          }
+        },
+        "filter_chains": [
+          {
+            "filters": [
+              {
+                "name": "envoy.filters.network.kafka_broker",
+                "typed_config": {
+                  "@type": "type.googleapis.com/envoy.extensions.filters.network.kafka_broker.v3.KafkaBroker",
+                  "stat_prefix": "listener",
+                  "id_based_broker_address_rewrite_spec": {
+                    "rules": [
+                      {
+                        "id": 0,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9100
+                      },
+                      {
+                        "id": 1,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9101
+                      },
+                      {
+                        "id": 2,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9102
+                      },
+                      {
+                        "id": 3,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9103
+                      },
+                      {
+                        "id": 4,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9104
+                      },
+                      {
+                        "id": 5,
+                        "host": "ec2-47-129-236-201.ap-southeast-1.compute.amazonaws.com",
+                        "port": 9105
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "name": "envoy.filters.network.tcp_proxy",
+                "typed_config": {
+                  "@type": "type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy",
+                  "stat_prefix": "tcp",
+                  "cluster": "b5"
+                }
+              }
+            ],
+            "transport_socket": {
+              "name": "envoy.transport_sockets.tls",
+              "typed_config": {
+                "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext",
+                "common_tls_context": {
+                  "tls_certificates": [
+                    {
+                      "certificate_chain": {
+                        "filename": "certs/server.crt"
+                      },
+                      "private_key": {
+                        "filename": "certs/server.key"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "clusters": [
+      {
+        "name": "bootstrap",
+        "connect_timeout": "0.25s",
+        "type": "strict_dns",
+        "lb_policy": "round_robin",
+        "load_assignment": {
+          "cluster_name": "pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+          "endpoints": [
+            {
+              "lb_endpoints": [
+                {
+                  "endpoint": {
+                    "address": {
+                      "socket_address": {
+                        "address": "pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+                        "port_value": 9092
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "transport_socket": {
+          "name": "envoy.transport_sockets.tls",
+          "typed_config": {
+            "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext",
+            "sni": "pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+            "common_tls_context": {
+              "validation_context": {
+                "match_typed_subject_alt_names": [
+                  {
+                    "san_type": "DNS",
+                    "matcher": {
+                      "exact": "pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud"
+                    }
+                  }
+                ],
+                "trusted_ca": {
+                  "filename": "/etc/ssl/certs/ca-certificates.crt"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "b0",
+        "connect_timeout": "0.25s",
+        "type": "strict_dns",
+        "lb_policy": "round_robin",
+        "load_assignment": {
+          "cluster_name": "b0-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+          "endpoints": [
+            {
+              "lb_endpoints": [
+                {
+                  "endpoint": {
+                    "address": {
+                      "socket_address": {
+                        "address": "b0-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+                        "port_value": 9092
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "transport_socket": {
+          "name": "envoy.transport_sockets.tls",
+          "typed_config": {
+            "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext",
+            "sni": "b0-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+            "common_tls_context": {
+              "validation_context": {
+                "match_typed_subject_alt_names": [
+                  {
+                    "san_type": "DNS",
+                    "matcher": {
+                      "exact": "b0-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud"
+                    }
+                  }
+                ],
+                "trusted_ca": {
+                  "filename": "/etc/ssl/certs/ca-certificates.crt"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "b1",
+        "connect_timeout": "0.25s",
+        "type": "strict_dns",
+        "lb_policy": "round_robin",
+        "load_assignment": {
+          "cluster_name": "b1-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+          "endpoints": [
+            {
+              "lb_endpoints": [
+                {
+                  "endpoint": {
+                    "address": {
+                      "socket_address": {
+                        "address": "b1-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+                        "port_value": 9092
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "transport_socket": {
+          "name": "envoy.transport_sockets.tls",
+          "typed_config": {
+            "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext",
+            "sni": "b1-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+            "common_tls_context": {
+              "validation_context": {
+                "match_typed_subject_alt_names": [
+                  {
+                    "san_type": "DNS",
+                    "matcher": {
+                      "exact": "b1-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud"
+                    }
+                  }
+                ],
+                "trusted_ca": {
+                  "filename": "/etc/ssl/certs/ca-certificates.crt"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "b2",
+        "connect_timeout": "0.25s",
+        "type": "strict_dns",
+        "lb_policy": "round_robin",
+        "load_assignment": {
+          "cluster_name": "b2-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+          "endpoints": [
+            {
+              "lb_endpoints": [
+                {
+                  "endpoint": {
+                    "address": {
+                      "socket_address": {
+                        "address": "b2-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+                        "port_value": 9092
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "transport_socket": {
+          "name": "envoy.transport_sockets.tls",
+          "typed_config": {
+            "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext",
+            "sni": "b2-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+            "common_tls_context": {
+              "validation_context": {
+                "match_typed_subject_alt_names": [
+                  {
+                    "san_type": "DNS",
+                    "matcher": {
+                      "exact": "b2-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud"
+                    }
+                  }
+                ],
+                "trusted_ca": {
+                  "filename": "/etc/ssl/certs/ca-certificates.crt"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "b3",
+        "connect_timeout": "0.25s",
+        "type": "strict_dns",
+        "lb_policy": "round_robin",
+        "load_assignment": {
+          "cluster_name": "b3-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+          "endpoints": [
+            {
+              "lb_endpoints": [
+                {
+                  "endpoint": {
+                    "address": {
+                      "socket_address": {
+                        "address": "b3-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+                        "port_value": 9092
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "transport_socket": {
+          "name": "envoy.transport_sockets.tls",
+          "typed_config": {
+            "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext",
+            "sni": "b3-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+            "common_tls_context": {
+              "validation_context": {
+                "match_typed_subject_alt_names": [
+                  {
+                    "san_type": "DNS",
+                    "matcher": {
+                      "exact": "b3-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud"
+                    }
+                  }
+                ],
+                "trusted_ca": {
+                  "filename": "/etc/ssl/certs/ca-certificates.crt"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "b4",
+        "connect_timeout": "0.25s",
+        "type": "strict_dns",
+        "lb_policy": "round_robin",
+        "load_assignment": {
+          "cluster_name": "b4-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+          "endpoints": [
+            {
+              "lb_endpoints": [
+                {
+                  "endpoint": {
+                    "address": {
+                      "socket_address": {
+                        "address": "b4-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+                        "port_value": 9092
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "transport_socket": {
+          "name": "envoy.transport_sockets.tls",
+          "typed_config": {
+            "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext",
+            "sni": "b4-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+            "common_tls_context": {
+              "validation_context": {
+                "match_typed_subject_alt_names": [
+                  {
+                    "san_type": "DNS",
+                    "matcher": {
+                      "exact": "b4-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud"
+                    }
+                  }
+                ],
+                "trusted_ca": {
+                  "filename": "/etc/ssl/certs/ca-certificates.crt"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "b5",
+        "connect_timeout": "0.25s",
+        "type": "strict_dns",
+        "lb_policy": "round_robin",
+        "load_assignment": {
+          "cluster_name": "b5-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+          "endpoints": [
+            {
+              "lb_endpoints": [
+                {
+                  "endpoint": {
+                    "address": {
+                      "socket_address": {
+                        "address": "b5-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+                        "port_value": 9092
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "transport_socket": {
+          "name": "envoy.transport_sockets.tls",
+          "typed_config": {
+            "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext",
+            "sni": "b5-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud",
+            "common_tls_context": {
+              "validation_context": {
+                "match_typed_subject_alt_names": [
+                  {
+                    "san_type": "DNS",
+                    "matcher": {
+                      "exact": "b5-pkc-vrzrj5.ap-southeast-1.aws.confluent.cloud"
+                    }
+                  }
+                ],
+                "trusted_ca": {
+                  "filename": "/etc/ssl/certs/ca-certificates.crt"
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}
