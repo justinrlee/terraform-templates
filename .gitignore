@@ -2,6 +2,7 @@
 *.tfstate
 *.tfstate.*
 .terraform.*
+**/.vscode/*
 
 test.*
 run.*
