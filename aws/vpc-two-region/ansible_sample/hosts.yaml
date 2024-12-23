@@ -6,7 +6,14 @@ all:
 
     confluent_package_version: 7.7.1
 
+    kafka_controller_custom_properties:
+      reserved.broker.max.id: 10000
+      confluent.log.placement.constraints: '{"version":2,"replicas":[{"count":2,"constraints":{"rack":"ap-southeast-1"}},{"count":2,"constraints":{"rack":"ap-southeast-2"}}],"observers":[{"count":1,"constraints":{"rack":"ap-southeast-1"}},{"count":1,"constraints":{"rack":"ap-southeast-2"}}],"observerPromotionPolicy":"under-min-isr"}'
+      min.insync.replicas: "3"
+      replica.selector.class: org.apache.kafka.common.replica.RackAwareReplicaSelector
+
     kafka_broker_custom_properties:
+      reserved.broker.max.id: 10000
       confluent.log.placement.constraints: '{"version":2,"replicas":[{"count":2,"constraints":{"rack":"ap-southeast-1"}},{"count":2,"constraints":{"rack":"ap-southeast-2"}}],"observers":[{"count":1,"constraints":{"rack":"ap-southeast-1"}},{"count":1,"constraints":{"rack":"ap-southeast-2"}}],"observerPromotionPolicy":"under-min-isr"}'
       min.insync.replicas: "3"
       replica.selector.class: org.apache.kafka.common.replica.RackAwareReplicaSelector
@@ -19,10 +26,11 @@ all:
 kafka_controller:
   hosts:
     ip-10-39-1-10.ap-southeast-1.compute.internal:
+      node_id: 9991
     ip-10-39-2-10.ap-southeast-1.compute.internal:
-    ip-10-39-3-10.ap-southeast-1.compute.internal:
+      node_id: 9992
     ip-10-55-1-10.ap-southeast-2.compute.internal:
-    ip-10-55-2-10.ap-southeast-2.compute.internal:
+      node_id: 9993
 kafka_broker:
   children:
     kafka_broker_r0:
@@ -35,11 +43,17 @@ kafka_broker_r0:
 
   hosts:
     ip-10-39-1-10.ap-southeast-1.compute.internal:
+      broker_id: 3110
     ip-10-39-1-11.ap-southeast-1.compute.internal:
+      broker_id: 3111
     ip-10-39-2-10.ap-southeast-1.compute.internal:
+      broker_id: 3210
     ip-10-39-2-11.ap-southeast-1.compute.internal:
+      broker_id: 3211
     ip-10-39-3-10.ap-southeast-1.compute.internal:
+      broker_id: 3310
     ip-10-39-3-11.ap-southeast-1.compute.internal:
+      broker_id: 3311
 
 kafka_broker_r1:
   vars:
@@ -48,9 +62,15 @@ kafka_broker_r1:
 
   hosts:
     ip-10-55-1-10.ap-southeast-2.compute.internal:
+      broker_id: 5110
     ip-10-55-1-11.ap-southeast-2.compute.internal:
+      broker_id: 5111
     ip-10-55-2-10.ap-southeast-2.compute.internal:
+      broker_id: 5210
     ip-10-55-2-11.ap-southeast-2.compute.internal:
+      broker_id: 5211
     ip-10-55-3-10.ap-southeast-2.compute.internal:
+      broker_id: 5310
     ip-10-55-3-11.ap-southeast-2.compute.internal:
+      broker_id: 5311
 
