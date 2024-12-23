@@ -1,0 +1,23 @@
+all:
+  vars:
+    ansible_become: true
+    ansible_connection: ssh
+    ansible_user: ubuntu
+
+    confluent_package_version: 7.7.2
+
+kafka_controller:
+  hosts:
+    ip-10-38-1-10.ap-southeast-1.compute.internal:
+    ip-10-38-2-10.ap-southeast-1.compute.internal:
+    ip-10-38-3-10.ap-southeast-1.compute.internal:
+
+kafka_broker:
+  hosts:
+    ip-10-38-1-10.ap-southeast-1.compute.internal:
+    ip-10-38-2-10.ap-southeast-1.compute.internal:
+    ip-10-38-3-10.ap-southeast-1.compute.internal:
+
+schema_registry:
+  hosts:
+    ip-10-38-1-10.ap-southeast-1.compute.internal:

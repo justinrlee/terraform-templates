@@ -11,9 +11,9 @@ all:
 
 kafka_controller:
   hosts:
-    ip-10-41-1-10.ap-southeast-1.compute.internal:
-    ip-10-41-2-10.ap-southeast-1.compute.internal:
-    ip-10-41-3-10.ap-southeast-1.compute.internal:
+    ip-10-38-1-10.ap-southeast-1.compute.internal:
+    ip-10-38-2-10.ap-southeast-1.compute.internal:
+    ip-10-38-3-10.ap-southeast-1.compute.internal:
     ip-10-42-1-10.ap-southeast-2.compute.internal:
     ip-10-42-2-10.ap-southeast-2.compute.internal:
 kafka_broker:
@@ -26,9 +26,9 @@ kafka_broker_r0:
       broker.rack: ap-southeast-1
 
   hosts:
-    ip-10-41-1-10.ap-southeast-1.compute.internal:
-    ip-10-41-1-11.ap-southeast-1.compute.internal:
-    ip-10-41-2-10.ap-southeast-1.compute.internal:
-    ip-10-41-2-11.ap-southeast-1.compute.internal:
-    ip-10-41-3-10.ap-southeast-1.compute.internal:
-    ip-10-41-3-11.ap-southeast-1.compute.internal:
+    ip-10-38-1-10.ap-southeast-1.compute.internal:
+    ip-10-38-1-11.ap-southeast-1.compute.internal:
+    ip-10-38-2-10.ap-southeast-1.compute.internal:
+    ip-10-38-2-11.ap-southeast-1.compute.internal:
+    ip-10-38-3-10.ap-southeast-1.compute.internal:
+    ip-10-38-3-11.ap-southeast-1.compute.internal:
