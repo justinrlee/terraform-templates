@@ -1,5 +1,9 @@
 # Kafka-Proxy for Confluent Cloud
 
+This folder has two roughly-equivalent TF projects in it:
+* A single shot TF template that deploys everything at once
+* A 'split' TF template that breaks down deployment into prereqs, peering connection, and proxy
+
 Expose a Confluent Cloud Peering Cluster on the Internet with AWS NLBs, using Kafka-Proxy
 
 Does the following:
