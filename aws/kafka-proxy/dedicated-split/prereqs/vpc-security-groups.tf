@@ -94,3 +94,46 @@ resource "aws_security_group" "nlb" {
     self             = null
   }]
 }
+
+resource "aws_security_group" "cc" {
+  description = "security group for Confluent Cloud"
+  name        = "${var.environment_name}-cc"
+  vpc_id      = aws_vpc.main.id
+
+  ingress = [
+    {
+      description      = null,
+      protocol         = "tcp",
+      cidr_blocks      = ["0.0.0.0/0"],
+      from_port        = 443,
+      to_port          = 443,
+      ipv6_cidr_blocks = null,
+      prefix_list_ids  = null,
+      security_groups  = null,
+      self             = null
+    },
+    {
+      description      = null,
+      protocol         = "tcp",
+      cidr_blocks      = ["0.0.0.0/0"],
+      from_port        = 9092,
+      to_port          = 9092,
+      ipv6_cidr_blocks = null,
+      prefix_list_ids  = null,
+      security_groups  = null,
+      self             = null
+    },
+  ]
+
+  egress = [{
+    description      = null,
+    protocol         = "-1",
+    cidr_blocks      = ["0.0.0.0/0"],
+    from_port        = 0,
+    to_port          = 0,
+    ipv6_cidr_blocks = null,
+    prefix_list_ids  = null,
+    security_groups  = null,
+    self             = null
+  }]
+}
