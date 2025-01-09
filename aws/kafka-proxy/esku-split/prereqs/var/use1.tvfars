@@ -1,8 +1,9 @@
 # General
 environment_name = "justinrlee-use1-kp"
+
+# Region-specific
 region = "us-east-1"
 region_short = "use1"
-
 
 zones = {
     "az1" = {
@@ -42,7 +43,7 @@ prefix = "10.6"
 bastion_instance_type = "t3.xlarge"
 ec2_public_key_name = "justinrlee-confluent-dev"
 
-# Ubuntu 24.04 LTS amd64 20241011
+# use1 Ubuntu 24.04 LTS amd64
 ami = "ami-079cb33ef719a7b78"
-# Ubuntu 24.04 LTS arm64 20241011
+# use1 Ubuntu 24.04 LTS arm64
 # ami = "ami-04474687c34a061cf"

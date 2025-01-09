@@ -14,13 +14,17 @@ output "internal_security_group_id" {
   value = aws_security_group.allow_internal.id
 }
 
-output "zone_nlb_mappings" {
-  value = {
-    "az1" = aws_lb.az1.id,
-    "az2" = aws_lb.az2.id,
-    "az3" = aws_lb.az3.id,
-  }
+output "nlb_arn" {
+  value = aws_lb.main.id
 }
+
+# output "zone_nlb_mappings" {
+#   value = {
+#     "az1" = aws_lb.az1.id,
+#     "az2" = aws_lb.az2.id,
+#     "az3" = aws_lb.az3.id,
+#   }
+# }
 
 output "zone_private_subnet_mappings" {
   value = {
@@ -42,8 +46,7 @@ output "route_table_zone_mapping" {
 
 output "zone_eip_mappings" {
   value = {
-    "az1" = aws_eip.az1.public_ip,
-    "az2" = aws_eip.az2.public_ip,
-    "az3" = aws_eip.az3.public_ip,
+    for k,v in var.zones:
+      k => aws_eip.nlb[k].public_ip
   }
 }
