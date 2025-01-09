@@ -7,7 +7,7 @@ resource "aws_lb_target_group" "bootstrap" {
   deregistration_delay = 30
 
   stickiness {
-    enabled = true
+    enabled = false
     type = "source_ip"
   }
 
@@ -58,10 +58,9 @@ resource "aws_lb_target_group" "broker" {
   deregistration_delay = 30
 
   stickiness {
-    enabled = true
+    enabled = false
     type = "source_ip"
   }
-
 
   health_check {
     enabled = true
