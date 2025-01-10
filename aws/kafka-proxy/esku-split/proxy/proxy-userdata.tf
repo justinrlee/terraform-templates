@@ -37,7 +37,7 @@ locals {
   userdata = <<-EOT
   #!/bin/bash
   
-  curl -Ls https://github.com/justinrlee/kafka-proxy/releases/download/v0.3.12-dl/kafka-proxy-v0.3.12-dl-linux-amd64.tar.gz | tar xz -C /usr/local/bin/
+  curl -Ls https://github.com/justinrlee/kafka-proxy/releases/download/v0.3.14-dl/kafka-proxy-v0.3.14-dl-linux-amd64.tar.gz | tar xz -C /usr/local/bin/
 
   echo '${local.start_command_b64gzip}' | base64 -d | gunzip > /tmp/start-kafka-proxy.sh
 
