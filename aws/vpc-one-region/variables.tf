@@ -19,3 +19,12 @@ variable "public_volume_size" {
 variable "private_volume_size" {
     default = 32
 }
+variable "public_volume_type" {
+    default = "gp3"
+}
+variable "public_volume_iops" {
+    default = 3000
+}
+variable "public_volume_throughput" {
+    default = 125
+}

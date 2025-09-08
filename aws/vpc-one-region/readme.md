@@ -1,12 +1,6 @@
 # Single Region VPC
 
-Takes the following as variable objects:
-* Per-Region network configuration (desired availability zones)
-* Per-Region Instance configuration (number of instances in each public/private subnet)
-
-## Resources
-
-Per Region:
+Provisions a set of baseline resources in AWS, in a single region:
 * VPC
 * Internet gateway
 * Default route (in default route table) pointing at IGW
@@ -22,9 +16,13 @@ Per Region:
     * Default route for private route table, pointing at NAT Gateway
 * EC2 instances in each subnet, as desired
 
+Takes the following as variable objects:
+* Network configuration (desired availability zones)
+* Instance configuration (number of instances in each public/private subnet)
+
 ## Example
 
-The default tfvar file will create a single VPC with 10.40.0.0/16 in AWS ap-southeast-1, with 3 public subnets and 3 private subnets, with 2 EC2 instances in each public subnet.
+The default tfvar file (terraform.tfvars) will create a single VPC with 10.38.0.0/16 in AWS ap-southeast-1, with 3 public subnets and 3 private subnets, with 2 EC2 instances in each public subnet.
 
 ```tf
 environment_name = "justinrlee-one-region"
