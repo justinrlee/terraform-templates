@@ -1,12 +1,14 @@
-# resource "google_compute_subnetwork" "proxy" {
-#   name          = "${var.prefix}-proxy"
-#   ip_cidr_range = var.proxy_subnet_cidr
-#   region        = var.google_region
-#   network       = var.google_network
+resource "google_compute_subnetwork" "proxy" {
+  count = var.deploy_proxy_subnetwork ? 1 : 0
 
-#   purpose = "REGIONAL_MANAGED_PROXY"
-#   role    = "ACTIVE"
-# }
+  name          = "${var.prefix}-proxy"
+  ip_cidr_range = var.proxy_subnet_cidr
+  region        = var.google_region
+  network       = var.google_network
+
+  purpose = "REGIONAL_MANAGED_PROXY"
+  role    = "ACTIVE"
+}
 
 resource "google_compute_network_endpoint_group" "main" {
   for_each = var.google_zones
@@ -64,11 +66,11 @@ resource "google_compute_region_target_tcp_proxy" "main" {
 }
 
 resource "google_compute_address" "load_balancer" {
-  name = "${var.prefix}-lb"
-  subnetwork = var.google_subnetwork
+  name         = "${var.prefix}-lb"
+  subnetwork   = var.google_subnetwork
   address_type = "INTERNAL"
-  address = var.load_balancer_ip
-  region = var.google_region
+  address      = var.load_balancer_ip
+  region       = var.google_region
 
 }
 
@@ -83,7 +85,7 @@ resource "google_compute_forwarding_rule" "main" {
   ip_address            = google_compute_address.load_balancer.id
   target                = google_compute_region_target_tcp_proxy.main.id
 
-  # depends_on = [ google_compute_subnetwork.proxy ]
+  depends_on = [google_compute_subnetwork.proxy]
 }
 
 output "load_balancer_ip" {

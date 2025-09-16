@@ -1,5 +1,5 @@
 variable "create_proxy_subnet" {
-  type = bool
+  type    = bool
   default = true
 }
 
@@ -13,7 +13,7 @@ variable "google_region" {
 }
 
 variable "google_zones" {
-  type = map
+  type = map(any)
   # google_zones = {"asia-southeast1-a": {}, "asia-southeast1-b": {}}
 }
 
@@ -54,4 +54,9 @@ variable "target_port" {
 variable "psc_subnet_cidr" {
   type        = string
   description = "CIDR range for the Private Service Connect subnet."
+}
+
+variable "deploy_proxy_subnetwork" {
+  type        = bool
+  description = "Deploy 'Proxy' Subnetwork. In a given network, there can be only one; set to false if one already exists"
 }

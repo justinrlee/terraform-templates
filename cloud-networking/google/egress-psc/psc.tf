@@ -12,9 +12,9 @@ resource "google_compute_subnetwork" "psc" {
 resource "google_compute_service_attachment" "main" {
   name   = "${var.prefix}-psc-sa"
   region = var.google_region
-  
-  target_service          = google_compute_forwarding_rule.main.id
-  connection_preference   = "ACCEPT_MANUAL"
-  nat_subnets            = [google_compute_subnetwork.psc.id]
-  enable_proxy_protocol   = false
+
+  target_service        = google_compute_forwarding_rule.main.id
+  connection_preference = "ACCEPT_MANUAL"
+  nat_subnets           = [google_compute_subnetwork.psc.id]
+  enable_proxy_protocol = false
 }

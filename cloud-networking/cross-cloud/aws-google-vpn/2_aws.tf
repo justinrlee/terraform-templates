@@ -32,19 +32,17 @@ resource "aws_customer_gateway" "gwy" {
   }
 }
 
-
-
 resource "aws_vpn_connection" "vpn_conn" {
   count = local.num_tunnels / 2
 
-  type                  = "ipsec.1"
+  type = "ipsec.1"
 
-  vpn_gateway_id    = aws_vpn_gateway.vpn_gw.id
+  vpn_gateway_id        = aws_vpn_gateway.vpn_gw.id
   customer_gateway_id   = aws_customer_gateway.gwy[count.index % 2].id
   tunnel1_preshared_key = var.tunnels[2 * count.index]["psk"]
-  tunnel1_inside_cidr = var.tunnels[2 * count.index]["cidr"]
+  tunnel1_inside_cidr   = var.tunnels[2 * count.index]["cidr"]
   tunnel2_preshared_key = var.tunnels[2 * count.index + 1]["psk"]
-  tunnel2_inside_cidr = var.tunnels[2 * count.index + 1]["cidr"]
+  tunnel2_inside_cidr   = var.tunnels[2 * count.index + 1]["cidr"]
 
   tags = {
     Name = "${var.prefix}-vpn-conn-${count.index}"

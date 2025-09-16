@@ -2,8 +2,8 @@ google_project_id = "sales-engineering-206314"
 google_region     = "asia-southeast1"
 google_network    = "justin"
 google_subnetwork = "justin"
-google_zones       = {
-    "asia-southeast1-a": {}, "asia-southeast1-b": {}
+google_zones = {
+  "asia-southeast1-a" : {}, "asia-southeast1-b" : {}
 }
 
 prefix = "justin-oracle-psc-mz"

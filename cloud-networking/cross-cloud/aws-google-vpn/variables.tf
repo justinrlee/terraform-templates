@@ -1,5 +1,5 @@
 variable "google_project_id" {
-  type = string
+  type        = string
   description = "The ID of the project to use for the resources"
 }
 
@@ -34,10 +34,10 @@ variable "aws_vpc_cidr" {
 
 variable "tunnels" {
   type = list(object({
-    psk = string
-    cidr = string
-    aws = string
-    gcp = string
+    psk               = string
+    cidr              = string
+    aws               = string
+    gcp               = string
     ext_gwy_interface = number
     vpn_gwy_interface = number
   }))

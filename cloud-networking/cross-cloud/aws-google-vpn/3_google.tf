@@ -3,22 +3,22 @@ resource "google_compute_external_vpn_gateway" "ext_gwy" {
   redundancy_type = "FOUR_IPS_REDUNDANCY"
 
   interface {
-    id = 0
+    id         = 0
     ip_address = aws_vpn_connection.vpn_conn[0].tunnel1_address
   }
 
   interface {
-    id = 1
+    id         = 1
     ip_address = aws_vpn_connection.vpn_conn[0].tunnel2_address
   }
 
   interface {
-    id = 2
+    id         = 2
     ip_address = aws_vpn_connection.vpn_conn[1].tunnel1_address
   }
 
   interface {
-    id = 3
+    id         = 3
     ip_address = aws_vpn_connection.vpn_conn[1].tunnel2_address
   }
 }
@@ -27,17 +27,17 @@ resource "google_compute_external_vpn_gateway" "ext_gwy" {
 resource "google_compute_vpn_tunnel" "tunnel" {
   for_each = local.tunnels
 
-  name                            = "${var.prefix}-tunnel-${each.key}"
+  name = "${var.prefix}-tunnel-${each.key}"
 
   peer_external_gateway           = google_compute_external_vpn_gateway.ext_gwy.name
   peer_external_gateway_interface = each.value["ext_gwy_interface"]
   region                          = var.google_region
   ike_version                     = "2"
-  
-  shared_secret                   = each.value["psk"]
-  router                          = google_compute_router.router.name
-  vpn_gateway                     = google_compute_ha_vpn_gateway.gwy.id
-  vpn_gateway_interface           = each.value["vpn_gwy_interface"]
+
+  shared_secret         = each.value["psk"]
+  router                = google_compute_router.router.name
+  vpn_gateway           = google_compute_ha_vpn_gateway.gwy.id
+  vpn_gateway_interface = each.value["vpn_gwy_interface"]
 }
 
 resource "google_compute_router_interface" "interface" {
@@ -53,9 +53,9 @@ resource "google_compute_router_interface" "interface" {
 resource "google_compute_router_peer" "peer" {
   for_each = local.tunnels
 
-  name            = "${var.prefix}-${each.key}-peer"
-  interface       = google_compute_router_interface.interface[each.key].name
-  peer_asn        = var.aws_asn
+  name      = "${var.prefix}-${each.key}-peer"
+  interface = google_compute_router_interface.interface[each.key].name
+  peer_asn  = var.aws_asn
   # ip_address      = each.value["gcp"]
   peer_ip_address = each.value["aws"]
   router          = google_compute_router.router.name
